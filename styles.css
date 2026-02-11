@@ -700,12 +700,19 @@ img {
   margin-top: 48px;
 }
 
+.pricing-section-header .section-title {
+  color: rgba(255, 255, 255, 0.95);
+}
+.pricing-section-header .section-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .pricing-banner {
   padding: 40px 44px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: var(--radius-2xl);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   display: flex;
@@ -722,14 +729,14 @@ img {
 .pricing-title {
   font-size: 22px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
+  color: #1a1a2e;
   margin-bottom: 8px;
 }
 
 .pricing-subtitle {
   font-size: 15px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 1);
+  color: #4a5568;
 }
 
 .pricing-main {
@@ -738,8 +745,8 @@ img {
   align-items: center;
   gap: 2px;
   padding: 20px 28px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #1a1a2e;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: var(--radius-xl);
   flex-shrink: 0;
 }
@@ -748,13 +755,13 @@ img {
   font-size: clamp(32px, 3.5vw, 42px);
   font-weight: 800;
   letter-spacing: -1px;
-  color: rgba(255, 255, 255, 0.95);
+  color: #ffffff;
 }
 
 .pricing-per {
   font-size: 13px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .pricing-highlights {
@@ -769,7 +776,7 @@ img {
   align-items: center;
   gap: 10px;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #4a5568;
 }
 
 .pricing-point-icon {
@@ -1230,6 +1237,12 @@ img {
   display: block;
 }
 
+.trust-header {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
 .trust-card {
   text-align: center;
   padding: 32px 20px;
@@ -1554,6 +1567,42 @@ img {
 
   .screenshots > .container {
     padding: 0 24px;
+  }
+
+  /* --- Mobile: feature card text colors (dark at bottom → white at top) --- */
+  .features-grid .feature-card:nth-child(1) .feature-title { color: rgba(255, 255, 255, 0.95); }
+  .features-grid .feature-card:nth-child(1) .feature-desc  { color: rgba(255, 255, 255, 0.6); }
+  .features-grid .feature-card:nth-child(2) .feature-title { color: rgba(235, 235, 235, 0.95); }
+  .features-grid .feature-card:nth-child(2) .feature-desc  { color: rgba(220, 220, 220, 0.7); }
+  .features-grid .feature-card:nth-child(3) .feature-title { color: #555; }
+  .features-grid .feature-card:nth-child(3) .feature-desc  { color: #777; }
+  .features-grid .feature-card:nth-child(4) .feature-title { color: #2d2d2d; }
+  .features-grid .feature-card:nth-child(4) .feature-desc  { color: #555; }
+
+  /* --- Mobile: features section title gradient text --- */
+  .features .section-title {
+    background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, #555 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .features .section-subtitle {
+    color: rgba(200, 200, 200, 0.7);
+  }
+
+  /* --- Mobile: trust section gradient background --- */
+  .trust {
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.06) 30%,
+      rgba(255, 255, 255, 0.15) 60%,
+      rgba(255, 255, 255, 0.08) 100%
+    );
+    padding: 60px 0;
+  }
+
+  .trust-header {
+    margin-bottom: 16px;
   }
 
   /* --- Fan dock hidden, phone slideshow visible --- */
