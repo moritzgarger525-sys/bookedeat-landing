@@ -1605,10 +1605,8 @@ img {
   /* --- Mobile: feature cards — white for first two, black for last two --- */
   .features-grid .feature-card:nth-child(1),
   .features-grid .feature-card:nth-child(2) {
-    background: #ffffff;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border-color: rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(255, 255, 255, 0.4);
   }
   .features-grid .feature-card:nth-child(1) .feature-title,
   .features-grid .feature-card:nth-child(2) .feature-title { color: var(--text-primary); }
@@ -1619,10 +1617,8 @@ img {
 
   .features-grid .feature-card:nth-child(3),
   .features-grid .feature-card:nth-child(4) {
-    background: #1a1a2e;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(26, 26, 46, 0.82);
+    border-color: rgba(255, 255, 255, 0.12);
   }
   .features-grid .feature-card:nth-child(3) .feature-title,
   .features-grid .feature-card:nth-child(4) .feature-title { color: rgba(255, 255, 255, 0.95); }
