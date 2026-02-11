@@ -341,62 +341,66 @@ img {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #007AFF 0%, #5856D6 50%, #007AFF 100%);
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.85) 0%, rgba(88, 86, 214, 0.85) 50%, rgba(0, 122, 255, 0.85) 100%);
   background-size: 200% 200%;
   color: #ffffff;
-  border: 1px solid rgba(0, 122, 255, 0.5);
+  border: 1px solid rgba(0, 122, 255, 0.4);
   box-shadow:
-    0 4px 16px rgba(0, 122, 255, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 4px 16px rgba(0, 122, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .btn-primary:hover {
   background-position: 100% 0;
   transform: translateY(-2px);
   box-shadow:
-    0 8px 28px rgba(0, 122, 255, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  border-color: rgba(88, 86, 214, 0.6);
+    0 8px 28px rgba(0, 122, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(88, 86, 214, 0.5);
 }
 
 /* Orange variant for restaurant persona */
 .btn-primary-orange {
-  background: linear-gradient(135deg, #FF9500 0%, #FF6B35 50%, #FF9500 100%);
+  background: linear-gradient(135deg, rgba(255, 149, 0, 0.85) 0%, rgba(255, 107, 53, 0.85) 50%, rgba(255, 149, 0, 0.85) 100%);
   background-size: 200% 200%;
   color: #ffffff;
-  border: 1px solid rgba(255, 149, 0, 0.5);
+  border: 1px solid rgba(255, 149, 0, 0.4);
   box-shadow:
-    0 4px 16px rgba(255, 149, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 4px 16px rgba(255, 149, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .btn-primary-orange:hover {
   background-position: 100% 0;
   transform: translateY(-2px);
   box-shadow:
-    0 8px 28px rgba(255, 107, 53, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 107, 53, 0.6);
+    0 8px 28px rgba(255, 107, 53, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 107, 53, 0.5);
 }
 
 .btn-secondary {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.12) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: var(--text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .btn-secondary:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.2) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 100%);
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.45);
+  border-color: rgba(255, 255, 255, 0.4);
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* ============================================================
@@ -431,6 +435,7 @@ img {
   grid-column: 1;
   grid-row: 1;
   margin-bottom: 28px;
+  justify-self: start;
 }
 
 .hero-text {
