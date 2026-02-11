@@ -737,12 +737,12 @@ img {
 
 .pricing-banner {
   padding: 24px 32px;
-  background: rgba(255, 255, 255, 0.67);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.3));
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
   max-width: 640px;
   margin: 0 auto;
 }
@@ -750,7 +750,7 @@ img {
 .pricing-title {
   font-size: 22px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 16px;
 }
 
@@ -772,8 +772,8 @@ img {
   align-items: center;
   gap: 2px;
   padding: 16px 22px;
-  background: #1a1a2e;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(26, 26, 46, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-xl);
   flex-shrink: 0;
 }
@@ -803,7 +803,7 @@ img {
   align-items: center;
   gap: 10px;
   font-size: 14px;
-  color: #4a5568;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .pricing-point-icon {
