@@ -1114,7 +1114,7 @@ img {
 /* ============================================================
    Phone Slideshow — mobile replacement for fan dock
    ============================================================ */
-.phone-slideshow {
+.phone-slideshow.phone-slideshow {
   display: none;  /* hidden on desktop, shown on mobile */
 }
 
@@ -1647,7 +1647,7 @@ img {
     display: none;
   }
 
-  .phone-slideshow {
+  .phone-slideshow.phone-slideshow {
     display: flex;
   }
 
