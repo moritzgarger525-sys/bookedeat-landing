@@ -736,30 +736,28 @@ img {
 }
 
 .pricing-banner {
-  padding: 28px 36px;
+  padding: 24px 32px;
   background: rgba(255, 255, 255, 0.67);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-2xl);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  flex-wrap: wrap;
-  max-width: 820px;
+  max-width: 640px;
   margin: 0 auto;
 }
 
-.pricing-header {
-  flex: 0 0 auto;
-}
-
 .pricing-title {
-  font-size: 19px;
+  font-size: 22px;
   font-weight: 700;
   color: #1a1a2e;
-  margin-bottom: 0;
+  margin-bottom: 16px;
+}
+
+.pricing-row {
+  display: flex;
+  align-items: center;
+  gap: 28px;
 }
 
 .pricing-subtitle {
@@ -817,10 +815,12 @@ img {
 
 @media (max-width: 768px) {
   .pricing-banner {
-    flex-direction: column;
     text-align: center;
-    padding: 28px 24px;
-    gap: 24px;
+    padding: 24px 20px;
+  }
+  .pricing-row {
+    flex-direction: column;
+    gap: 20px;
   }
   .pricing-highlights {
     align-items: flex-start;
