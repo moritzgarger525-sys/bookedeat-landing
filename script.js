@@ -116,7 +116,6 @@
   var personaTrusts = document.querySelectorAll('.persona-trust');
   var heroVisualGuest = document.getElementById('hero-visual-guest');
   var heroVisualRestaurant = document.getElementById('hero-visual-restaurant');
-  var mobileCTABtn = document.getElementById('mobileCTABtn');
 
   function switchPersona(persona) {
     if (persona === currentPersona) return;
@@ -171,11 +170,6 @@
       heroVisualRestaurant.style.display = persona === 'restaurant' ? '' : 'none';
     }
 
-    // Update mobile CTA
-    if (mobileCTABtn) {
-      mobileCTABtn.textContent = persona === 'guest' ? 'Get BookedEat Free' : 'Get Started Free';
-      mobileCTABtn.href = persona === 'guest' ? '#' : 'portal/';
-    }
   }
 
   tabs.forEach(function (tab) {
@@ -231,27 +225,7 @@
   }
 
   /* ----------------------------------------------------------
-     4. Mobile Sticky CTA — show after scrolling past hero
-     ---------------------------------------------------------- */
-  var mobileCta = document.getElementById('mobileCta');
-  var heroSection = document.querySelector('.hero');
-
-  if (mobileCta && heroSection) {
-    var ctaObserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          mobileCta.classList.remove('visible');
-        } else {
-          mobileCta.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    ctaObserver.observe(heroSection);
-  }
-
-  /* ----------------------------------------------------------
-     5. Nav shadow on scroll
+     4. Nav shadow on scroll
      ---------------------------------------------------------- */
   var nav = document.getElementById('nav');
 
