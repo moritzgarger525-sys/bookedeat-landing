@@ -287,7 +287,7 @@
   function initSlideshow(showcaseId, captionId, dotsId, intervalMs) {
     var showcase = document.getElementById(showcaseId);
     var captionEl = document.getElementById(captionId);
-    var dotsEl = document.getElementById(dotsId);
+    var dotsEl = dotsId ? document.getElementById(dotsId) : null;
     if (!showcase) return null;
 
     var slides = showcase.querySelectorAll('.device-slide');
@@ -295,27 +295,29 @@
 
     var state = { current: 0, timer: null, total: slides.length };
 
-    // Build dots
-    for (var i = 0; i < state.total; i++) {
-      var dot = document.createElement('button');
-      dot.className = 'device-dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', 'Slide ' + (i + 1));
-      dot.dataset.index = i;
-      dot.addEventListener('click', function () {
-        goTo(parseInt(this.dataset.index, 10));
-      });
-      dotsEl.appendChild(dot);
+    // Build dots (if container provided)
+    var dots = [];
+    if (dotsEl) {
+      for (var i = 0; i < state.total; i++) {
+        var dot = document.createElement('button');
+        dot.className = 'device-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+        dot.dataset.index = i;
+        dot.addEventListener('click', function () {
+          goTo(parseInt(this.dataset.index, 10));
+        });
+        dotsEl.appendChild(dot);
+      }
+      dots = dotsEl.querySelectorAll('.device-dot');
     }
-
-    var dots = dotsEl.querySelectorAll('.device-dot');
 
     function goTo(index) {
       if (index === state.current) return;
       slides[state.current].classList.remove('active');
-      dots[state.current].classList.remove('active');
+      if (dots.length) dots[state.current].classList.remove('active');
       state.current = index;
       slides[state.current].classList.add('active');
-      dots[state.current].classList.add('active');
+      if (dots.length) dots[state.current].classList.add('active');
       if (captionEl) {
         captionEl.style.opacity = '0';
         setTimeout(function () {
@@ -342,6 +344,7 @@
   }
 
   initSlideshow('laptop-showcase', 'laptop-caption', 'laptop-dots', 5000);
+  initSlideshow('phone-showcase', 'phone-caption', null, 3000);
 
   /* ----------------------------------------------------------
      7b. Fan Dock — Dock-style magnification

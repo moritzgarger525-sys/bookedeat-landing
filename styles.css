@@ -1052,6 +1052,38 @@ img {
 }
 
 /* ============================================================
+   Phone Slideshow — mobile replacement for fan dock
+   ============================================================ */
+.phone-slideshow {
+  display: none;  /* hidden on desktop, shown on mobile */
+}
+
+.phone-mockup-lg {
+  display: flex;
+  justify-content: center;
+}
+
+.phone-frame-lg {
+  width: 260px;
+  height: 540px;
+  background: #1C1C1E;
+  border-radius: 36px;
+  padding: 10px;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.08);
+}
+
+.phone-screen-lg {
+  width: 100%;
+  height: 100%;
+  border-radius: 26px;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+}
+
+/* ============================================================
    Device Showcases — Laptop slideshow
    ============================================================ */
 .device-showcase {
@@ -1501,6 +1533,45 @@ img {
   .section-title {
     font-size: 28px;
   }
+
+  /* --- Mobile section reorder: screenshots before features --- */
+  main {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero        { order: 1; }
+  .screenshots { order: 2; }
+  .features    { order: 3; }
+  .trust       { order: 4; }
+  .cta         { order: 5; }
+
+  .screenshots {
+    padding: 60px 0;
+  }
+
+  .screenshots > .container {
+    padding: 0 24px;
+  }
+
+  /* --- Fan dock hidden, phone slideshow visible --- */
+  .fan-dock,
+  .fan-caption {
+    display: none;
+  }
+
+  .phone-slideshow {
+    display: flex;
+  }
+
+  .phone-frame-lg {
+    width: 240px;
+    height: 500px;
+    border-radius: 32px;
+    padding: 8px;
+  }
+  .phone-screen-lg {
+    border-radius: 24px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1525,6 +1596,23 @@ img {
     width: 100%;
   }
 
+  .screenshots > .container {
+    padding: 0 16px;
+  }
+
+  .phone-frame-lg {
+    width: 220px;
+    height: 460px;
+    border-radius: 28px;
+    padding: 7px;
+  }
+  .phone-screen-lg {
+    border-radius: 22px;
+  }
+
+  .hero-headline {
+    font-size: 30px;
+  }
 }
 
 /* ============================================================
