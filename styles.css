@@ -341,35 +341,62 @@ img {
 }
 
 .btn-primary {
-  background: rgba(0, 122, 255, 0.35);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  color: var(--text-primary);
-  border: 1px solid rgba(0, 122, 255, 0.4);
-  box-shadow: 0 4px 16px rgba(0, 122, 255, 0.15);
+  background: linear-gradient(135deg, #007AFF 0%, #5856D6 50%, #007AFF 100%);
+  background-size: 200% 200%;
+  color: #ffffff;
+  border: 1px solid rgba(0, 122, 255, 0.5);
+  box-shadow:
+    0 4px 16px rgba(0, 122, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .btn-primary:hover {
-  background: rgba(0, 122, 255, 0.5);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.25);
-  border-color: rgba(0, 122, 255, 0.6);
+  background-position: 100% 0;
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 28px rgba(0, 122, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border-color: rgba(88, 86, 214, 0.6);
+}
+
+/* Orange variant for restaurant persona */
+.btn-primary-orange {
+  background: linear-gradient(135deg, #FF9500 0%, #FF6B35 50%, #FF9500 100%);
+  background-size: 200% 200%;
+  color: #ffffff;
+  border: 1px solid rgba(255, 149, 0, 0.5);
+  box-shadow:
+    0 4px 16px rgba(255, 149, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary-orange:hover {
+  background-position: 100% 0;
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 28px rgba(255, 107, 53, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 107, 53, 0.6);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.12) 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: var(--text-primary);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-1px);
-  border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.2) 100%);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 /* ============================================================
@@ -468,6 +495,14 @@ img {
   color: var(--blue-500);
   animation: blink 1s step-end infinite;
   font-weight: 300;
+}
+
+/* Restaurant typewriter — orange */
+#persona-restaurant .typewriter-text {
+  color: var(--orange-500);
+}
+#persona-restaurant .typewriter-cursor {
+  color: var(--orange-500);
 }
 
 @keyframes blink {
