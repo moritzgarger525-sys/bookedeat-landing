@@ -740,19 +740,12 @@ img {
   margin-top: 48px;
 }
 
-.pricing-section-header .section-title {
-  color: rgba(255, 255, 255, 0.95);
-}
-.pricing-section-header .section-subtitle {
-  color: rgba(255, 255, 255, 0.6);
-}
-
 .pricing-banner {
   padding: 40px 44px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.67);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-2xl);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   display: flex;
@@ -835,6 +828,9 @@ img {
   }
   .pricing-highlights {
     align-items: flex-start;
+  }
+  .device-dots {
+    display: none;
   }
 }
 

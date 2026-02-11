@@ -317,7 +317,7 @@
     return state;
   }
 
-  initSlideshow('laptop-showcase', 'laptop-caption', 'laptop-dots', 5000);
+  initSlideshow('laptop-showcase', 'laptop-caption', 'laptop-dots', 3500);
   initSlideshow('phone-showcase', 'phone-caption', null, 3000);
 
   /* ----------------------------------------------------------
