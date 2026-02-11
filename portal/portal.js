@@ -37,7 +37,9 @@
     includedItems: [],
     eventDates: [],
     validDays: new Set(),
-    cooldownDays: null
+    cooldownDays: null,
+    insiderEnabled: false,
+    insiderCode: ''
   };
 
   // ============================================================
@@ -90,6 +92,23 @@
     var div = document.createElement('div');
     div.textContent = str || '';
     return div.innerHTML;
+  }
+
+  function generateInsiderCode() {
+    var chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    var code = '';
+    for (var i = 0; i < 8; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  }
+
+  function copyToClipboard(text, buttonEl) {
+    navigator.clipboard.writeText(text).then(function () {
+      var original = buttonEl.innerHTML;
+      buttonEl.innerHTML = '&#10003;';
+      setTimeout(function () { buttonEl.innerHTML = original; }, 1200);
+    });
   }
 
   // ============================================================
@@ -456,9 +475,22 @@
       var redemptionText = d.current_redemptions + ' redemptions' +
         (d.max_redemptions ? ' / ' + d.max_redemptions : '');
 
+      var badgesHTML = '<div class="deal-badges">' +
+        '<span class="deal-badge">' + escapeHTML(shortLabel(d)) + '</span>' +
+        (d.insider_code ? '<span class="deal-badge insider">Insider</span>' : '') +
+        '</div>';
+
+      var insiderRow = '';
+      if (d.insider_code) {
+        insiderRow = '<div class="deal-card-insider-code">' +
+          '<span class="insider-code-value">' + escapeHTML(d.insider_code) + '</span>' +
+          '<button class="copy-btn" data-copy-code="' + escapeHTML(d.insider_code) + '" title="Copy code">&#128203;</button>' +
+        '</div>';
+      }
+
       html += '<div class="deal-card" data-id="' + d.id + '">' +
         '<div class="deal-card-top">' +
-          '<span class="deal-badge">' + escapeHTML(shortLabel(d)) + '</span>' +
+          badgesHTML +
           '<label class="deal-toggle">' +
             '<input type="checkbox"' + (d.is_active ? ' checked' : '') + ' data-toggle-id="' + d.id + '">' +
             '<span class="deal-toggle-slider"></span>' +
@@ -469,6 +501,7 @@
           '<div class="deal-card-validity">' + escapeHTML(validitySummary(d)) + '</div>' +
           '<div class="deal-card-redemptions">' + escapeHTML(redemptionText) + '</div>' +
         '</div>' +
+        insiderRow +
         '<div class="deal-card-actions">' +
           '<button class="btn-icon" data-edit-id="' + d.id + '" title="Edit">&#9998;</button>' +
           '<button class="btn-icon danger" data-delete-id="' + d.id + '" title="Delete">&#128465;</button>' +
@@ -495,6 +528,14 @@
       deletes[dd].addEventListener('click', function (ev) {
         ev.stopPropagation();
         handleDelete(this.getAttribute('data-delete-id'));
+      });
+    }
+    // Bind copy code events
+    var copyBtns = $('deals-list').querySelectorAll('[data-copy-code]');
+    for (var cc = 0; cc < copyBtns.length; cc++) {
+      copyBtns[cc].addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        copyToClipboard(this.getAttribute('data-copy-code'), this);
       });
     }
   }
@@ -586,10 +627,15 @@
       includedItems: [],
       eventDates: [],
       validDays: new Set(),
-      cooldownDays: null
+      cooldownDays: null,
+      insiderEnabled: false,
+      insiderCode: ''
     };
     $('included-items-list').innerHTML = '';
     $('event-date-chips').innerHTML = '';
+    $('insider-toggle').checked = false;
+    hide($('insider-code-section'));
+    $('insider-code-input').value = '';
     updateTypePills();
     updateCooldownChips();
     updateDayToggles();
@@ -617,6 +663,15 @@
     $('deal-valid-until').value = deal.valid_until || '';
     $('deal-time-start').value = (deal.valid_time_start || '').slice(0, 5);
     $('deal-time-end').value = (deal.valid_time_end || '').slice(0, 5);
+
+    // Insider deal
+    if (deal.insider_code) {
+      formState.insiderEnabled = true;
+      formState.insiderCode = deal.insider_code;
+      $('insider-toggle').checked = true;
+      show($('insider-code-section'));
+      $('insider-code-input').value = deal.insider_code;
+    }
 
     updateTypePills();
     updateCooldownChips();
@@ -893,6 +948,32 @@
       if (e.key === 'Enter') { e.preventDefault(); addIncludedItem(); }
     });
 
+    // Insider deal toggle
+    $('insider-toggle').addEventListener('change', function () {
+      formState.insiderEnabled = this.checked;
+      if (this.checked) {
+        show($('insider-code-section'));
+        if (!formState.insiderCode) {
+          formState.insiderCode = generateInsiderCode();
+          $('insider-code-input').value = formState.insiderCode;
+        }
+      } else {
+        hide($('insider-code-section'));
+      }
+    });
+
+    // Insider code input
+    $('insider-code-input').addEventListener('input', function () {
+      this.value = this.value.toUpperCase().replace(/[^A-Z0-9_]/g, '');
+      formState.insiderCode = this.value;
+    });
+
+    // Insider regenerate button
+    $('insider-regenerate-btn').addEventListener('click', function () {
+      formState.insiderCode = generateInsiderCode();
+      $('insider-code-input').value = formState.insiderCode;
+    });
+
     // Submit
     $('deal-form').addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -932,6 +1013,10 @@
       $('deal-price').focus();
       return;
     }
+    if (formState.insiderEnabled && !formState.insiderCode.trim()) {
+      $('insider-code-input').focus();
+      return;
+    }
 
     var btn = $('deal-submit-btn');
     btn.disabled = true;
@@ -962,7 +1047,8 @@
       valid_until: !isEvent() && $('deal-valid-until').value ? $('deal-valid-until').value : null,
       valid_time_start: !isEvent() && $('deal-time-start').value ? $('deal-time-start').value : null,
       valid_time_end: !isEvent() && $('deal-time-end').value ? $('deal-time-end').value : null,
-      is_active: true
+      is_active: true,
+      insider_code: formState.insiderEnabled && formState.insiderCode.trim() ? formState.insiderCode.trim() : null
     };
 
     try {
@@ -977,7 +1063,11 @@
       }
       location.hash = '#deals';
     } catch (err) {
-      alert('Failed to save deal: ' + (err.message || err));
+      var msg = err.message || String(err);
+      if (msg.indexOf('idx_deals_insider_code') > -1 || msg.indexOf('insider_code') > -1) {
+        msg = 'This insider code is already in use. Please choose a different code.';
+      }
+      alert('Failed to save deal: ' + msg);
     } finally {
       btn.disabled = false;
       btn.textContent = editingDealId ? 'Save Changes' : 'Create Deal';

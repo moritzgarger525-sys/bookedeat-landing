@@ -288,6 +288,24 @@
             </div>
           </div>
 
+          <!-- Insider Deal (full width) -->
+          <div class="form-panel">
+            <div class="insider-header">
+              <div class="section-label" style="margin-bottom:0;">Insider Deal</div>
+              <label class="deal-toggle">
+                <input type="checkbox" id="insider-toggle">
+                <span class="deal-toggle-slider"></span>
+              </label>
+            </div>
+            <div id="insider-code-section" style="display:none;">
+              <div class="form-helper" style="margin-top:8px;margin-bottom:10px;">Share this code with food creators/influencers. Their followers enter it to unlock this deal.</div>
+              <div class="insider-code-row">
+                <input type="text" id="insider-code-input" class="form-input insider-code-field" maxlength="20" placeholder="e.g. CHEF_ANNA" autocomplete="off">
+                <button type="button" class="btn-icon" id="insider-regenerate-btn" title="Generate new code">&#8635;</button>
+              </div>
+            </div>
+          </div>
+
           <!-- Submit (full width) -->
           <div style="margin-top:24px;">
             <button type="submit" class="btn-portal btn-portal-primary" id="deal-submit-btn">
