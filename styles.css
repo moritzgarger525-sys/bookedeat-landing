@@ -825,7 +825,7 @@ img {
   .pricing-highlights {
     align-items: flex-start;
   }
-  .device-dots {
+  #laptop-dots {
     display: none;
   }
 }
@@ -1602,15 +1602,34 @@ img {
     padding: 0 24px;
   }
 
-  /* --- Mobile: feature card text colors (dark at bottom → white at top) --- */
-  .features-grid .feature-card:nth-child(1) .feature-title { color: rgba(255, 255, 255, 0.95); }
-  .features-grid .feature-card:nth-child(1) .feature-desc  { color: rgba(255, 255, 255, 0.6); }
-  .features-grid .feature-card:nth-child(2) .feature-title { color: rgba(235, 235, 235, 0.95); }
-  .features-grid .feature-card:nth-child(2) .feature-desc  { color: rgba(220, 220, 220, 0.7); }
-  .features-grid .feature-card:nth-child(3) .feature-title { color: #555; }
-  .features-grid .feature-card:nth-child(3) .feature-desc  { color: #777; }
-  .features-grid .feature-card:nth-child(4) .feature-title { color: #2d2d2d; }
-  .features-grid .feature-card:nth-child(4) .feature-desc  { color: #555; }
+  /* --- Mobile: feature cards — white for first two, black for last two --- */
+  .features-grid .feature-card:nth-child(1),
+  .features-grid .feature-card:nth-child(2) {
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+  .features-grid .feature-card:nth-child(1) .feature-title,
+  .features-grid .feature-card:nth-child(2) .feature-title { color: var(--text-primary); }
+  .features-grid .feature-card:nth-child(1) .feature-desc,
+  .features-grid .feature-card:nth-child(2) .feature-desc  { color: var(--text-secondary); }
+  .features-grid .feature-card:nth-child(1) .feature-bg-icon,
+  .features-grid .feature-card:nth-child(2) .feature-bg-icon { color: rgba(0, 0, 0, 0.05); }
+
+  .features-grid .feature-card:nth-child(3),
+  .features-grid .feature-card:nth-child(4) {
+    background: #1a1a2e;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .features-grid .feature-card:nth-child(3) .feature-title,
+  .features-grid .feature-card:nth-child(4) .feature-title { color: rgba(255, 255, 255, 0.95); }
+  .features-grid .feature-card:nth-child(3) .feature-desc,
+  .features-grid .feature-card:nth-child(4) .feature-desc  { color: rgba(255, 255, 255, 0.6); }
+  .features-grid .feature-card:nth-child(3) .feature-bg-icon,
+  .features-grid .feature-card:nth-child(4) .feature-bg-icon { color: rgba(255, 255, 255, 0.06); }
 
   /* --- Mobile: features section title gradient text --- */
   .features .section-title {
@@ -1697,6 +1716,37 @@ img {
 
   .hero-headline {
     font-size: 30px;
+  }
+
+  /* Compact nav for small phones */
+  .nav-inner {
+    padding: 0 12px;
+    height: 52px;
+    gap: 8px;
+  }
+
+  .nav-brand {
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+
+  .nav-actions {
+    gap: 8px;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .nav-link {
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .nav-actions .btn-sm {
+    font-size: 11px;
+    height: 30px;
+    padding: 0 10px;
+    flex-shrink: 1;
+    min-width: 0;
   }
 }
 

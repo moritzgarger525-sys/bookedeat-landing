@@ -15,22 +15,22 @@
      ---------------------------------------------------------- */
   var personaPhrases = {
     guest: [
-      'see where your friends eat.',
-      'read reviews from people you trust.',
-      'discover deals near you.',
-      'redeem with one tap.',
-      'get notified of new offers.',
-      'track your dining stats.',
-      'explore every restaurant on the map.',
+      'See where your friends eat.',
+      'Read reviews from people you trust.',
+      'Discover deals near you.',
+      'Redeem with one tap.',
+      'Get notified of new offers.',
+      'Track your dining stats.',
+      'Explore every restaurant on the map.',
     ],
     restaurant: [
-      'reach new customers.',
-      'fill off-peak hours.',
-      'create deals in seconds.',
-      'offer first-time customer benefits.',
-      'run special event promotions.',
-      'track every redemption.',
-      'customize everything your way.',
+      'Reach new customers.',
+      'Fill off-peak hours.',
+      'Create deals in seconds.',
+      'Offer first-time customer benefits.',
+      'Run special event promotions.',
+      'Track every redemption.',
+      'Customize everything your way.',
     ],
   };
 
@@ -318,7 +318,7 @@
   }
 
   initSlideshow('laptop-showcase', 'laptop-caption', 'laptop-dots', 3500);
-  initSlideshow('phone-showcase', 'phone-caption', null, 3000);
+  initSlideshow('phone-showcase', 'phone-caption', 'phone-dots', 3000);
 
   /* ----------------------------------------------------------
      7b. Fan Dock — Dock-style magnification
