@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookedEat - Restaurant Deals, Discovered</title>
+  <meta name="description" content="Discover exclusive restaurant deals near you. Save on every meal with BookedEat.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">BookedEat</a>
+      <div class="nav-actions">
+        <a href="portal/" class="nav-link">Log in</a>
+        <a href="#features" class="btn btn-primary btn-sm">Get the App</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="container hero-content">
+        <div class="hero-text">
+
+          <!-- Persona Selector -->
+          <div class="persona-selector" id="personaSelector">
+            <button class="persona-tab active" data-persona="guest">Guest</button>
+            <button class="persona-tab" data-persona="restaurant">Restaurant</button>
+          </div>
+
+          <!-- Guest content (default) -->
+          <div class="persona-content active" id="persona-guest">
+            <div class="hero-badge">Now available in Zurich.</div>
+            <h1 class="hero-headline">Friends. Deals. Insights.<br><span class="text-gradient">One Map.</span></h1>
+            <p class="hero-subtitle">Every restaurant on the map. See where your friends have been, read their honest reviews, and discover deals nearby. No ads, no cost, you're in control.</p>
+
+            <div class="typewriter-container">
+              <span class="typewriter-prefix">You can </span>
+              <span class="typewriter-text" id="typewriter"></span>
+              <span class="typewriter-cursor">|</span>
+            </div>
+
+            <div class="hero-stats">
+              <div class="stat">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Restaurant deals</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat">
+                <span class="stat-number">Free</span>
+                <span class="stat-label">Always, no ads</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Your control</span>
+              </div>
+            </div>
+
+            <div class="hero-cta">
+              <a href="#" class="btn btn-primary btn-lg">Download for Free</a>
+              <a href="#screenshots" class="btn btn-secondary btn-lg">See it in action</a>
+            </div>
+          </div>
+
+          <!-- Restaurant content -->
+          <div class="persona-content" id="persona-restaurant">
+            <div class="hero-badge" style="background: #FFF5EB; color: #FF9500; border-color: #FFE0B2;">For restaurant partners</div>
+            <h1 class="hero-headline">Reach new customers,<br><span class="text-gradient-orange">fill every table.</span></h1>
+            <p class="hero-subtitle">Attract new diners with customizable deals. Incentivize visits outside peak hours. From discounts to special events to first-time customer offers. You decide.</p>
+
+            <div class="typewriter-container">
+              <span class="typewriter-prefix">You can </span>
+              <span class="typewriter-text" id="typewriter-restaurant"></span>
+              <span class="typewriter-cursor">|</span>
+            </div>
+
+            <div class="hero-stats">
+              <div class="stat">
+                <span class="stat-number">850+</span>
+                <span class="stat-label">Partner restaurants</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat">
+                <span class="stat-number">$0</span>
+                <span class="stat-label">Setup fees</span>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Customizable</span>
+              </div>
+            </div>
+
+            <div class="hero-cta">
+              <a href="portal/" class="btn btn-primary btn-lg">Get Started Free</a>
+              <a href="#screenshots" class="btn btn-secondary btn-lg">See it in action</a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Guest: Phone mockup -->
+        <div class="hero-visual hero-visual-guest" id="hero-visual-guest">
+          <div class="phone-mockup">
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <img src="screenshots/see_and_filter_where_you_and_your_friends_have_been.jpeg" alt="Map showing restaurants and friends' visits" loading="eager">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Restaurant: Laptop mockup -->
+        <div class="hero-visual hero-visual-restaurant" id="hero-visual-restaurant" style="display:none;">
+          <div class="laptop-mockup hero-laptop">
+            <div class="laptop-lid">
+              <div class="laptop-bezel">
+                <div class="laptop-camera"></div>
+                <div class="laptop-screen">
+                  <img src="screenshots/laptop_dashboard.png" alt="Partner dashboard overview" loading="eager" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+              </div>
+            </div>
+            <div class="laptop-base">
+              <div class="laptop-notch"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+      <div class="container">
+
+        <!-- Guest Features -->
+        <div class="persona-section active" data-for="guest">
+          <div class="section-header">
+            <h2 class="section-title">Social meets savings,<br><span class="text-gradient">all in one map</span></h2>
+            <p class="section-subtitle">Not just deals. Every restaurant, your friends' experiences, and honest reviews. No ads, no cost.</p>
+          </div>
+
+          <div class="features-grid">
+            <div class="feature-card">
+              <svg class="feature-bg-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="80" cy="70" r="40" stroke="currentColor" stroke-width="1"/>
+                <circle cx="80" cy="70" r="15" stroke="currentColor" stroke-width="1"/>
+                <path d="M80 55 L80 42" stroke="currentColor" stroke-width="1"/>
+                <circle cx="140" cy="110" r="30" stroke="currentColor" stroke-width="1"/>
+                <circle cx="140" cy="110" r="10" stroke="currentColor" stroke-width="1"/>
+                <path d="M50 140 Q100 120 160 150" stroke="currentColor" stroke-width="1"/>
+                <path d="M30 160 Q90 135 180 170" stroke="currentColor" stroke-width="1"/>
+                <circle cx="60" cy="150" r="5" fill="currentColor" opacity="0.3"/>
+                <circle cx="130" cy="155" r="5" fill="currentColor" opacity="0.3"/>
+                <circle cx="160" cy="60" r="4" fill="currentColor" opacity="0.2"/>
+              </svg>
+              <h3 class="feature-title">Every Restaurant, One Map</h3>
+              <p class="feature-desc">More than deals — we show all restaurants on the map. Browse freely, discover deals when they're there. Missing a place? Add it yourself in seconds.</p>
+            </div>
+
+            <div class="feature-card">
+              <svg class="feature-bg-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="70" cy="80" r="28" stroke="currentColor" stroke-width="1"/>
+                <circle cx="70" cy="70" r="10" stroke="currentColor" stroke-width="1"/>
+                <path d="M52 100 Q70 115 88 100" stroke="currentColor" stroke-width="1"/>
+                <circle cx="130" cy="80" r="28" stroke="currentColor" stroke-width="1"/>
+                <circle cx="130" cy="70" r="10" stroke="currentColor" stroke-width="1"/>
+                <path d="M112 100 Q130 115 148 100" stroke="currentColor" stroke-width="1"/>
+                <rect x="55" y="130" rx="12" width="90" height="40" stroke="currentColor" stroke-width="1"/>
+                <circle cx="75" cy="150" r="3" fill="currentColor" opacity="0.4"/>
+                <circle cx="90" cy="150" r="3" fill="currentColor" opacity="0.3"/>
+                <circle cx="105" cy="150" r="3" fill="currentColor" opacity="0.2"/>
+              </svg>
+              <h3 class="feature-title">See Where Friends Go</h3>
+              <p class="feature-desc">See where your friends have been and what they thought. Real reviews from people you trust, not strangers or bought ratings. Fully private — only your friends see your activity.</p>
+            </div>
+
+            <div class="feature-card">
+              <svg class="feature-bg-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="50" y="50" rx="8" width="60" height="35" stroke="currentColor" stroke-width="1" transform="rotate(-8 80 67)"/>
+                <text x="68" y="73" font-size="16" fill="currentColor" opacity="0.3" transform="rotate(-8 80 67)">%</text>
+                <path d="M140 60 L140 40 L160 50 Z" stroke="currentColor" stroke-width="1"/>
+                <circle cx="150" cy="70" r="18" stroke="currentColor" stroke-width="1"/>
+                <path d="M142 70 L150 78 L162 62" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M60 130 L60 110" stroke="currentColor" stroke-width="1"/>
+                <path d="M60 105 Q60 95 70 95 L160 95 Q170 95 170 105 L170 145 Q170 155 160 155 L70 155 Q60 155 60 145 Z" stroke="currentColor" stroke-width="1"/>
+                <line x1="80" y1="115" x2="150" y2="115" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
+                <line x1="80" y1="130" x2="130" y2="130" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
+                <line x1="80" y1="145" x2="140" y2="145" stroke="currentColor" stroke-width="0.8" opacity="0.2"/>
+              </svg>
+              <h3 class="feature-title">Deals &amp; Notifications</h3>
+              <p class="feature-desc">Like your favourite places and stay in the loop. New deals, special events, new dishes — you'll be the first to know. Redeem with one tap and save.</p>
+            </div>
+
+            <div class="feature-card">
+              <svg class="feature-bg-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="40" y="130" width="24" height="50" rx="4" stroke="currentColor" stroke-width="1"/>
+                <rect x="40" y="140" width="24" height="40" rx="4" fill="currentColor" opacity="0.1"/>
+                <rect x="75" y="100" width="24" height="80" rx="4" stroke="currentColor" stroke-width="1"/>
+                <rect x="75" y="115" width="24" height="65" rx="4" fill="currentColor" opacity="0.15"/>
+                <rect x="110" y="70" width="24" height="110" rx="4" stroke="currentColor" stroke-width="1"/>
+                <rect x="110" y="90" width="24" height="90" rx="4" fill="currentColor" opacity="0.1"/>
+                <rect x="145" y="50" width="24" height="130" rx="4" stroke="currentColor" stroke-width="1"/>
+                <rect x="145" y="70" width="24" height="110" rx="4" fill="currentColor" opacity="0.15"/>
+                <circle cx="155" cy="40" r="12" stroke="currentColor" stroke-width="1"/>
+                <path d="M155 34 L155 40 L160 40" stroke="currentColor" stroke-width="1"/>
+              </svg>
+              <h3 class="feature-title">Your Dining Insights</h3>
+              <p class="feature-desc">A great side effect: stats on your dining habits, your restaurant personality type, visit history, and more. Always private to you and your friends.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Restaurant Features -->
+        <div class="persona-section" data-for="restaurant">
+          <div class="section-header">
+            <h2 class="section-title">Everything you need to<br><span class="text-gradient-orange">grow your business</span></h2>
+            <p class="section-subtitle">Reach new customers. Fill off-peak hours. Deals tailored to your needs.</p>
+          </div>
+
+          <div class="features-grid">
+            <div class="feature-card">
+              <svg class="feature-bg-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="80" r="45" stroke="currentColor" stroke-width="1"/>
+                <circle cx="100" cy="68" r="16" stroke="currentColor" stroke-width="1"/>
+                <path d="M72 108 Q100 130 128 108" stroke="currentColor" stroke-width="1"/>
+                <path d="M60 150 L80 135" stroke="currentColor" stroke-width="0.8" opacity="0.4"/>
+                <path d="M140 150 L120 135" stroke="currentColor" stroke-width="0.8" opacity="0.4"/>
+                <circle cx="50" cy="160" r="12" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
+                <circle cx="150" cy="160" r="12" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
+                <circle cx="30" cy="140" r="8" stroke="currentColor" stroke-width="0.8" opacity="0.2"/>
+                <circle cx="170" cy="140" r="8" stroke="currentColor" stroke-width="0.8" opacity="0.2"/>
+              </svg>
+              <h3 class="feature-title">Reach New Customers</h3>
+              <p class="feature-desc">Your restaurant is visible to thousands of nearby diners actively exploring the map. Deals make you stand out.</p>
+            </div>
+
+            <div class="feature-card">
+              <svg class="feature-bg-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="60" stroke="currentColor" stroke-width="1"/>
+                <circle cx="100" cy="100" r="3" fill="currentColor" opacity="0.3"/>
+                <path d="M100 100 L100 55" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M100 100 L135 100" stroke="currentColor" stroke-width="1"/>
+                <line x1="100" y1="44" x2="100" y2="48" stroke="currentColor" stroke-width="1"/>
+                <line x1="100" y1="152" x2="100" y2="156" stroke="currentColor" stroke-width="1"/>
+                <line x1="156" y1="100" x2="152" y2="100" stroke="currentColor" stroke-width="1"/>
+                <line x1="44" y1="100" x2="48" y2="100" stroke="currentColor" stroke-width="1"/>
+                <path d="M70 55 Q60 45 65 35" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
+                <path d="M55 70 Q45 60 35 65" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
+                <rect x="120" y="140" rx="4" width="50" height="20" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
+                <line x1="130" y1="148" x2="160" y2="148" stroke="currentColor" stroke-width="0.6" opacity="0.2"/>
+                <line x1="130" y1="153" x2="150" y2="153" stroke="currentColor" stroke-width="0.6" opacity="0.2"/>
+              </svg>
+              <h3 class="feature-title">Fill Off-Peak Hours</h3>
+              <p class="feature-desc">Incentivize visits outside busy hours. Schedule deals for specific days and times when you need more traffic.</p>
+            </div>
+
+            <div class="feature-card">
+              <svg class="feature-bg-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="70" cy="70" r="8" stroke="currentColor" stroke-width="1"/>
+                <circle cx="70" cy="70" r="3" fill="currentColor" opacity="0.3"/>
+                <line x1="82" y1="70" x2="160" y2="70" stroke="currentColor" stroke-width="0.8" opacity="0.4"/>
+                <circle cx="120" cy="110" r="8" stroke="currentColor" stroke-width="1"/>
+                <circle cx="120" cy="110" r="3" fill="currentColor" opacity="0.3"/>
+                <line x1="40" y1="110" x2="108" y2="110" stroke="currentColor" stroke-width="0.8" opacity="0.4"/>
+                <circle cx="90" cy="150" r="8" stroke="currentColor" stroke-width="1"/>
+                <circle cx="90" cy="150" r="3" fill="currentColor" opacity="0.3"/>
+                <line x1="102" y1="150" x2="170" y2="150" stroke="currentColor" stroke-width="0.8" opacity="0.4"/>
+                <rect x="40" y="55" rx="4" width="18" height="30" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
+                <rect x="140" y="95" rx="4" width="18" height="30" stroke="currentColor" stroke-width="0.8" opacity="0.3"/>
+              </svg>
+              <h3 class="feature-title">Fully Customizable</h3>
+              <p class="feature-desc">Discounts, menu deals, special events, first-time customer offers. Set limits, schedules, and rules your way.</p>
+            </div>
+
+            <div class="feature-card">
+              <svg class="feature-bg-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M40 160 L40 50" stroke="currentColor" stroke-width="1"/>
+                <path d="M40 160 L170 160" stroke="currentColor" stroke-width="1"/>
+                <path d="M55 140 Q80 90 105 110 Q130 130 155 60" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <circle cx="55" cy="140" r="4" fill="currentColor" opacity="0.3"/>
+                <circle cx="105" cy="110" r="4" fill="currentColor" opacity="0.3"/>
+                <circle cx="155" cy="60" r="4" fill="currentColor" opacity="0.3"/>
+                <path d="M55 140 L55 160" stroke="currentColor" stroke-width="0.6" stroke-dasharray="3 3" opacity="0.2"/>
+                <path d="M105 110 L105 160" stroke="currentColor" stroke-width="0.6" stroke-dasharray="3 3" opacity="0.2"/>
+                <path d="M155 60 L155 160" stroke="currentColor" stroke-width="0.6" stroke-dasharray="3 3" opacity="0.2"/>
+              </svg>
+              <h3 class="feature-title">Track Everything</h3>
+              <p class="feature-desc">See redemptions, new vs returning guests, and deal performance in your partner dashboard. Full transparency.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- App Screenshots Section -->
+    <section class="screenshots" id="screenshots">
+      <div class="container">
+
+        <!-- Guest Screenshots — fan dock -->
+        <div class="persona-section active" data-for="guest">
+          <div class="section-header">
+            <h2 class="section-title">See it in action</h2>
+            <p class="section-subtitle">A clean, beautiful experience designed around how you actually dine out.</p>
+          </div>
+
+          <div class="fan-dock" id="fan-dock">
+            <div class="fan-item" data-caption="See where friends have been">
+              <div class="fan-phone"><img src="screenshots/see_and_filter_where_you_and_your_friends_have_been.jpeg" alt="Map view" loading="lazy"></div>
+            </div>
+            <div class="fan-item" data-caption="Filter nearby deals">
+              <div class="fan-phone"><img src="screenshots/filter_nearby_deals.jpeg" alt="Deal filters" loading="lazy"></div>
+            </div>
+            <div class="fan-item" data-caption="Friend reviews while browsing">
+              <div class="fan-phone"><img src="screenshots/see_friend_reviews_while_searching.jpeg" alt="Friend reviews" loading="lazy"></div>
+            </div>
+            <div class="fan-item" data-caption="Redeem in seconds">
+              <div class="fan-phone"><img src="screenshots/redeem.jpeg" alt="Redeem deals" loading="lazy"></div>
+            </div>
+            <div class="fan-item" data-caption="Like, save &amp; get notified">
+              <div class="fan-phone"><img src="screenshots/Navigate_like_notify_save_deals.jpeg" alt="Likes and notifications" loading="lazy"></div>
+            </div>
+            <div class="fan-item" data-caption="Your dining stats">
+              <div class="fan-phone"><img src="screenshots/statistics.jpeg" alt="Dining statistics" loading="lazy"></div>
+            </div>
+            <div class="fan-item" data-caption="Your profile &amp; insights">
+              <div class="fan-phone"><img src="screenshots/profile_insights.jpeg" alt="Profile insights" loading="lazy"></div>
+            </div>
+          </div>
+          <div class="fan-caption" id="fan-caption"></div>
+        </div>
+
+        <!-- Restaurant Screenshots — laptop slideshow -->
+        <div class="persona-section" data-for="restaurant">
+          <div class="section-header">
+            <h2 class="section-title">Your partner dashboard</h2>
+            <p class="section-subtitle">Manage deals, track performance, and grow your business from one place.</p>
+          </div>
+
+          <div class="device-showcase" id="laptop-showcase">
+            <div class="laptop-mockup">
+              <div class="laptop-lid">
+                <div class="laptop-bezel">
+                  <div class="laptop-camera"></div>
+                  <div class="laptop-screen" id="laptop-screen">
+                    <img src="screenshots/laptop_dashboard.png" alt="Partner dashboard" class="device-slide active" data-caption="Your performance at a glance" loading="lazy">
+                    <img src="screenshots/laptop_deal_overview.png" alt="Manage deals" class="device-slide" data-caption="Manage all your deals" loading="lazy">
+                    <img src="screenshots/laptop_deal_creation.png" alt="Create a deal" class="device-slide" data-caption="Create deals in seconds" loading="lazy">
+                    <img src="screenshots/laptop_code_verification.png" alt="Verify codes" class="device-slide" data-caption="Verify customer codes instantly" loading="lazy">
+                  </div>
+                </div>
+              </div>
+              <div class="laptop-base">
+                <div class="laptop-notch"></div>
+              </div>
+            </div>
+            <div class="device-caption" id="laptop-caption">Your performance at a glance</div>
+            <div class="device-dots" id="laptop-dots"></div>
+          </div>
+
+          <!-- Pricing — success-based -->
+          <div class="pricing-section">
+            <div class="pricing-banner">
+              <div class="pricing-header">
+                <h3 class="pricing-title">Transparent, success-based pricing</h3>
+                <p class="pricing-subtitle">You only pay when it works. No fees until a customer actually redeems a deal at your restaurant.</p>
+              </div>
+              <div class="pricing-main">
+                <span class="pricing-amount">CHF 0.50</span>
+                <span class="pricing-per">per redeemed deal</span>
+              </div>
+              <div class="pricing-highlights">
+                <div class="pricing-point">
+                  <span class="pricing-point-icon">&#10003;</span>
+                  <span>No setup fees, no monthly minimums</span>
+                </div>
+                <div class="pricing-point">
+                  <span class="pricing-point-icon">&#10003;</span>
+                  <span>Only charged when a guest redeems</span>
+                </div>
+                <div class="pricing-point">
+                  <span class="pricing-point-icon">&#10003;</span>
+                  <span>Billed monthly, cancel anytime</span>
+                </div>
+                <div class="pricing-point">
+                  <span class="pricing-point-icon">&#10003;</span>
+                  <span>Full dashboard visibility into every charge</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Social Proof / Trust Section -->
+    <section class="trust">
+      <div class="container">
+        <div class="trust-grid" id="trustGrid">
+          <!-- Guest trust (default) -->
+          <div class="persona-trust active" data-for="guest">
+            <!-- 850+ Partner restaurants (4 icons) -->
+            <div class="trust-card">
+              <svg class="trust-bg-icon" style="width:110px;height:110px;top:-22px;right:-15px;opacity:0.45;transform:rotate(12deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="16" width="28" height="4" rx="2" stroke="currentColor" stroke-width="2"/><path d="M10 16V12C10 9 13 6 20 6C27 6 30 9 30 12V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="28" r="3" stroke="currentColor" stroke-width="2"/><circle cx="27" cy="28" r="3" stroke="currentColor" stroke-width="2"/><path d="M16 28H24" stroke="currentColor" stroke-width="2"/><path d="M20 20V25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:72px;height:72px;bottom:-10px;left:-14px;opacity:0.32;transform:rotate(-18deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="16" width="28" height="4" rx="2" stroke="currentColor" stroke-width="2"/><path d="M10 16V12C10 9 13 6 20 6C27 6 30 9 30 12V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="28" r="3" stroke="currentColor" stroke-width="2"/><circle cx="27" cy="28" r="3" stroke="currentColor" stroke-width="2"/><path d="M16 28H24" stroke="currentColor" stroke-width="2"/><path d="M20 20V25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:52px;height:52px;top:8px;left:10px;opacity:0.22;transform:rotate(25deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="16" width="28" height="4" rx="2" stroke="currentColor" stroke-width="2"/><path d="M10 16V12C10 9 13 6 20 6C27 6 30 9 30 12V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="28" r="3" stroke="currentColor" stroke-width="2"/><circle cx="27" cy="28" r="3" stroke="currentColor" stroke-width="2"/></svg>
+              <svg class="trust-bg-icon" style="width:40px;height:40px;bottom:8px;right:30%;opacity:0.18;transform:rotate(-8deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="16" width="28" height="4" rx="2" stroke="currentColor" stroke-width="2"/><path d="M10 16V12C10 9 13 6 20 6C27 6 30 9 30 12V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <div class="trust-number">850+</div>
+              <div class="trust-label">Partner restaurants</div>
+            </div>
+            <!-- 12,400+ Deals redeemed (3 icons) -->
+            <div class="trust-card">
+              <svg class="trust-bg-icon" style="width:105px;height:105px;bottom:-16px;right:-20px;opacity:0.40;transform:rotate(-10deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="24" rx="4" stroke="currentColor" stroke-width="2"/><path d="M6 16H34" stroke="currentColor" stroke-width="2"/><circle cx="14" cy="24" r="3" stroke="currentColor" stroke-width="2"/><path d="M14 21L14 27" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1 2"/><path d="M22 24H30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M22 28H27" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:78px;height:78px;top:-12px;left:-10px;opacity:0.32;transform:rotate(20deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="24" rx="4" stroke="currentColor" stroke-width="2"/><path d="M6 16H34" stroke="currentColor" stroke-width="2"/><circle cx="14" cy="24" r="3" stroke="currentColor" stroke-width="2"/><path d="M22 24H30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M22 28H27" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:50px;height:50px;top:25%;left:52%;opacity:0.22;transform:rotate(5deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="24" rx="4" stroke="currentColor" stroke-width="2"/><path d="M6 16H34" stroke="currentColor" stroke-width="2"/></svg>
+              <div class="trust-number">12,400+</div>
+              <div class="trust-label">Deals redeemed</div>
+            </div>
+            <!-- 4.8 Average rating (4 icons — stars) -->
+            <div class="trust-card">
+              <svg class="trust-bg-icon" style="width:95px;height:95px;top:-22px;right:-10px;opacity:0.45;transform:rotate(15deg)" viewBox="0 0 40 40" fill="none"><path d="M20 6L23.5 15H33L25.5 21L28 30L20 24.5L12 30L14.5 21L7 15H16.5L20 6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              <svg class="trust-bg-icon" style="width:80px;height:80px;bottom:-16px;left:-18px;opacity:0.35;transform:rotate(-22deg)" viewBox="0 0 40 40" fill="none"><path d="M20 6L23.5 15H33L25.5 21L28 30L20 24.5L12 30L14.5 21L7 15H16.5L20 6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              <svg class="trust-bg-icon" style="width:45px;height:45px;top:10px;left:15px;opacity:0.25;transform:rotate(8deg)" viewBox="0 0 40 40" fill="none"><path d="M20 6L23.5 15H33L25.5 21L28 30L20 24.5L12 30L14.5 21L7 15H16.5L20 6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              <svg class="trust-bg-icon" style="width:35px;height:35px;bottom:12px;right:15px;opacity:0.20;transform:rotate(-30deg)" viewBox="0 0 40 40" fill="none"><path d="M20 6L23.5 15H33L25.5 21L28 30L20 24.5L12 30L14.5 21L7 15H16.5L20 6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              <div class="trust-number">4.8</div>
+              <div class="trust-label">Average rating</div>
+            </div>
+            <!-- CHF 60 Avg monthly savings (4 icons) -->
+            <div class="trust-card">
+              <svg class="trust-bg-icon" style="width:100px;height:100px;top:-20px;left:-16px;opacity:0.42;transform:rotate(-12deg)" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="13" stroke="currentColor" stroke-width="2"/><path d="M16 22C16 22 14 18 14 16C14 14 15.5 13 17 13C18.2 13 19 13.8 19 13.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M24 22C24 22 26 18 26 16C26 14 24.5 13 23 13C21.8 13 21 13.8 21 13.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 26H26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 22V26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:85px;height:85px;bottom:-18px;right:-14px;opacity:0.35;transform:rotate(18deg)" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="13" stroke="currentColor" stroke-width="2"/><path d="M16 22C16 22 14 18 14 16C14 14 15.5 13 17 13C18.2 13 19 13.8 19 13.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M24 22C24 22 26 18 26 16C26 14 24.5 13 23 13C21.8 13 21 13.8 21 13.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 26H26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 22V26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:55px;height:55px;top:5px;right:8px;opacity:0.25;transform:rotate(30deg)" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="13" stroke="currentColor" stroke-width="2"/><path d="M14 26H26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:38px;height:38px;bottom:5px;left:25%;opacity:0.20;transform:rotate(-25deg)" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="13" stroke="currentColor" stroke-width="2"/></svg>
+              <div class="trust-number">CHF 60</div>
+              <div class="trust-label">Avg. monthly savings</div>
+            </div>
+          </div>
+
+          <!-- Restaurant trust -->
+          <div class="persona-trust" data-for="restaurant">
+            <!-- 34k+ Active diners (4 icons) -->
+            <div class="trust-card">
+              <svg class="trust-bg-icon" style="width:108px;height:108px;top:-16px;right:-20px;opacity:0.45;transform:rotate(10deg)" viewBox="0 0 40 40" fill="none"><circle cx="16" cy="14" r="5" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="14" r="4" stroke="currentColor" stroke-width="2"/><path d="M6 32C6 26 10 22 16 22C19 22 21.5 23 23 25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M22 30C22 26 24.5 23 28 23C31.5 23 34 26 34 30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:75px;height:75px;bottom:-12px;left:-16px;opacity:0.32;transform:rotate(-14deg)" viewBox="0 0 40 40" fill="none"><circle cx="16" cy="14" r="5" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="14" r="4" stroke="currentColor" stroke-width="2"/><path d="M6 32C6 26 10 22 16 22C19 22 21.5 23 23 25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M22 30C22 26 24.5 23 28 23C31.5 23 34 26 34 30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:50px;height:50px;top:40%;left:45%;opacity:0.22;transform:rotate(6deg)" viewBox="0 0 40 40" fill="none"><circle cx="16" cy="14" r="5" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="14" r="4" stroke="currentColor" stroke-width="2"/></svg>
+              <svg class="trust-bg-icon" style="width:38px;height:38px;top:5px;left:12px;opacity:0.18;transform:rotate(-20deg)" viewBox="0 0 40 40" fill="none"><circle cx="16" cy="14" r="5" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="14" r="4" stroke="currentColor" stroke-width="2"/></svg>
+              <div class="trust-number">34k+</div>
+              <div class="trust-label">Active diners</div>
+            </div>
+            <!-- 12,400+ Deals redeemed (3 icons) -->
+            <div class="trust-card">
+              <svg class="trust-bg-icon" style="width:100px;height:100px;top:-18px;left:-16px;opacity:0.40;transform:rotate(16deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="24" rx="4" stroke="currentColor" stroke-width="2"/><path d="M6 16H34" stroke="currentColor" stroke-width="2"/><circle cx="14" cy="24" r="3" stroke="currentColor" stroke-width="2"/><path d="M14 21L14 27" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1 2"/><path d="M22 24H30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M22 28H27" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:82px;height:82px;bottom:-16px;right:-18px;opacity:0.32;transform:rotate(-12deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="24" rx="4" stroke="currentColor" stroke-width="2"/><path d="M6 16H34" stroke="currentColor" stroke-width="2"/><circle cx="14" cy="24" r="3" stroke="currentColor" stroke-width="2"/><path d="M22 24H30" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:48px;height:48px;top:25%;right:15%;opacity:0.22;transform:rotate(8deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="24" rx="4" stroke="currentColor" stroke-width="2"/><path d="M6 16H34" stroke="currentColor" stroke-width="2"/></svg>
+              <div class="trust-number">12,400+</div>
+              <div class="trust-label">Deals redeemed</div>
+            </div>
+            <!-- 89% Fill rate (4 icons — charts) -->
+            <div class="trust-card">
+              <svg class="trust-bg-icon" style="width:112px;height:112px;bottom:-22px;left:-18px;opacity:0.42;transform:rotate(-8deg)" viewBox="0 0 40 40" fill="none"><path d="M8 32V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 32H34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13 26Q18 16 23 20Q28 24 33 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="13" cy="26" r="2" fill="currentColor" opacity="0.6"/><circle cx="23" cy="20" r="2" fill="currentColor" opacity="0.6"/><circle cx="33" cy="12" r="2" fill="currentColor" opacity="0.6"/></svg>
+              <svg class="trust-bg-icon" style="width:70px;height:70px;top:-10px;right:-16px;opacity:0.32;transform:rotate(22deg)" viewBox="0 0 40 40" fill="none"><path d="M8 32V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 32H34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13 26Q18 16 23 20Q28 24 33 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+              <svg class="trust-bg-icon" style="width:55px;height:55px;top:10px;left:10px;opacity:0.25;transform:rotate(-15deg)" viewBox="0 0 40 40" fill="none"><path d="M8 32V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 32H34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13 26Q18 16 23 20Q28 24 33 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+              <svg class="trust-bg-icon" style="width:40px;height:40px;bottom:10px;right:25%;opacity:0.20;transform:rotate(10deg)" viewBox="0 0 40 40" fill="none"><path d="M8 32V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 32H34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <div class="trust-number">89%</div>
+              <div class="trust-label">Fill rate</div>
+            </div>
+            <!-- 850+ Partner restaurants (3 icons) -->
+            <div class="trust-card">
+              <svg class="trust-bg-icon" style="width:95px;height:95px;top:-16px;left:-20px;opacity:0.45;transform:rotate(-16deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="16" width="28" height="4" rx="2" stroke="currentColor" stroke-width="2"/><path d="M10 16V12C10 9 13 6 20 6C27 6 30 9 30 12V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="28" r="3" stroke="currentColor" stroke-width="2"/><circle cx="27" cy="28" r="3" stroke="currentColor" stroke-width="2"/><path d="M16 28H24" stroke="currentColor" stroke-width="2"/><path d="M20 20V25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:100px;height:100px;bottom:-20px;right:-14px;opacity:0.35;transform:rotate(12deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="16" width="28" height="4" rx="2" stroke="currentColor" stroke-width="2"/><path d="M10 16V12C10 9 13 6 20 6C27 6 30 9 30 12V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="28" r="3" stroke="currentColor" stroke-width="2"/><circle cx="27" cy="28" r="3" stroke="currentColor" stroke-width="2"/><path d="M16 28H24" stroke="currentColor" stroke-width="2"/><path d="M20 20V25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="trust-bg-icon" style="width:45px;height:45px;top:45%;left:40%;opacity:0.22;transform:rotate(-6deg)" viewBox="0 0 40 40" fill="none"><rect x="6" y="16" width="28" height="4" rx="2" stroke="currentColor" stroke-width="2"/><path d="M10 16V12C10 9 13 6 20 6C27 6 30 9 30 12V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <div class="trust-number">850+</div>
+              <div class="trust-label">Partner restaurants</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="cta">
+      <div class="container">
+        <!-- Guest CTA -->
+        <div class="cta-content persona-section active" data-for="guest">
+          <h2 class="cta-headline">Your friends. Your deals. Your map.</h2>
+          <p class="cta-subtitle">See where friends go, read their private reviews, and discover deals. No ads, no subscriptions, free forever.</p>
+          <div class="cta-actions">
+            <a href="#" class="btn btn-primary btn-lg">Download BookedEat</a>
+          </div>
+          <p class="cta-footnote">Available on iOS and Android. No credit card required.</p>
+        </div>
+
+        <!-- Restaurant CTA -->
+        <div class="cta-content persona-section" data-for="restaurant">
+          <h2 class="cta-headline">Ready to fill more tables?</h2>
+          <p class="cta-subtitle">Join 850+ restaurants reaching new customers with customizable deals. No setup fees, full control, cancel anytime.</p>
+          <div class="cta-actions">
+            <a href="portal/" class="btn btn-primary btn-lg">Get Started Free</a>
+          </div>
+          <p class="cta-footnote">No setup fees. Customize everything. Full transparency.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 BookedEat. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Sticky CTA -->
+  <div class="mobile-cta" id="mobileCta">
+    <a href="#" class="btn btn-primary btn-lg mobile-cta-btn" id="mobileCTABtn">Get BookedEat Free</a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

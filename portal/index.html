@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookedEat — Restaurant Portal</title>
+  <meta name="description" content="Manage your restaurant deals and view analytics on BookedEat.">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="portal.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body class="portal-body">
+
+  <!-- Portal Navigation -->
+  <header class="portal-nav" id="portal-nav">
+    <a href="../" class="portal-nav-brand">Booked<span>Eat</span></a>
+    <nav class="portal-nav-links" id="portal-nav-links">
+      <button class="portal-nav-link" data-route="dashboard">Dashboard</button>
+      <button class="portal-nav-link" data-route="deals">Deals</button>
+      <button class="portal-nav-link" data-route="verify-code">Verify</button>
+      <button class="portal-nav-link" data-route="settings">Settings</button>
+      <button class="portal-nav-link sign-out" id="nav-sign-out">Sign Out</button>
+    </nav>
+  </header>
+
+  <main id="portal-app">
+
+    <!-- ==================== LOGIN ==================== -->
+    <section id="screen-login" class="portal-screen">
+      <div class="login-wrapper">
+        <div class="login-card">
+          <div class="login-icon">&#127978;</div>
+          <h1 class="login-title">Partner Sign In</h1>
+          <p class="login-subtitle">Sign in with your restaurant account</p>
+
+          <div id="login-error" class="alert alert-error" style="display:none;"></div>
+
+          <form id="login-form" autocomplete="on">
+            <div class="form-group">
+              <label class="form-label" for="login-email">Email</label>
+              <input type="email" id="login-email" class="form-input" placeholder="you@restaurant.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="login-password">Password</label>
+              <div class="form-input-wrapper">
+                <input type="password" id="login-password" class="form-input" placeholder="Your password" required autocomplete="current-password">
+                <button type="button" class="password-toggle" id="password-toggle">&#128065;</button>
+              </div>
+            </div>
+            <button type="submit" class="btn-portal btn-portal-primary" id="login-btn">
+              Sign In
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <section id="screen-dashboard" class="portal-screen">
+      <div class="portal-container portal-container-wide">
+        <!-- Header -->
+        <div class="dashboard-header">
+          <div class="dashboard-avatar" id="dash-avatar"></div>
+          <div>
+            <div class="dashboard-name" id="dash-name"></div>
+            <div class="dashboard-subtitle">Partner Dashboard</div>
+          </div>
+        </div>
+
+        <!-- Top row: value banner + stats side by side on desktop -->
+        <div class="dashboard-top-row">
+          <!-- Value Banner -->
+          <div class="value-banner">
+            <div class="value-banner-icon">&#128101;</div>
+            <div class="value-banner-text" id="dash-value-text"></div>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="stats-row">
+            <div class="stat-item">
+              <div class="stat-value blue" id="dash-active-deals">0</div>
+              <div class="stat-label">Active Deals</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value purple" id="dash-redemptions">0</div>
+              <div class="stat-label">Redemptions</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value green" id="dash-guests">0</div>
+              <div class="stat-label">Guests</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts grid: side by side on desktop -->
+        <div class="dashboard-charts-grid">
+          <!-- Pie Chart -->
+          <div class="portal-card chart-section">
+            <div class="chart-title">Redemptions by Deal</div>
+            <div id="pie-chart-area">
+              <div class="chart-container"><canvas id="pie-chart"></canvas></div>
+              <div class="chart-legend" id="pie-legend"></div>
+            </div>
+            <div class="chart-empty" id="pie-empty" style="display:none;">No redemption data yet</div>
+          </div>
+
+          <!-- Line Chart -->
+          <div class="portal-card chart-section">
+            <div class="chart-title">Daily Guests</div>
+            <div class="chart-subtitle">Last 30 days</div>
+            <div id="line-chart-area">
+              <div class="chart-container"><canvas id="line-chart"></canvas></div>
+            </div>
+            <div class="chart-empty" id="line-empty" style="display:none;">No guest data yet</div>
+          </div>
+        </div>
+
+        <!-- Manage Deals -->
+        <a class="manage-deals-card" href="#deals">
+          <div class="manage-deals-icon">&#127991;</div>
+          <div class="manage-deals-info">
+            <div class="manage-deals-title">Manage Deals</div>
+            <div class="manage-deals-count" id="dash-deal-count">0 total deals</div>
+          </div>
+          <div class="manage-deals-arrow">&#8250;</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ==================== DEALS LIST ==================== -->
+    <section id="screen-deals" class="portal-screen">
+      <div class="portal-container portal-container-wide">
+        <div class="deals-header">
+          <h1 class="deals-title">Manage Deals</h1>
+          <button class="deals-add-btn" id="deals-add-btn" title="Create deal">+</button>
+        </div>
+
+        <div class="filter-chips" id="deals-filter-chips">
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="active">Active</button>
+          <button class="filter-chip" data-filter="inactive">Inactive</button>
+        </div>
+
+        <div id="deals-list" class="deals-grid"></div>
+        <div id="deals-empty" class="empty-state" style="display:none;">
+          <div class="empty-state-icon">&#127991;</div>
+          <div class="empty-state-text">No deals yet</div>
+          <button class="btn-portal btn-portal-primary" style="width:auto;padding:12px 24px;" id="deals-create-first">Create First Deal</button>
+        </div>
+        <div id="deals-loading" class="loading-center" style="display:none;"><div class="spinner dark"></div></div>
+      </div>
+    </section>
+
+    <!-- ==================== DEAL FORM ==================== -->
+    <section id="screen-deal-form" class="portal-screen">
+      <div class="portal-container portal-container-wide">
+        <div class="form-screen-header">
+          <button class="form-back-btn" id="form-back-btn">&#8592;</button>
+          <h1 class="form-screen-title" id="form-title">Create Deal</h1>
+        </div>
+
+        <form id="deal-form" novalidate>
+          <!-- Row 1: Deal Type (full width) -->
+          <div class="form-panel">
+            <div class="section-label">Deal Type</div>
+            <div class="type-pills" id="deal-type-pills"></div>
+          </div>
+
+          <!-- Row 2: Two columns -->
+          <div class="form-columns">
+            <!-- LEFT: Deal Details + Pricing + Included Items -->
+            <div class="form-col">
+              <div class="form-panel">
+                <div class="section-label">Deal Details</div>
+                <div class="form-group">
+                  <label class="form-label" for="deal-title">Title *</label>
+                  <input type="text" id="deal-title" class="form-input" placeholder="e.g., 20% off lunch menu" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="deal-description">Description (optional)</label>
+                  <textarea id="deal-description" class="form-input" rows="2" placeholder="Brief description of the deal"></textarea>
+                </div>
+                <div class="form-group" id="field-discount-value" style="display:none;">
+                  <label class="form-label" for="deal-discount-value" id="discount-value-label">Percentage (1-100)</label>
+                  <input type="number" id="deal-discount-value" class="form-input" min="1" step="1">
+                </div>
+                <div class="form-group" id="field-item-description" style="display:none;">
+                  <label class="form-label" for="deal-item-description" id="item-description-label">Item</label>
+                  <input type="text" id="deal-item-description" class="form-input">
+                </div>
+              </div>
+
+              <!-- Price fields -->
+              <div id="field-pricing" style="display:none;">
+                <div class="form-panel">
+                  <div class="section-label" id="pricing-label">Menu Pricing</div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="deal-price">Price (CHF) *</label>
+                      <input type="number" id="deal-price" class="form-input" min="0" step="0.01" placeholder="e.g., 49">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="deal-original-price">Original Price (CHF)</label>
+                      <input type="number" id="deal-original-price" class="form-input" min="0" step="0.01" placeholder="e.g., 65">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Included items -->
+              <div id="field-included-items" style="display:none;">
+                <div class="form-panel">
+                  <div class="section-label">Included Items</div>
+                  <div id="included-items-list"></div>
+                  <div class="add-item-row">
+                    <input type="text" id="new-item-input" class="form-input" placeholder="e.g., Starter, Main Course, Dessert">
+                    <button type="button" class="add-item-btn" id="add-item-btn">&#10753;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: Limits + Cooldown + Schedule / Event Dates -->
+            <div class="form-col">
+              <div class="form-panel">
+                <div class="section-label">Limits</div>
+                <div class="form-group">
+                  <label class="form-label" for="deal-max-per-user">Max uses per customer (empty = unlimited)</label>
+                  <input type="number" id="deal-max-per-user" class="form-input" min="1" step="1">
+                </div>
+
+                <div id="field-cooldown" style="display:none;">
+                  <div class="section-label" style="margin-top:16px;">Cooldown Period</div>
+                  <div class="cooldown-chips" id="cooldown-chips">
+                    <button type="button" class="cooldown-chip active" data-value="">None</button>
+                    <button type="button" class="cooldown-chip" data-value="7">7 days</button>
+                    <button type="button" class="cooldown-chip" data-value="14">14 days</button>
+                    <button type="button" class="cooldown-chip" data-value="30">30 days</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Schedule -->
+              <div id="field-schedule" style="display:none;">
+                <div class="form-panel">
+                  <div class="section-label">Schedule</div>
+                  <div class="form-helper" style="margin-bottom:10px;">Leave blank for always available</div>
+                  <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">Valid days</div>
+                  <div class="day-toggles" id="day-toggles"></div>
+
+                  <div class="form-row" style="margin-top:14px;">
+                    <div class="form-group">
+                      <label class="form-label">Start date</label>
+                      <input type="date" id="deal-valid-from" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">End date</label>
+                      <input type="date" id="deal-valid-until" class="form-input">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Start time</label>
+                      <input type="time" id="deal-time-start" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">End time</label>
+                      <input type="time" id="deal-time-end" class="form-input">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Event Dates -->
+              <div id="field-event-dates" style="display:none;">
+                <div class="form-panel">
+                  <div class="section-label">Event Dates</div>
+                  <div id="event-calendar"></div>
+                  <div class="event-date-chips" id="event-date-chips"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit (full width) -->
+          <div style="margin-top:24px;">
+            <button type="submit" class="btn-portal btn-portal-primary" id="deal-submit-btn">
+              Create Deal
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== SETTINGS ==================== -->
+    <section id="screen-settings" class="portal-screen">
+      <div class="portal-container">
+        <h1 class="deals-title" style="margin-bottom:24px;">Settings</h1>
+
+        <!-- Restaurant info -->
+        <div class="settings-header">
+          <div class="settings-avatar" id="settings-avatar"></div>
+          <div>
+            <div class="dashboard-name" id="settings-name"></div>
+            <div class="dashboard-subtitle" id="settings-address"></div>
+          </div>
+        </div>
+
+        <!-- Billing -->
+        <div class="portal-card" id="settings-billing">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <span style="font-size:20px;">&#128196;</span>
+            <span style="font-size:16px;font-weight:600;">Billing</span>
+          </div>
+          <div class="billing-row">
+            <span class="billing-label">Total Redemptions</span>
+            <span class="billing-value" id="billing-redemptions">0</span>
+          </div>
+          <div class="billing-row">
+            <span class="billing-label">Amount Owed</span>
+            <span class="billing-value bold" id="billing-amount">CHF 0.00</span>
+          </div>
+          <div class="billing-note">CHF 0.50 per redemption</div>
+          <button class="btn-portal btn-portal-outline warning" style="padding:12px;">
+            &#9993; Contact for Payment
+          </button>
+        </div>
+
+        <!-- Sign Out -->
+        <div style="margin-top:32px;">
+          <button class="btn-portal btn-portal-outline danger" id="settings-sign-out">
+            &#128682; Sign Out
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VERIFY CODE ==================== -->
+    <section id="screen-verify-code" class="portal-screen">
+      <div class="portal-container">
+        <h1 class="deals-title" style="margin-bottom:24px;">Verify Code</h1>
+
+        <div class="verify-info-banner">
+          <div class="verify-info-icon">&#128205;</div>
+          <div class="verify-info-text">
+            <strong>Automatic verification</strong> &mdash; Customers can only redeem deals when they are within 100 metres of your restaurant. Codes are confirmed automatically upon redemption, so manual verification is typically not required. Use this tool if you'd like to double-check a code on the spot.
+          </div>
+        </div>
+
+        <div class="verify-wrapper">
+          <div class="verify-card">
+            <div class="verify-icon">&#128274;</div>
+            <h2 class="verify-title">Enter Customer Code</h2>
+            <p class="verify-subtitle">Enter the 6-character code shown by your customer</p>
+
+            <div class="form-group" style="text-align:center;">
+              <input type="text" id="verify-code-input" class="form-input code-input" maxlength="6" placeholder="------" autocomplete="off">
+            </div>
+
+            <button class="btn-portal btn-portal-green" id="verify-btn" disabled>
+              Verify
+            </button>
+
+            <div id="verify-result"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Confirm Dialog -->
+  <div class="dialog-overlay hidden" id="confirm-dialog">
+    <div class="dialog-box">
+      <div class="dialog-title" id="dialog-title"></div>
+      <div class="dialog-message" id="dialog-message"></div>
+      <div class="dialog-actions">
+        <button class="dialog-btn dialog-btn-cancel" id="dialog-cancel">Cancel</button>
+        <button class="dialog-btn dialog-btn-danger" id="dialog-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="supabase-config.js"></script>
+  <script src="portal.js"></script>
+</body>
+</html>
