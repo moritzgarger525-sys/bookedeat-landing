@@ -1017,94 +1017,71 @@ img {
 }
 
 /* ============================================================
-   Fan Dock — Guest screenshots (Dock magnification)
+   Screenshot Carousel — Guest screenshots (infinite loop)
    ============================================================ */
-.fan-dock {
+.screenshot-carousel {
+  overflow: hidden;
+  width: 100%;
+  padding: 30px 0 10px;
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.screenshot-track {
   display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 12px;
-  padding: 20px 0 10px;
+  gap: 28px;
+  width: max-content;
+  animation: carousel-scroll 35s linear infinite;
+  will-change: transform;
 }
 
-.fan-item {
+.screenshot-carousel:hover .screenshot-track {
+  animation-play-state: paused;
+}
+
+@keyframes carousel-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.screenshot-item {
   flex-shrink: 0;
-  z-index: 1;
-  transform: translateY(0) scale(1);
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  cursor: pointer;
+  text-align: center;
 }
 
-.fan-item:hover {
-  transform: translateY(-20px) scale(1.2);
-  z-index: 10;
-}
-
-.fan-item:hover .fan-phone {
-  box-shadow:
-    0 16px 40px rgba(0, 0, 0, 0.3),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-}
-
-/* Neighbours scale slightly via :has() and + */
-.fan-item:has(+ .fan-item:hover),
-.fan-item:hover + .fan-item {
-  transform: translateY(-8px) scale(1.06);
-  z-index: 5;
-}
-
-.fan-phone {
-  width: 120px;
-  height: 250px;
-  border-radius: 18px;
+.screenshot-phone {
+  width: 165px;
+  height: 340px;
+  border-radius: 22px;
   background: #1C1C1E;
   padding: 5px;
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.15),
+    0 10px 30px rgba(0, 0, 0, 0.18),
     inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.fan-phone img {
+.screenshot-item:hover .screenshot-phone {
+  transform: translateY(-6px);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.screenshot-phone img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 14px;
+  border-radius: 18px;
   display: block;
 }
 
-/* Caption below the dock */
-.fan-caption {
-  text-align: center;
-  font-size: 15px;
+.screenshot-label {
+  margin-top: 14px;
+  font-size: 14px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-  min-height: 24px;
-  margin-top: 20px;
-  transition: opacity 0.25s ease;
-}
-
-@media (max-width: 768px) {
-  .fan-phone {
-    width: 80px;
-    height: 166px;
-    border-radius: 12px;
-    padding: 3px;
-  }
-  .fan-phone img { border-radius: 10px; }
-  .fan-caption { font-size: 13px; }
-}
-
-@media (max-width: 480px) {
-  .fan-dock { gap: 6px; }
-  .fan-phone {
-    width: 60px;
-    height: 125px;
-    border-radius: 9px;
-    padding: 2px;
-  }
-  .fan-phone img { border-radius: 7px; }
+  color: #000000;
 }
 
 /* ============================================================
@@ -1653,9 +1630,8 @@ img {
     margin-bottom: 16px;
   }
 
-  /* --- Fan dock hidden, phone slideshow visible --- */
-  .fan-dock,
-  .fan-caption {
+  /* --- Carousel hidden, phone slideshow visible --- */
+  .screenshot-carousel {
     display: none;
   }
 

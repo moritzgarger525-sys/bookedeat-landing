@@ -321,23 +321,8 @@
   initSlideshow('phone-showcase', 'phone-caption', 'phone-dots', 3000);
 
   /* ----------------------------------------------------------
-     7b. Fan Dock — Dock-style magnification
+     7b. Screenshot Carousel — continuous loop (pure CSS)
      ---------------------------------------------------------- */
-  var fanDock = document.getElementById('fan-dock');
-  var fanCaption = document.getElementById('fan-caption');
-
-  if (fanDock && fanCaption) {
-    var fanItems = fanDock.querySelectorAll('.fan-item');
-    fanItems.forEach(function (item) {
-      item.addEventListener('mouseenter', function () {
-        fanCaption.textContent = this.getAttribute('data-caption') || '';
-        fanCaption.style.opacity = '1';
-      });
-      item.addEventListener('mouseleave', function () {
-        fanCaption.style.opacity = '0';
-      });
-    });
-  }
 
   /* ----------------------------------------------------------
      8. Trust numbers — count-up animation
