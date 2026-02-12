@@ -321,8 +321,82 @@
   initSlideshow('phone-showcase', 'phone-caption', 'phone-dots', 3000);
 
   /* ----------------------------------------------------------
-     7b. Screenshot Carousel — continuous loop (pure CSS)
+     7b. Screenshot Carousel — typewriter caption
      ---------------------------------------------------------- */
+  (function () {
+    var carousel = document.getElementById('screenshot-carousel');
+    var captionEl = document.getElementById('carousel-caption-text');
+    if (!carousel || !captionEl) return;
+
+    var items = carousel.querySelectorAll('.screenshot-item');
+    var track = carousel.querySelector('.screenshot-track');
+    var currentCaption = '';
+    var targetCaption = '';
+    var charIndex = 0;
+    var isDeleting = false;
+    var timer = null;
+
+    function getCenterItem() {
+      var center = carousel.getBoundingClientRect().left + carousel.offsetWidth / 2;
+      var closest = null;
+      var closestDist = Infinity;
+      items.forEach(function (item) {
+        var rect = item.getBoundingClientRect();
+        var itemCenter = rect.left + rect.width / 2;
+        var dist = Math.abs(itemCenter - center);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = item;
+        }
+      });
+      return closest;
+    }
+
+    function typewrite() {
+      if (!isDeleting) {
+        charIndex++;
+        captionEl.textContent = targetCaption.substring(0, charIndex);
+        if (charIndex >= targetCaption.length) {
+          currentCaption = targetCaption;
+          return; // done typing, wait for next change
+        }
+        timer = setTimeout(typewrite, 55);
+      } else {
+        charIndex--;
+        captionEl.textContent = currentCaption.substring(0, charIndex);
+        if (charIndex <= 0) {
+          isDeleting = false;
+          currentCaption = '';
+          captionEl.textContent = '';
+          timer = setTimeout(typewrite, 150);
+          return;
+        }
+        timer = setTimeout(typewrite, 30);
+      }
+    }
+
+    function checkCenter() {
+      var item = getCenterItem();
+      if (!item) return;
+      var caption = item.getAttribute('data-caption') || '';
+      if (caption !== targetCaption) {
+        targetCaption = caption;
+        if (timer) clearTimeout(timer);
+        if (currentCaption) {
+          isDeleting = true;
+          charIndex = currentCaption.length;
+        } else {
+          isDeleting = false;
+          charIndex = 0;
+        }
+        typewrite();
+      }
+    }
+
+    // Poll for center item changes
+    setInterval(checkCenter, 200);
+    checkCenter();
+  })();
 
   /* ----------------------------------------------------------
      8. Trust numbers — count-up animation

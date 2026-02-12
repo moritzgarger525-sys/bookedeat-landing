@@ -1077,11 +1077,23 @@ img {
   display: block;
 }
 
-.screenshot-label {
-  margin-top: 14px;
-  font-size: 14px;
+/* Centered typewriter caption below carousel */
+.carousel-caption-container {
+  text-align: center;
+  min-height: 32px;
+  margin-top: 24px;
+  font-size: 17px;
   font-weight: 600;
-  color: #000000;
+}
+
+.carousel-caption-text {
+  color: var(--blue-500);
+}
+
+.carousel-caption-cursor {
+  color: var(--blue-500);
+  animation: blink 1s step-end infinite;
+  font-weight: 300;
 }
 
 /* ============================================================
@@ -1631,7 +1643,8 @@ img {
   }
 
   /* --- Carousel hidden, phone slideshow visible --- */
-  .screenshot-carousel {
+  .screenshot-carousel,
+  .carousel-caption-container {
     display: none;
   }
 
