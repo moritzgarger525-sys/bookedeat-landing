@@ -375,9 +375,19 @@
       }
     }
 
+    var currentHighlight = null;
+
     function checkCenter() {
       var item = getCenterItem();
       if (!item) return;
+
+      // Highlight the center item
+      if (item !== currentHighlight) {
+        if (currentHighlight) currentHighlight.classList.remove('is-center');
+        item.classList.add('is-center');
+        currentHighlight = item;
+      }
+
       var caption = item.getAttribute('data-caption') || '';
       if (caption !== targetCaption) {
         targetCaption = caption;

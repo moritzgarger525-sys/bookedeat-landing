@@ -1060,6 +1060,13 @@ img {
   transition: transform 0.3s ease;
 }
 
+.screenshot-item.is-center .screenshot-phone {
+  transform: translateY(-8px) scale(1.08);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+    0 0 30px rgba(0, 122, 255, 0.2);
+}
+
 .screenshot-item:hover .screenshot-phone {
   transform: translateY(-6px);
 }
