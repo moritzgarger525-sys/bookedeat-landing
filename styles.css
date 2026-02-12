@@ -1080,18 +1080,18 @@ img {
 /* Centered typewriter caption below carousel */
 .carousel-caption-container {
   text-align: center;
-  min-height: 32px;
-  margin-top: 24px;
-  font-size: 17px;
+  min-height: 40px;
+  margin-top: 28px;
+  font-size: 24px;
   font-weight: 600;
 }
 
 .carousel-caption-text {
-  color: var(--blue-500);
+  color: #000000;
 }
 
 .carousel-caption-cursor {
-  color: var(--blue-500);
+  color: #000000;
   animation: blink 1s step-end infinite;
   font-weight: 300;
 }
