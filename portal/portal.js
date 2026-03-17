@@ -43,6 +43,41 @@
   };
 
   // ============================================================
+  //  API HELPERS
+  // ============================================================
+  function getToken() {
+    return localStorage.getItem('partner_token');
+  }
+  function setToken(token) {
+    localStorage.setItem('partner_token', token);
+  }
+  function clearToken() {
+    localStorage.removeItem('partner_token');
+  }
+
+  async function apiFetch(path, options) {
+    var opts = options || {};
+    var headers = opts.headers || {};
+    var token = getToken();
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+    if (opts.body && typeof opts.body === 'object') {
+      headers['Content-Type'] = 'application/json';
+      opts.body = JSON.stringify(opts.body);
+    }
+    opts.headers = headers;
+    var resp = await fetch(API_BASE_URL + path, opts);
+    if (resp.status === 401) {
+      clearToken();
+      partner = null;
+      navigate('#login');
+      throw new Error('Session expired');
+    }
+    var data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || 'Request failed');
+    return data;
+  }
+
+  // ============================================================
   //  HELPERS
   // ============================================================
   function $(id) { return document.getElementById(id); }
@@ -72,7 +107,7 @@
       }
     }
     if (deal.valid_time_start && deal.valid_time_end) {
-      parts.push(deal.valid_time_start.slice(0, 5) + '–' + deal.valid_time_end.slice(0, 5));
+      parts.push(deal.valid_time_start.slice(0, 5) + '\u2013' + deal.valid_time_end.slice(0, 5));
     }
     if (deal.valid_until) {
       var diff = Math.ceil((new Date(deal.valid_until) - new Date()) / 86400000);
@@ -172,56 +207,20 @@
   //  AUTH
   // ============================================================
   async function checkSession() {
-    var result = await supabaseClient.auth.getSession();
-    var session = result.data && result.data.session;
-    if (session) {
-      var ok = await fetchPartner();
-      if (ok) {
+    var token = getToken();
+    if (token) {
+      try {
+        var data = await apiFetch('/partner/me');
+        partner = data;
         navigate(location.hash || '#dashboard');
-      } else {
-        await supabaseClient.auth.signOut();
+      } catch (e) {
+        clearToken();
         navigate('#login');
       }
     } else {
       navigate('#login');
     }
   }
-
-  async function fetchPartner() {
-    var userRes = await supabaseClient.auth.getUser();
-    var user = userRes.data && userRes.data.user;
-    if (!user) return false;
-
-    var res = await supabaseClient
-      .from('partners')
-      .select('*, restaurants(name, address, photos)')
-      .eq('user_id', user.id)
-      .maybeSingle();
-
-    if (res.error || !res.data) return false;
-    var d = res.data;
-    if (!d.is_verified) return false;
-
-    var rest = d.restaurants || {};
-    partner = {
-      id: d.id,
-      userId: d.user_id,
-      restaurantId: d.restaurant_id,
-      isVerified: d.is_verified,
-      restaurantName: rest.name || 'Your Restaurant',
-      restaurantAddress: rest.address || '',
-      restaurantPhotos: rest.photos || []
-    };
-    return true;
-  }
-
-  supabaseClient.auth.onAuthStateChange(function (event) {
-    if (event === 'SIGNED_OUT') {
-      partner = null;
-      deals = [];
-      navigate('#login');
-    }
-  });
 
   // Login form
   function setupLogin() {
@@ -251,15 +250,16 @@
       btn.innerHTML = '<div class="spinner"></div>';
 
       try {
-        var authRes = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
-        if (authRes.error) throw authRes.error;
+        var resp = await fetch(API_BASE_URL + '/partner/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, password: password })
+        });
+        var data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Invalid email or password.');
 
-        var ok = await fetchPartner();
-        if (!ok) {
-          await supabaseClient.auth.signOut();
-          showLoginError('No verified restaurant account found for this email.');
-          return;
-        }
+        setToken(data.access_token);
+        partner = data.partner;
         location.hash = '#dashboard';
       } catch (err) {
         showLoginError(err.message || 'Invalid email or password.');
@@ -288,18 +288,20 @@
 
     // Load data
     var results = await Promise.all([
-      supabaseClient.rpc('get_partner_dashboard_stats', { p_restaurant_id: partner.restaurantId }),
-      supabaseClient.from('deals').select('*').eq('partner_id', partner.userId).order('created_at', { ascending: false }),
-      supabaseClient.rpc('get_partner_deal_analytics', { p_restaurant_id: partner.restaurantId })
+      apiFetch('/partner/dashboard/stats'),
+      apiFetch('/partner/deals'),
+      apiFetch('/partner/deals/analytics')
     ]);
 
-    var stats = (results[0].data) || {};
-    deals = (results[1].data) || [];
-    var analytics = (results[2].data) || [];
+    var stats = results[0] || {};
+    deals = results[1] || [];
+    var analytics = results[2] || [];
 
-    // Daily stats (loaded separately — RPC may not exist)
-    var dailyRes = await supabaseClient.rpc('get_daily_redemption_stats', { p_restaurant_id: partner.restaurantId });
-    var dailyStats = (dailyRes.data) || [];
+    // Daily stats
+    var dailyStats = [];
+    try {
+      dailyStats = await apiFetch('/partner/analytics/daily-redemptions');
+    } catch (e) { /* ignore */ }
 
     // Render stats
     $('dash-value-text').textContent = (stats.unique_guests || 0) + ' unique customers brought to your restaurant';
@@ -445,13 +447,11 @@
     hide($('deals-list'));
     hide($('deals-empty'));
 
-    var res = await supabaseClient
-      .from('deals')
-      .select('*')
-      .eq('partner_id', partner.userId)
-      .order('created_at', { ascending: false });
-
-    deals = (res.data) || [];
+    try {
+      deals = await apiFetch('/partner/deals');
+    } catch (e) {
+      deals = [];
+    }
     hide($('deals-loading'));
     renderDeals();
   }
@@ -542,11 +542,9 @@
 
   async function handleToggle() {
     var id = this.getAttribute('data-toggle-id');
-    var active = this.checked;
-    await supabaseClient
-      .from('deals')
-      .update({ is_active: active, updated_at: new Date().toISOString() })
-      .eq('id', id);
+    try {
+      await apiFetch('/partner/deals/' + id + '/toggle', { method: 'PATCH' });
+    } catch (e) { /* ignore */ }
     initDeals();
   }
 
@@ -568,7 +566,9 @@
     }
     async function onConfirm() {
       cleanup();
-      await supabaseClient.from('deals').delete().eq('id', id);
+      try {
+        await apiFetch('/partner/deals/' + id, { method: 'DELETE' });
+      } catch (e) { /* ignore */ }
       initDeals();
     }
     function onCancel() { cleanup(); }
@@ -611,8 +611,9 @@
     if (editingDealId) {
       var deal = deals.find(function (d) { return d.id === editingDealId; });
       if (!deal) {
-        var res = await supabaseClient.from('deals').select('*').eq('id', editingDealId).single();
-        deal = res.data;
+        try {
+          deal = await apiFetch('/partner/deals/' + editingDealId);
+        } catch (e) { deal = null; }
       }
       if (deal) populateForm(deal);
     }
@@ -1023,8 +1024,6 @@
     btn.innerHTML = '<div class="spinner"></div>';
 
     var data = {
-      partner_id: partner.userId,
-      restaurant_id: partner.restaurantId,
       title: title,
       description: $('deal-description').value.trim() || null,
       discount_type: type,
@@ -1053,13 +1052,9 @@
 
     try {
       if (editingDealId) {
-        delete data.partner_id;
-        delete data.restaurant_id;
-        var res = await supabaseClient.from('deals').update(data).eq('id', editingDealId);
-        if (res.error) throw res.error;
+        await apiFetch('/partner/deals/' + editingDealId, { method: 'PATCH', body: data });
       } else {
-        var res2 = await supabaseClient.from('deals').insert(data).select().single();
-        if (res2.error) throw res2.error;
+        await apiFetch('/partner/deals', { method: 'POST', body: data });
       }
       location.hash = '#deals';
     } catch (err) {
@@ -1084,12 +1079,12 @@
     $('settings-name').textContent = partner.restaurantName;
     $('settings-address').textContent = partner.restaurantAddress || '';
 
-    var statsRes = await supabaseClient.rpc('get_partner_dashboard_stats', { p_restaurant_id: partner.restaurantId });
-    var stats = (statsRes.data) || {};
-
-    $('billing-redemptions').textContent = stats.total_redemptions || 0;
-    var amount = stats.amount_owed || 0;
-    $('billing-amount').textContent = 'CHF ' + (typeof amount === 'number' ? amount.toFixed(2) : '0.00');
+    try {
+      var stats = await apiFetch('/partner/dashboard/stats');
+      $('billing-redemptions').textContent = stats.total_redemptions || 0;
+      var amount = stats.amount_owed || 0;
+      $('billing-amount').textContent = 'CHF ' + (typeof amount === 'number' ? amount.toFixed(2) : '0.00');
+    } catch (e) { /* ignore */ }
   }
 
   function setupSettings() {
@@ -1108,7 +1103,7 @@
       }
       async function onConfirm() {
         cleanup();
-        await supabaseClient.auth.signOut();
+        clearToken();
         partner = null;
         location.hash = '#login';
       }
@@ -1159,13 +1154,10 @@
     $('verify-result').innerHTML = '';
 
     try {
-      var res = await supabaseClient.rpc('confirm_redemption_code', {
-        p_code: code,
-        p_partner_id: partner.userId
+      var result = await apiFetch('/partner/verify-code', {
+        method: 'POST',
+        body: { code: code }
       });
-
-      var result = res.data || {};
-      if (res.error) throw res.error;
 
       if (result.success) {
         $('verify-result').innerHTML =
