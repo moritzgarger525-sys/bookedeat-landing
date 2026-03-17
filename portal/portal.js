@@ -915,9 +915,13 @@
     var html = '';
     for (var i = 0; i < formState.influencerCodes.length; i++) {
       var c = formState.influencerCodes[i];
+      var rate = parseFloat(c.compensation_rate) || 0;
+      var rateLabel = rate > 0
+        ? ' \u2014 CHF ' + rate.toFixed(2) + (c.compensation_type === 'fixed' ? ' fixed' : '/unlock')
+        : '';
       html += '<div class="influencer-code-row">' +
         '<span class="influencer-handle">@' + escapeHTML(c.instagram_handle) + '</span>' +
-        '<span class="influencer-code-value">' + escapeHTML(c.code) + '</span>' +
+        '<span class="influencer-code-value">' + escapeHTML(c.code) + escapeHTML(rateLabel) + '</span>' +
         '<button type="button" class="copy-btn" data-copy-code="' + escapeHTML(c.code) + '" title="Copy code">&#128203;</button>' +
         '<button type="button" class="btn-icon danger influencer-delete-btn" data-inf-idx="' + i + '" title="Remove">&#10005;</button>' +
       '</div>';
@@ -1052,8 +1056,12 @@
   async function handleAddInfluencerCode() {
     var handleInput = $('new-influencer-handle');
     var codeInput = $('new-influencer-code');
+    var rateInput = $('new-influencer-rate');
+    var typeSelect = $('new-influencer-comp-type');
     var handle = handleInput.value.trim().replace(/^@/, '');
     var code = codeInput.value.trim().toUpperCase();
+    var rate = rateInput ? parseFloat(rateInput.value) || 0 : 0;
+    var compType = typeSelect ? typeSelect.value : 'per_unlock';
 
     if (!handle) { handleInput.focus(); return; }
     if (code.length < 4) { codeInput.focus(); return; }
@@ -1067,12 +1075,19 @@
       return;
     }
 
+    var payload = {
+      instagram_handle: handle,
+      code: code,
+      compensation_rate: rate,
+      compensation_type: compType
+    };
+
     if (editingDealId) {
       // Save immediately via API
       try {
         var created = await apiFetch('/partner/deals/' + editingDealId + '/influencer-codes', {
           method: 'POST',
-          body: { instagram_handle: handle, code: code }
+          body: payload
         });
         formState.influencerCodes.push(created);
       } catch (e) {
@@ -1081,11 +1096,12 @@
       }
     } else {
       // Buffer for new deal
-      formState.influencerCodes.push({ instagram_handle: handle, code: code });
+      formState.influencerCodes.push(payload);
     }
 
     handleInput.value = '';
     codeInput.value = '';
+    if (rateInput) rateInput.value = '';
     renderInfluencerCodes();
   }
 

@@ -307,6 +307,11 @@
                 </div>
                 <input type="text" id="new-influencer-code" class="form-input insider-code-field" placeholder="CODE" maxlength="20" style="flex:1;" autocomplete="off">
                 <button type="button" class="btn-icon" id="influencer-generate-btn" title="Generate code">&#8635;</button>
+                <input type="number" id="new-influencer-rate" class="form-input" placeholder="CHF rate" min="0" step="0.01" style="width:90px;" autocomplete="off">
+                <select id="new-influencer-comp-type" class="form-input" style="width:110px;">
+                  <option value="per_unlock">Per unlock</option>
+                  <option value="fixed">Fixed</option>
+                </select>
                 <button type="button" class="btn-portal btn-portal-primary" id="add-influencer-btn" style="width:auto;padding:10px 16px;font-size:13px;">Add</button>
               </div>
             </div>
