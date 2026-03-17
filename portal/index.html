@@ -351,12 +351,25 @@
             <span class="billing-label">Total Redemptions</span>
             <span class="billing-value" id="billing-redemptions">0</span>
           </div>
+          <div style="border-top:1px solid rgba(0,0,0,0.08);margin:10px 0;"></div>
           <div class="billing-row">
-            <span class="billing-label">Amount Owed</span>
+            <span class="billing-label">BookedEat Fee</span>
+            <span class="billing-value" id="billing-bookedeat-fee">CHF 0.00</span>
+          </div>
+          <div class="billing-note" style="margin-bottom:8px;">CHF 0.50 per confirmed redemption</div>
+          <div id="billing-influencer-section" style="display:none;">
+            <div class="billing-row" style="margin-top:4px;">
+              <span class="billing-label">Influencer Compensation</span>
+              <span class="billing-value" id="billing-influencer-total">CHF 0.00</span>
+            </div>
+            <div id="billing-influencer-breakdown" style="padding-left:12px;margin:6px 0 10px;"></div>
+          </div>
+          <div style="border-top:1px solid rgba(0,0,0,0.08);margin:10px 0;"></div>
+          <div class="billing-row">
+            <span class="billing-label" style="font-weight:600;">Total Owed</span>
             <span class="billing-value bold" id="billing-amount">CHF 0.00</span>
           </div>
-          <div class="billing-note">CHF 0.50 per redemption</div>
-          <button class="btn-portal btn-portal-outline warning" style="padding:12px;">
+          <button class="btn-portal btn-portal-outline warning" style="padding:12px;margin-top:12px;">
             &#9993; Contact for Payment
           </button>
         </div>

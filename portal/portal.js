@@ -1293,6 +1293,31 @@
     try {
       var stats = await apiFetch('/partner/dashboard/stats');
       $('billing-redemptions').textContent = stats.total_redemptions || 0;
+
+      // BookedEat fee
+      var beFee = stats.bookedeat_fee || 0;
+      $('billing-bookedeat-fee').textContent = 'CHF ' + (typeof beFee === 'number' ? beFee.toFixed(2) : '0.00');
+
+      // Influencer breakdown
+      var infBreakdown = stats.influencer_breakdown || [];
+      var infTotal = stats.influencer_total || 0;
+      if (infBreakdown.length > 0) {
+        show($('billing-influencer-section'));
+        $('billing-influencer-total').textContent = 'CHF ' + (typeof infTotal === 'number' ? infTotal.toFixed(2) : '0.00');
+        var bhtml = '';
+        for (var ib = 0; ib < infBreakdown.length; ib++) {
+          var inf = infBreakdown[ib];
+          bhtml += '<div class="billing-row" style="font-size:13px;padding:2px 0;">' +
+            '<span class="billing-label" style="color:rgba(0,0,0,0.5);">@' + escapeHTML(inf.handle) + ' (' + inf.unlocks + ' unlocks)</span>' +
+            '<span class="billing-value" style="font-size:13px;">CHF ' + (inf.cost || 0).toFixed(2) + '</span>' +
+          '</div>';
+        }
+        $('billing-influencer-breakdown').innerHTML = bhtml;
+      } else {
+        hide($('billing-influencer-section'));
+      }
+
+      // Total
       var amount = stats.amount_owed || 0;
       $('billing-amount').textContent = 'CHF ' + (typeof amount === 'number' ? amount.toFixed(2) : '0.00');
     } catch (e) { /* ignore */ }
