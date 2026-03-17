@@ -298,10 +298,13 @@
               </label>
             </div>
             <div id="insider-code-section" style="display:none;">
-              <div class="form-helper" style="margin-top:8px;margin-bottom:10px;">Share this code with food creators/influencers. Their followers enter it to unlock this deal.</div>
-              <div class="insider-code-row">
-                <input type="text" id="insider-code-input" class="form-input insider-code-field" maxlength="20" placeholder="e.g. CHEF_ANNA" autocomplete="off">
-                <button type="button" class="btn-icon" id="insider-regenerate-btn" title="Generate new code">&#8635;</button>
+              <div class="form-helper" style="margin-top:8px;margin-bottom:12px;">Add unique codes for each influencer. Their followers enter the code to unlock this deal.</div>
+              <div id="influencer-codes-list"></div>
+              <div class="influencer-add-row">
+                <input type="text" id="new-influencer-handle" class="form-input" placeholder="@instagram_handle" style="flex:1;">
+                <input type="text" id="new-influencer-code" class="form-input insider-code-field" placeholder="CODE" maxlength="20" style="flex:1;" autocomplete="off">
+                <button type="button" class="btn-icon" id="influencer-generate-btn" title="Generate code">&#8635;</button>
+                <button type="button" class="btn-portal btn-portal-primary" id="add-influencer-btn" style="width:auto;padding:10px 16px;font-size:13px;">Add</button>
               </div>
             </div>
           </div>

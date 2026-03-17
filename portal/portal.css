@@ -1374,6 +1374,49 @@ textarea.form-input {
   font-weight: 600;
 }
 
+/* Influencer codes in form */
+.influencer-codes-empty {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  padding: 8px 0 12px;
+}
+.influencer-code-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(175, 82, 222, 0.06);
+  border: 1px solid rgba(175, 82, 222, 0.15);
+  border-radius: var(--radius-md);
+  margin-bottom: 6px;
+}
+.influencer-handle {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  min-width: 100px;
+}
+.influencer-code-value {
+  flex: 1;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--purple-500);
+}
+.influencer-delete-btn {
+  font-size: 14px !important;
+}
+.influencer-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+}
+.influencer-add-row .form-input {
+  min-width: 0;
+}
+
 /* Deal badges container */
 .deal-badges {
   display: flex;

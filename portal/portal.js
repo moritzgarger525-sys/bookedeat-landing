@@ -39,7 +39,7 @@
     validDays: new Set(),
     cooldownDays: null,
     insiderEnabled: false,
-    insiderCode: ''
+    influencerCodes: []  // [{id?, instagram_handle, code}]
   };
 
   // ============================================================
@@ -475,18 +475,15 @@
       var redemptionText = d.current_redemptions + ' redemptions' +
         (d.max_redemptions ? ' / ' + d.max_redemptions : '');
 
+      var codeCount = d.influencer_code_count || 0;
+      var hasInsider = codeCount > 0 || d.insider_code;
+
       var badgesHTML = '<div class="deal-badges">' +
         '<span class="deal-badge">' + escapeHTML(shortLabel(d)) + '</span>' +
-        (d.insider_code ? '<span class="deal-badge insider">Insider</span>' : '') +
+        (hasInsider ? '<span class="deal-badge insider">Insider' + (codeCount > 0 ? ' (' + codeCount + ')' : '') + '</span>' : '') +
         '</div>';
 
       var insiderRow = '';
-      if (d.insider_code) {
-        insiderRow = '<div class="deal-card-insider-code">' +
-          '<span class="insider-code-value">' + escapeHTML(d.insider_code) + '</span>' +
-          '<button class="copy-btn" data-copy-code="' + escapeHTML(d.insider_code) + '" title="Copy code">&#128203;</button>' +
-        '</div>';
-      }
 
       html += '<div class="deal-card" data-id="' + d.id + '">' +
         '<div class="deal-card-top">' +
@@ -528,14 +525,6 @@
       deletes[dd].addEventListener('click', function (ev) {
         ev.stopPropagation();
         handleDelete(this.getAttribute('data-delete-id'));
-      });
-    }
-    // Bind copy code events
-    var copyBtns = $('deals-list').querySelectorAll('[data-copy-code]');
-    for (var cc = 0; cc < copyBtns.length; cc++) {
-      copyBtns[cc].addEventListener('click', function (ev) {
-        ev.stopPropagation();
-        copyToClipboard(this.getAttribute('data-copy-code'), this);
       });
     }
   }
@@ -615,7 +604,7 @@
           deal = await apiFetch('/partner/deals/' + editingDealId);
         } catch (e) { deal = null; }
       }
-      if (deal) populateForm(deal);
+      if (deal) await populateForm(deal);
     }
 
     updateFormVisibility();
@@ -630,19 +619,19 @@
       validDays: new Set(),
       cooldownDays: null,
       insiderEnabled: false,
-      insiderCode: ''
+      influencerCodes: []
     };
     $('included-items-list').innerHTML = '';
     $('event-date-chips').innerHTML = '';
     $('insider-toggle').checked = false;
     hide($('insider-code-section'));
-    $('insider-code-input').value = '';
+    renderInfluencerCodes();
     updateTypePills();
     updateCooldownChips();
     updateDayToggles();
   }
 
-  function populateForm(deal) {
+  async function populateForm(deal) {
     formState.discountType = deal.discount_type || 'percent';
     $('deal-title').value = deal.title || '';
     $('deal-description').value = deal.description || '';
@@ -665,14 +654,21 @@
     $('deal-time-start').value = (deal.valid_time_start || '').slice(0, 5);
     $('deal-time-end').value = (deal.valid_time_end || '').slice(0, 5);
 
-    // Insider deal
-    if (deal.insider_code) {
+    // Insider deal — load influencer codes from API
+    if (editingDealId) {
+      try {
+        var codes = await apiFetch('/partner/deals/' + editingDealId + '/influencer-codes');
+        formState.influencerCodes = codes || [];
+      } catch (e) {
+        formState.influencerCodes = [];
+      }
+    }
+    if (formState.influencerCodes.length > 0 || deal.insider_code) {
       formState.insiderEnabled = true;
-      formState.insiderCode = deal.insider_code;
       $('insider-toggle').checked = true;
       show($('insider-code-section'));
-      $('insider-code-input').value = deal.insider_code;
     }
+    renderInfluencerCodes();
 
     updateTypePills();
     updateCooldownChips();
@@ -906,6 +902,104 @@
     }
   }
 
+  // Influencer codes list
+  function renderInfluencerCodes() {
+    var list = $('influencer-codes-list');
+    if (!list) return;
+
+    if (formState.influencerCodes.length === 0) {
+      list.innerHTML = '<div class="influencer-codes-empty">No influencer codes yet. Add one below.</div>';
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < formState.influencerCodes.length; i++) {
+      var c = formState.influencerCodes[i];
+      html += '<div class="influencer-code-row">' +
+        '<span class="influencer-handle">@' + escapeHTML(c.instagram_handle) + '</span>' +
+        '<span class="influencer-code-value">' + escapeHTML(c.code) + '</span>' +
+        '<button type="button" class="copy-btn" data-copy-code="' + escapeHTML(c.code) + '" title="Copy code">&#128203;</button>' +
+        '<button type="button" class="btn-icon danger influencer-delete-btn" data-inf-idx="' + i + '" title="Remove">&#10005;</button>' +
+      '</div>';
+    }
+    list.innerHTML = html;
+
+    // Bind copy
+    var copyBtns = list.querySelectorAll('[data-copy-code]');
+    for (var cc = 0; cc < copyBtns.length; cc++) {
+      copyBtns[cc].addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        copyToClipboard(this.getAttribute('data-copy-code'), this);
+      });
+    }
+
+    // Bind delete
+    var delBtns = list.querySelectorAll('[data-inf-idx]');
+    for (var dd = 0; dd < delBtns.length; dd++) {
+      delBtns[dd].addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-inf-idx'));
+        handleDeleteInfluencerCode(idx);
+      });
+    }
+  }
+
+  async function handleDeleteInfluencerCode(idx) {
+    var code = formState.influencerCodes[idx];
+    if (!code) return;
+
+    // If editing existing deal and code has an id, delete via API
+    if (editingDealId && code.id) {
+      try {
+        await apiFetch('/partner/deals/' + editingDealId + '/influencer-codes/' + code.id, { method: 'DELETE' });
+      } catch (e) {
+        alert('Failed to delete code: ' + (e.message || e));
+        return;
+      }
+    }
+    formState.influencerCodes.splice(idx, 1);
+    renderInfluencerCodes();
+  }
+
+  async function handleAddInfluencerCode() {
+    var handleInput = $('new-influencer-handle');
+    var codeInput = $('new-influencer-code');
+    var handle = handleInput.value.trim().replace(/^@/, '');
+    var code = codeInput.value.trim().toUpperCase();
+
+    if (!handle) { handleInput.focus(); return; }
+    if (code.length < 4) { codeInput.focus(); return; }
+
+    // Check for duplicate handle in current list
+    var dupHandle = formState.influencerCodes.some(function (c) {
+      return c.instagram_handle.toLowerCase() === handle.toLowerCase();
+    });
+    if (dupHandle) {
+      alert('This influencer already has a code for this deal.');
+      return;
+    }
+
+    if (editingDealId) {
+      // Save immediately via API
+      try {
+        var created = await apiFetch('/partner/deals/' + editingDealId + '/influencer-codes', {
+          method: 'POST',
+          body: { instagram_handle: handle, code: code }
+        });
+        formState.influencerCodes.push(created);
+      } catch (e) {
+        alert('Failed to add code: ' + (e.message || e));
+        return;
+      }
+    } else {
+      // Buffer for new deal
+      formState.influencerCodes.push({ instagram_handle: handle, code: code });
+    }
+
+    handleInput.value = '';
+    codeInput.value = '';
+    renderInfluencerCodes();
+  }
+
   function setupDealForm() {
     // Back button
     $('form-back-btn').addEventListener('click', function () {
@@ -954,25 +1048,28 @@
       formState.insiderEnabled = this.checked;
       if (this.checked) {
         show($('insider-code-section'));
-        if (!formState.insiderCode) {
-          formState.insiderCode = generateInsiderCode();
-          $('insider-code-input').value = formState.insiderCode;
-        }
+        renderInfluencerCodes();
       } else {
         hide($('insider-code-section'));
       }
     });
 
-    // Insider code input
-    $('insider-code-input').addEventListener('input', function () {
-      this.value = this.value.toUpperCase().replace(/[^A-Z0-9_]/g, '');
-      formState.insiderCode = this.value;
+    // Add influencer code
+    $('add-influencer-btn').addEventListener('click', function () {
+      handleAddInfluencerCode();
+    });
+    $('new-influencer-code').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); handleAddInfluencerCode(); }
     });
 
-    // Insider regenerate button
-    $('insider-regenerate-btn').addEventListener('click', function () {
-      formState.insiderCode = generateInsiderCode();
-      $('insider-code-input').value = formState.insiderCode;
+    // Generate code button
+    $('influencer-generate-btn').addEventListener('click', function () {
+      $('new-influencer-code').value = generateInsiderCode();
+    });
+
+    // Uppercase the code input
+    $('new-influencer-code').addEventListener('input', function () {
+      this.value = this.value.toUpperCase().replace(/[^A-Z0-9_]/g, '');
     });
 
     // Submit
@@ -1014,8 +1111,8 @@
       $('deal-price').focus();
       return;
     }
-    if (formState.insiderEnabled && !formState.insiderCode.trim()) {
-      $('insider-code-input').focus();
+    if (formState.insiderEnabled && formState.influencerCodes.length === 0) {
+      $('new-influencer-handle').focus();
       return;
     }
 
@@ -1046,22 +1143,28 @@
       valid_until: !isEvent() && $('deal-valid-until').value ? $('deal-valid-until').value : null,
       valid_time_start: !isEvent() && $('deal-time-start').value ? $('deal-time-start').value : null,
       valid_time_end: !isEvent() && $('deal-time-end').value ? $('deal-time-end').value : null,
-      is_active: true,
-      insider_code: formState.insiderEnabled && formState.insiderCode.trim() ? formState.insiderCode.trim() : null
+      is_active: true
     };
 
     try {
       if (editingDealId) {
         await apiFetch('/partner/deals/' + editingDealId, { method: 'PATCH', body: data });
       } else {
-        await apiFetch('/partner/deals', { method: 'POST', body: data });
+        var created = await apiFetch('/partner/deals', { method: 'POST', body: data });
+        // Post buffered influencer codes for new deal
+        if (formState.influencerCodes.length > 0 && created && created.id) {
+          for (var ci = 0; ci < formState.influencerCodes.length; ci++) {
+            var ic = formState.influencerCodes[ci];
+            await apiFetch('/partner/deals/' + created.id + '/influencer-codes', {
+              method: 'POST',
+              body: { instagram_handle: ic.instagram_handle, code: ic.code }
+            });
+          }
+        }
       }
       location.hash = '#deals';
     } catch (err) {
       var msg = err.message || String(err);
-      if (msg.indexOf('idx_deals_insider_code') > -1 || msg.indexOf('insider_code') > -1) {
-        msg = 'This insider code is already in use. Please choose a different code.';
-      }
       alert('Failed to save deal: ' + msg);
     } finally {
       btn.disabled = false;
