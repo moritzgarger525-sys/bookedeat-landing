@@ -960,6 +960,95 @@
     renderInfluencerCodes();
   }
 
+  // Influencer handle autocomplete
+  var acTimer = null;
+  var acResults = [];
+
+  function setupHandleAutocomplete() {
+    var input = $('new-influencer-handle');
+    var dropdown = $('handle-autocomplete');
+
+    input.addEventListener('input', function () {
+      var q = this.value.trim().replace(/^@/, '');
+      if (acTimer) clearTimeout(acTimer);
+      if (q.length < 1) { hideAutocomplete(); return; }
+      acTimer = setTimeout(function () { fetchHandleSuggestions(q); }, 200);
+    });
+
+    input.addEventListener('focus', function () {
+      var q = this.value.trim().replace(/^@/, '');
+      if (q.length >= 1 && acResults.length > 0) showAutocomplete();
+    });
+
+    // Hide on click outside
+    document.addEventListener('click', function (e) {
+      if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+        hideAutocomplete();
+      }
+    });
+
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') hideAutocomplete();
+      if (e.key === 'ArrowDown' && dropdown.style.display !== 'none') {
+        e.preventDefault();
+        var first = dropdown.querySelector('.ac-item');
+        if (first) first.focus();
+      }
+    });
+  }
+
+  async function fetchHandleSuggestions(q) {
+    try {
+      acResults = await apiFetch('/partner/influencer-handles?q=' + encodeURIComponent(q));
+    } catch (e) {
+      acResults = [];
+    }
+    if (acResults.length > 0) {
+      renderAutocomplete(acResults);
+      showAutocomplete();
+    } else {
+      hideAutocomplete();
+    }
+  }
+
+  function renderAutocomplete(handles) {
+    var dropdown = $('handle-autocomplete');
+    var html = '';
+    for (var i = 0; i < handles.length; i++) {
+      html += '<button type="button" class="ac-item" data-handle="' + escapeHTML(handles[i]) + '">@' + escapeHTML(handles[i]) + '</button>';
+    }
+    dropdown.innerHTML = html;
+
+    var items = dropdown.querySelectorAll('.ac-item');
+    for (var j = 0; j < items.length; j++) {
+      items[j].addEventListener('click', function () {
+        $('new-influencer-handle').value = '@' + this.getAttribute('data-handle');
+        hideAutocomplete();
+        $('new-influencer-code').focus();
+      });
+      items[j].addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (this.nextElementSibling) this.nextElementSibling.focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (this.previousElementSibling) this.previousElementSibling.focus();
+          else $('new-influencer-handle').focus();
+        } else if (e.key === 'Escape') {
+          hideAutocomplete();
+          $('new-influencer-handle').focus();
+        }
+      });
+    }
+  }
+
+  function showAutocomplete() {
+    $('handle-autocomplete').style.display = 'block';
+  }
+  function hideAutocomplete() {
+    $('handle-autocomplete').style.display = 'none';
+  }
+
   async function handleAddInfluencerCode() {
     var handleInput = $('new-influencer-handle');
     var codeInput = $('new-influencer-code');
@@ -1071,6 +1160,9 @@
     $('new-influencer-code').addEventListener('input', function () {
       this.value = this.value.toUpperCase().replace(/[^A-Z0-9_]/g, '');
     });
+
+    // Handle autocomplete
+    setupHandleAutocomplete();
 
     // Submit
     $('deal-form').addEventListener('submit', async function (e) {
