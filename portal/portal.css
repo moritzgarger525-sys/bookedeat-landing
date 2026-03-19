@@ -603,6 +603,107 @@ textarea.form-input {
   font-weight: 600;
 }
 
+/* Opening Hours Card */
+.opening-hours-card {
+  margin-top: 8px;
+}
+.opening-hours-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.opening-hours-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+.hours-list {
+  display: grid;
+  gap: 6px;
+}
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 14px;
+}
+.hours-row.today {
+  font-weight: 600;
+  color: var(--blue-500);
+}
+.hours-day {
+  color: var(--text-primary);
+  min-width: 100px;
+}
+.hours-time {
+  color: var(--text-secondary);
+  text-align: right;
+}
+.hours-empty {
+  color: var(--text-tertiary);
+  font-size: 14px;
+  padding: 12px 0;
+}
+.hours-edit-grid {
+  display: grid;
+  gap: 8px;
+}
+.hours-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hours-edit-row label {
+  min-width: 40px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.hours-edit-row input[type="time"] {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  background: var(--surface-primary);
+}
+.hours-edit-row .hours-closed-toggle {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: none;
+  transition: all var(--duration-fast);
+}
+.hours-edit-row .hours-closed-toggle.active {
+  background: var(--red-500);
+  color: #fff;
+  border-color: var(--red-500);
+}
+.hours-edit-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+.btn-portal-text {
+  background: none;
+  border: none;
+  color: var(--blue-500);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast);
+}
+.btn-portal-text:hover {
+  background: rgba(0, 122, 255, 0.08);
+}
+
 /* Dashboard Action Cards Grid */
 .dashboard-actions-grid {
   display: grid;

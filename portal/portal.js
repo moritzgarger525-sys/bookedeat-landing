@@ -318,11 +318,181 @@
       $('dash-billing-desc').textContent = 'View billing details';
     }
 
+    // Opening hours
+    renderOpeningHours(partner.openingHours);
+
     // Pie chart
     renderPieChart(analytics);
 
     // Line chart
     renderLineChart(dailyStats);
+  }
+
+  // ── Opening Hours ──────────────────────────────────────────────
+  var DAY_LABELS_FULL = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  var DAY_LABELS_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  var hoursEditing = false;
+
+  function renderOpeningHours(oh) {
+    var list = $('hours-list');
+    var empty = $('hours-empty');
+    var weekdayText = oh && oh.weekday_text ? oh.weekday_text : null;
+
+    if (!weekdayText || weekdayText.length === 0) {
+      hide(list);
+      show(empty);
+      return;
+    }
+
+    show(list);
+    hide(empty);
+
+    // Today is 0=Sunday in JS, but weekday_text is Monday-first
+    var jsDay = new Date().getDay();
+    var todayIdx = jsDay === 0 ? 6 : jsDay - 1; // Convert to Mon=0 index
+
+    var html = '';
+    for (var i = 0; i < weekdayText.length; i++) {
+      var parts = weekdayText[i].split(': ');
+      var dayName = parts[0] || DAY_LABELS_FULL[i];
+      var timeStr = parts.slice(1).join(': ') || '';
+      var isToday = i === todayIdx;
+      html += '<div class="hours-row' + (isToday ? ' today' : '') + '">' +
+        '<span class="hours-day">' + escapeHTML(dayName) + (isToday ? ' (today)' : '') + '</span>' +
+        '<span class="hours-time">' + escapeHTML(timeStr) + '</span>' +
+        '</div>';
+    }
+    list.innerHTML = html;
+  }
+
+  function setupOpeningHours() {
+    $('hours-edit-btn').addEventListener('click', function () {
+      if (hoursEditing) return;
+      hoursEditing = true;
+      hide($('hours-display'));
+      show($('hours-edit'));
+      $('hours-edit-btn').style.display = 'none';
+
+      var oh = partner.openingHours;
+      var weekdayText = oh && oh.weekday_text ? oh.weekday_text : [];
+
+      var html = '';
+      for (var i = 0; i < 7; i++) {
+        var existing = weekdayText[i] || '';
+        var parts = existing.split(': ');
+        var timeStr = parts.slice(1).join(': ') || '';
+        var isClosed = timeStr.toLowerCase() === 'closed' || timeStr === '';
+        var openTime = '';
+        var closeTime = '';
+
+        if (!isClosed && timeStr) {
+          // Parse "11:00 AM – 10:00 PM" or "11:30–22:00" format
+          var timeParts = timeStr.split(/\s*[–\-]\s*/);
+          if (timeParts.length === 2) {
+            openTime = to24h(timeParts[0].trim());
+            closeTime = to24h(timeParts[1].trim());
+          }
+        }
+
+        html += '<div class="hours-edit-row" data-day="' + i + '">' +
+          '<label>' + DAY_LABELS_SHORT[i] + '</label>' +
+          '<input type="time" class="hours-open" value="' + openTime + '"' + (isClosed ? ' disabled' : '') + '>' +
+          '<span style="color:var(--text-tertiary);font-size:13px;">–</span>' +
+          '<input type="time" class="hours-close" value="' + closeTime + '"' + (isClosed ? ' disabled' : '') + '>' +
+          '<button type="button" class="hours-closed-toggle' + (isClosed ? ' active' : '') + '">Closed</button>' +
+          '</div>';
+      }
+      $('hours-edit-grid').innerHTML = html;
+
+      // Toggle closed buttons
+      var toggles = document.querySelectorAll('.hours-closed-toggle');
+      for (var j = 0; j < toggles.length; j++) {
+        toggles[j].addEventListener('click', function () {
+          this.classList.toggle('active');
+          var row = this.closest('.hours-edit-row');
+          var inputs = row.querySelectorAll('input[type="time"]');
+          var closed = this.classList.contains('active');
+          for (var k = 0; k < inputs.length; k++) {
+            inputs[k].disabled = closed;
+            if (closed) inputs[k].value = '';
+          }
+        });
+      }
+    });
+
+    $('hours-cancel-btn').addEventListener('click', function () {
+      hoursEditing = false;
+      show($('hours-display'));
+      hide($('hours-edit'));
+      $('hours-edit-btn').style.display = '';
+    });
+
+    $('hours-save-btn').addEventListener('click', async function () {
+      var rows = document.querySelectorAll('.hours-edit-row');
+      var weekdayText = [];
+      for (var i = 0; i < rows.length; i++) {
+        var dayIdx = parseInt(rows[i].getAttribute('data-day'));
+        var closed = rows[i].querySelector('.hours-closed-toggle').classList.contains('active');
+        if (closed) {
+          weekdayText.push(DAY_LABELS_FULL[dayIdx] + ': Closed');
+        } else {
+          var openVal = rows[i].querySelector('.hours-open').value;
+          var closeVal = rows[i].querySelector('.hours-close').value;
+          if (openVal && closeVal) {
+            weekdayText.push(DAY_LABELS_FULL[dayIdx] + ': ' + formatTime(openVal) + ' \u2013 ' + formatTime(closeVal));
+          } else {
+            weekdayText.push(DAY_LABELS_FULL[dayIdx] + ': Closed');
+          }
+        }
+      }
+
+      $('hours-save-btn').disabled = true;
+      $('hours-save-btn').textContent = 'Saving...';
+      try {
+        var result = await apiFetch('/partner/restaurant/opening-hours', {
+          method: 'PATCH',
+          body: JSON.stringify({ weekday_text: weekdayText }),
+        });
+        partner.openingHours = result.openingHours;
+        renderOpeningHours(partner.openingHours);
+      } catch (e) {
+        alert('Failed to save opening hours: ' + (e.message || 'Unknown error'));
+      } finally {
+        $('hours-save-btn').disabled = false;
+        $('hours-save-btn').textContent = 'Save';
+        hoursEditing = false;
+        show($('hours-display'));
+        hide($('hours-edit'));
+        $('hours-edit-btn').style.display = '';
+      }
+    });
+  }
+
+  function to24h(timeStr) {
+    // Convert "9:00 AM", "10:30 PM", etc. to "09:00", "22:30"
+    // If already in 24h format like "14:00", return as-is
+    if (!timeStr) return '';
+    var match = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+    if (!match) return timeStr.replace(/\s/g, '');
+    var h = parseInt(match[1]);
+    var m = match[2];
+    var ampm = match[3];
+    if (ampm) {
+      if (ampm.toUpperCase() === 'PM' && h !== 12) h += 12;
+      if (ampm.toUpperCase() === 'AM' && h === 12) h = 0;
+    }
+    return (h < 10 ? '0' : '') + h + ':' + m;
+  }
+
+  function formatTime(time24) {
+    // Format "14:00" as "2:00 PM", "09:30" as "9:30 AM"
+    if (!time24) return '';
+    var parts = time24.split(':');
+    var h = parseInt(parts[0]);
+    var m = parts[1];
+    var suffix = h >= 12 ? 'PM' : 'AM';
+    var h12 = h % 12 || 12;
+    return h12 + ':' + m + '\u202F' + suffix;
   }
 
   function renderPieChart(analytics) {
@@ -1497,6 +1667,7 @@
     setupDealForm();
     setupSettings();
     setupVerifyCode();
+    setupOpeningHours();
 
     // Initialize type pills and day toggles in DOM
     updateTypePills();
