@@ -77,6 +77,96 @@
   background: rgba(255, 59, 48, 0.08);
 }
 
+/* Profile button & dropdown */
+.portal-nav-right {
+  position: relative;
+}
+.portal-profile-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background var(--duration-fast);
+}
+.portal-profile-btn:hover {
+  background: var(--surface-secondary);
+}
+.portal-profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--blue-500);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+}
+.portal-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.portal-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 220px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid var(--border-default);
+  padding: 12px;
+  z-index: 200;
+}
+.portal-profile-dropdown.hidden {
+  display: none;
+}
+.profile-dropdown-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 4px 8px;
+}
+.profile-dropdown-email {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 0 8px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.profile-dropdown-divider {
+  height: 1px;
+  background: var(--border-default);
+  margin: 8px 0;
+}
+.profile-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 10px 8px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast);
+}
+.profile-dropdown-item:hover {
+  background: var(--surface-secondary);
+}
+.profile-dropdown-item.danger {
+  color: var(--red-500);
+}
+.profile-dropdown-item.danger:hover {
+  background: rgba(255,59,48,0.08);
+}
+
 /* Hide nav when on login screen */
 .portal-nav.hidden {
   display: none;
@@ -513,7 +603,58 @@ textarea.form-input {
   font-weight: 600;
 }
 
-/* Manage Deals Card */
+/* Dashboard Action Cards Grid */
+.dashboard-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.dashboard-action-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: 18px 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+.dashboard-action-card:hover {
+  background: var(--surface-secondary);
+  border-color: var(--blue-500);
+}
+.dashboard-action-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.dashboard-action-info {
+  flex: 1;
+}
+.dashboard-action-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+.dashboard-action-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 3px;
+}
+.dashboard-action-arrow {
+  color: var(--text-tertiary);
+  font-size: 18px;
+  font-weight: 300;
+}
+
+/* Legacy: Manage Deals Card (kept for compatibility) */
 .manage-deals-card {
   display: flex;
   align-items: center;

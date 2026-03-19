@@ -176,11 +176,9 @@
       nav.classList.remove('hidden');
     }
 
-    // Update active nav link
-    var navLinks = document.querySelectorAll('.portal-nav-link[data-route]');
-    for (var j = 0; j < navLinks.length; j++) {
-      navLinks[j].classList.toggle('active', navLinks[j].getAttribute('data-route') === route);
-    }
+    // Close profile dropdown on navigation
+    var dropdown = $('profile-dropdown');
+    if (dropdown) dropdown.classList.add('hidden');
 
     // Show target screen
     var screen = $('screen-' + route);
@@ -212,6 +210,7 @@
       try {
         var data = await apiFetch('/partner/me');
         partner = data;
+        updateNavProfile();
         navigate(location.hash || '#dashboard');
       } catch (e) {
         clearToken();
@@ -260,6 +259,7 @@
 
         setToken(data.access_token);
         partner = data.partner;
+        updateNavProfile();
         location.hash = '#dashboard';
       } catch (err) {
         showLoginError(err.message || 'Invalid email or password.');
@@ -309,6 +309,14 @@
     $('dash-redemptions').textContent = stats.total_redemptions || 0;
     $('dash-guests').textContent = stats.unique_guests || 0;
     $('dash-deal-count').textContent = deals.length + ' total deals';
+
+    // Billing card description
+    var amountOwed = stats.amount_owed;
+    if (typeof amountOwed === 'number' && amountOwed > 0) {
+      $('dash-billing-desc').textContent = 'CHF ' + amountOwed.toFixed(2) + ' outstanding';
+    } else {
+      $('dash-billing-desc').textContent = 'View billing details';
+    }
 
     // Pie chart
     renderPieChart(analytics);
@@ -1324,35 +1332,33 @@
   }
 
   function setupSettings() {
-    $('settings-sign-out').addEventListener('click', async function () {
-      $('dialog-title').textContent = 'Sign Out';
-      $('dialog-message').textContent = 'Are you sure you want to sign out?';
-      $('dialog-confirm').textContent = 'Sign Out';
-      $('dialog-confirm').className = 'dialog-btn dialog-btn-danger';
-      $('confirm-dialog').classList.remove('hidden');
+    // Settings page no longer has sign-out button — it's in the profile dropdown
+  }
 
-      function cleanup() {
-        $('confirm-dialog').classList.add('hidden');
-        $('dialog-confirm').removeEventListener('click', onConfirm);
-        $('dialog-cancel').removeEventListener('click', onCancel);
-        $('dialog-confirm').textContent = 'Delete';
-      }
-      async function onConfirm() {
-        cleanup();
-        clearToken();
-        partner = null;
-        location.hash = '#login';
-      }
-      function onCancel() { cleanup(); }
+  function doSignOut() {
+    $('dialog-title').textContent = 'Sign Out';
+    $('dialog-message').textContent = 'Are you sure you want to sign out?';
+    $('dialog-confirm').textContent = 'Sign Out';
+    $('dialog-confirm').className = 'dialog-btn dialog-btn-danger';
+    $('confirm-dialog').classList.remove('hidden');
 
-      $('dialog-confirm').addEventListener('click', onConfirm);
-      $('dialog-cancel').addEventListener('click', onCancel);
-    });
+    function cleanup() {
+      $('confirm-dialog').classList.add('hidden');
+      $('dialog-confirm').removeEventListener('click', onConfirm);
+      $('dialog-cancel').removeEventListener('click', onCancel);
+      $('dialog-confirm').textContent = 'Delete';
+    }
+    function onConfirm() {
+      cleanup();
+      clearToken();
+      partner = null;
+      $('profile-dropdown').classList.add('hidden');
+      location.hash = '#login';
+    }
+    function onCancel() { cleanup(); }
 
-    // Nav sign out button
-    $('nav-sign-out').addEventListener('click', function () {
-      $('settings-sign-out').click();
-    });
+    $('dialog-confirm').addEventListener('click', onConfirm);
+    $('dialog-cancel').addEventListener('click', onCancel);
   }
 
   // ============================================================
@@ -1447,12 +1453,41 @@
   //  INIT
   // ============================================================
   function setupNav() {
-    var navLinks = document.querySelectorAll('.portal-nav-link[data-route]');
-    for (var i = 0; i < navLinks.length; i++) {
-      navLinks[i].addEventListener('click', function () {
-        location.hash = '#' + this.getAttribute('data-route');
-      });
+    // Profile dropdown toggle
+    $('profile-btn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      var dd = $('profile-dropdown');
+      dd.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+      var dd = $('profile-dropdown');
+      if (!dd.classList.contains('hidden') && !e.target.closest('.portal-nav-right')) {
+        dd.classList.add('hidden');
+      }
+    });
+
+    // Sign out from dropdown
+    $('dropdown-sign-out').addEventListener('click', function () {
+      $('profile-dropdown').classList.add('hidden');
+      doSignOut();
+    });
+  }
+
+  function updateNavProfile() {
+    if (!partner) return;
+    var name = partner.restaurantName || 'Restaurant';
+    var initial = name.charAt(0).toUpperCase();
+    var photos = partner.restaurantPhotos;
+
+    if (photos && photos.length > 0) {
+      $('nav-avatar').innerHTML = '<img src="' + photos[0] + '" alt="">';
+    } else {
+      $('nav-avatar').textContent = initial;
     }
+    $('dropdown-name').textContent = name;
+    $('dropdown-email').textContent = partner.restaurantAddress || '';
   }
 
   function init() {

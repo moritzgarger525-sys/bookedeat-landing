@@ -17,14 +17,18 @@
 
   <!-- Portal Navigation -->
   <header class="portal-nav" id="portal-nav">
-    <a href="../" class="portal-nav-brand">Booked<span>Eat</span></a>
-    <nav class="portal-nav-links" id="portal-nav-links">
-      <button class="portal-nav-link" data-route="dashboard">Dashboard</button>
-      <button class="portal-nav-link" data-route="deals">Deals</button>
-      <button class="portal-nav-link" data-route="verify-code">Verify</button>
-      <button class="portal-nav-link" data-route="settings">Settings</button>
-      <button class="portal-nav-link sign-out" id="nav-sign-out">Sign Out</button>
-    </nav>
+    <a href="#dashboard" class="portal-nav-brand">Booked<span>Eat</span></a>
+    <div class="portal-nav-right">
+      <button class="portal-profile-btn" id="profile-btn">
+        <div class="portal-profile-avatar" id="nav-avatar"></div>
+      </button>
+      <div class="portal-profile-dropdown hidden" id="profile-dropdown">
+        <div class="profile-dropdown-name" id="dropdown-name"></div>
+        <div class="profile-dropdown-email" id="dropdown-email"></div>
+        <div class="profile-dropdown-divider"></div>
+        <button class="profile-dropdown-item danger" id="dropdown-sign-out">&#128682; Sign Out</button>
+      </div>
+    </div>
   </header>
 
   <main id="portal-app">
@@ -121,15 +125,33 @@
           </div>
         </div>
 
-        <!-- Manage Deals -->
-        <a class="manage-deals-card" href="#deals">
-          <div class="manage-deals-icon">&#127991;</div>
-          <div class="manage-deals-info">
-            <div class="manage-deals-title">Manage Deals</div>
-            <div class="manage-deals-count" id="dash-deal-count">0 total deals</div>
-          </div>
-          <div class="manage-deals-arrow">&#8250;</div>
-        </a>
+        <!-- Action Cards Grid -->
+        <div class="dashboard-actions-grid">
+          <a class="dashboard-action-card" href="#deals">
+            <div class="dashboard-action-icon" style="background:rgba(0,122,255,0.1);">&#127991;</div>
+            <div class="dashboard-action-info">
+              <div class="dashboard-action-title">Manage Deals</div>
+              <div class="dashboard-action-desc" id="dash-deal-count">0 total deals</div>
+            </div>
+            <div class="dashboard-action-arrow">&#8250;</div>
+          </a>
+          <a class="dashboard-action-card" href="#verify-code">
+            <div class="dashboard-action-icon" style="background:rgba(52,199,89,0.1);">&#128274;</div>
+            <div class="dashboard-action-info">
+              <div class="dashboard-action-title">Verify Code</div>
+              <div class="dashboard-action-desc">Check customer codes</div>
+            </div>
+            <div class="dashboard-action-arrow">&#8250;</div>
+          </a>
+          <a class="dashboard-action-card" href="#settings">
+            <div class="dashboard-action-icon" style="background:rgba(175,82,222,0.1);">&#128196;</div>
+            <div class="dashboard-action-info">
+              <div class="dashboard-action-title">Billing & Receipts</div>
+              <div class="dashboard-action-desc" id="dash-billing-desc">View billing details</div>
+            </div>
+            <div class="dashboard-action-arrow">&#8250;</div>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -137,7 +159,9 @@
     <section id="screen-deals" class="portal-screen">
       <div class="portal-container portal-container-wide">
         <div class="deals-header">
+          <button class="form-back-btn" onclick="location.hash='#dashboard'" style="margin-right:8px;">&#8592;</button>
           <h1 class="deals-title">Manage Deals</h1>
+          <div style="flex:1;"></div>
           <button class="deals-add-btn" id="deals-add-btn" title="Create deal">+</button>
         </div>
 
@@ -327,10 +351,13 @@
       </div>
     </section>
 
-    <!-- ==================== SETTINGS ==================== -->
+    <!-- ==================== SETTINGS (Billing & Receipts) ==================== -->
     <section id="screen-settings" class="portal-screen">
       <div class="portal-container">
-        <h1 class="deals-title" style="margin-bottom:24px;">Settings</h1>
+        <div class="form-screen-header">
+          <button class="form-back-btn" onclick="location.hash='#dashboard'">&#8592;</button>
+          <h1 class="form-screen-title">Billing & Receipts</h1>
+        </div>
 
         <!-- Restaurant info -->
         <div class="settings-header">
@@ -374,19 +401,16 @@
           </button>
         </div>
 
-        <!-- Sign Out -->
-        <div style="margin-top:32px;">
-          <button class="btn-portal btn-portal-outline danger" id="settings-sign-out">
-            &#128682; Sign Out
-          </button>
-        </div>
       </div>
     </section>
 
     <!-- ==================== VERIFY CODE ==================== -->
     <section id="screen-verify-code" class="portal-screen">
       <div class="portal-container">
-        <h1 class="deals-title" style="margin-bottom:24px;">Verify Code</h1>
+        <div class="form-screen-header">
+          <button class="form-back-btn" onclick="location.hash='#dashboard'">&#8592;</button>
+          <h1 class="form-screen-title">Verify Code</h1>
+        </div>
 
         <div class="verify-info-banner">
           <div class="verify-info-icon">&#128205;</div>
