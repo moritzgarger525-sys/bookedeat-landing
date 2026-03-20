@@ -1709,6 +1709,10 @@ textarea.form-input {
   background: rgba(175, 82, 222, 0.12);
   color: var(--purple-500);
 }
+.deal-badge.giveaway {
+  background: rgba(255, 149, 0, 0.12);
+  color: var(--orange-500);
+}
 
 /* Insider code row on deal cards */
 .deal-card-insider-code {
@@ -1742,6 +1746,56 @@ textarea.form-input {
 .copy-btn:hover {
   background: rgba(175, 82, 222, 0.1);
   color: var(--purple-500);
+}
+
+/* --- Giveaway Recipients --- */
+.giveaway-recipients-empty {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  padding: 8px 0 12px;
+}
+.giveaway-recipient-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 149, 0, 0.06);
+  border: 1px solid rgba(255, 149, 0, 0.15);
+  border-radius: var(--radius-md);
+  margin-bottom: 6px;
+}
+.giveaway-recipient-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  min-width: 100px;
+}
+.giveaway-recipient-email {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.giveaway-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+}
+.giveaway-add-row .form-input {
+  min-width: 0;
+}
+
+/* --- Restaurant Settings --- */
+.rs-contact-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 14px;
+}
+.rs-save-status {
+  font-size: 13px;
+  font-weight: 500;
 }
 
 /* --- Responsive: Mobile (max 768px) --- */

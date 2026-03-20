@@ -26,6 +26,8 @@
         <div class="profile-dropdown-name" id="dropdown-name"></div>
         <div class="profile-dropdown-email" id="dropdown-email"></div>
         <div class="profile-dropdown-divider"></div>
+        <a class="profile-dropdown-item" href="#restaurant-settings" id="dropdown-settings">&#9881; Restaurant Settings</a>
+        <div class="profile-dropdown-divider"></div>
         <button class="profile-dropdown-item danger" id="dropdown-sign-out">&#128682; Sign Out</button>
       </div>
     </div>
@@ -122,28 +124,6 @@
               <div class="chart-container"><canvas id="line-chart"></canvas></div>
             </div>
             <div class="chart-empty" id="line-empty" style="display:none;">No guest data yet</div>
-          </div>
-        </div>
-
-        <!-- Opening Hours -->
-        <div class="portal-card opening-hours-card">
-          <div class="opening-hours-header">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-size:18px;">&#128336;</span>
-              <span class="opening-hours-title">Opening Hours</span>
-            </div>
-            <button class="btn-portal-text" id="hours-edit-btn">Edit</button>
-          </div>
-          <div id="hours-display">
-            <div class="hours-empty" id="hours-empty" style="display:none;">No opening hours set</div>
-            <div class="hours-list" id="hours-list"></div>
-          </div>
-          <div id="hours-edit" style="display:none;">
-            <div class="hours-edit-grid" id="hours-edit-grid"></div>
-            <div class="hours-edit-actions">
-              <button class="btn-portal btn-portal-outline" id="hours-cancel-btn" style="padding:10px 20px;width:auto;">Cancel</button>
-              <button class="btn-portal btn-portal-primary" id="hours-save-btn" style="padding:10px 20px;width:auto;">Save</button>
-            </div>
           </div>
         </div>
 
@@ -334,8 +314,20 @@
             </div>
           </div>
 
+          <!-- Giveaway Recipients (full width) -->
+          <div class="form-panel" id="giveaway-section" style="display:none;">
+            <div class="section-label">Giveaway Recipients</div>
+            <div class="form-helper" style="margin-bottom:12px;">Enter the name and email of users to grant this giveaway to.</div>
+            <div id="giveaway-recipients-list"></div>
+            <div class="giveaway-add-row">
+              <input type="text" id="giveaway-name" class="form-input" placeholder="Full name" autocomplete="off" style="flex:1;">
+              <input type="email" id="giveaway-email" class="form-input" placeholder="Email address" autocomplete="off" style="flex:1;">
+              <button type="button" class="btn-portal btn-portal-primary" id="add-giveaway-btn" style="width:auto;padding:10px 16px;font-size:13px;">Grant</button>
+            </div>
+          </div>
+
           <!-- Insider Deal (full width) -->
-          <div class="form-panel">
+          <div class="form-panel" id="insider-panel">
             <div class="insider-header">
               <div class="section-label" style="margin-bottom:0;">Insider Deal</div>
               <label class="deal-toggle">
@@ -423,6 +415,67 @@
           </button>
         </div>
 
+      </div>
+    </section>
+
+    <!-- ==================== RESTAURANT SETTINGS ==================== -->
+    <section id="screen-restaurant-settings" class="portal-screen">
+      <div class="portal-container">
+        <div class="form-screen-header">
+          <button class="form-back-btn" onclick="location.hash='#dashboard'">&#8592;</button>
+          <h1 class="form-screen-title">Restaurant Settings</h1>
+        </div>
+
+        <!-- Restaurant info -->
+        <div class="settings-header">
+          <div class="settings-avatar" id="rs-avatar"></div>
+          <div>
+            <div class="dashboard-name" id="rs-name"></div>
+            <div class="dashboard-subtitle" id="rs-address"></div>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="portal-card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <span style="font-size:18px;">&#128222;</span>
+            <span style="font-size:16px;font-weight:600;">Contact Information</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rs-phone">Phone Number</label>
+            <input type="tel" id="rs-phone" class="form-input" placeholder="e.g., +41 44 123 45 67">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rs-website">Website</label>
+            <input type="url" id="rs-website" class="form-input" placeholder="e.g., https://www.myrestaurant.ch">
+          </div>
+          <div class="rs-contact-actions">
+            <span class="rs-save-status" id="rs-contact-status"></span>
+            <button class="btn-portal btn-portal-primary" id="rs-contact-save" style="width:auto;padding:10px 20px;">Save</button>
+          </div>
+        </div>
+
+        <!-- Opening Hours -->
+        <div class="portal-card opening-hours-card">
+          <div class="opening-hours-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:18px;">&#128336;</span>
+              <span class="opening-hours-title">Opening Hours</span>
+            </div>
+            <button class="btn-portal-text" id="hours-edit-btn">Edit</button>
+          </div>
+          <div id="hours-display">
+            <div class="hours-empty" id="hours-empty" style="display:none;">No opening hours set</div>
+            <div class="hours-list" id="hours-list"></div>
+          </div>
+          <div id="hours-edit" style="display:none;">
+            <div class="hours-edit-grid" id="hours-edit-grid"></div>
+            <div class="hours-edit-actions">
+              <button class="btn-portal btn-portal-outline" id="hours-cancel-btn" style="padding:10px 20px;width:auto;">Cancel</button>
+              <button class="btn-portal btn-portal-primary" id="hours-save-btn" style="padding:10px 20px;width:auto;">Save</button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 

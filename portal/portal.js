@@ -25,7 +25,8 @@
     { key: 'free_item',     label: 'Free Item',       icon: '&#127873;' },
     { key: 'menu_discount', label: 'Menu Discount',   icon: '&#127860;' },
     { key: 'set_menu',      label: 'Set Menu',        icon: '&#128214;' },
-    { key: 'special_event', label: 'Special Event',   icon: '&#127881;' }
+    { key: 'special_event', label: 'Special Event',   icon: '&#127881;' },
+    { key: 'giveaway',      label: 'Giveaway',        icon: '&#127775;' }
   ];
 
   var DAY_NAMES = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -39,7 +40,8 @@
     validDays: new Set(),
     cooldownDays: null,
     insiderEnabled: false,
-    influencerCodes: []  // [{id?, instagram_handle, code}]
+    influencerCodes: [],  // [{id?, instagram_handle, code}]
+    giveawayRecipients: []  // [{id?, name, email}]
   };
 
   // ============================================================
@@ -93,6 +95,7 @@
       case 'menu_discount': return deal.discount_value + '% off';
       case 'set_menu': return 'CHF ' + (deal.price ? Math.round(deal.price) : '?');
       case 'special_event': return 'Event';
+      case 'giveaway': return 'Giveaway';
       default: return 'Deal';
     }
   }
@@ -193,6 +196,7 @@
       case 'deals': initDeals(); break;
       case 'deal-form': initDealForm(param); break;
       case 'settings': initSettings(); break;
+      case 'restaurant-settings': initRestaurantSettings(); break;
       case 'verify-code': initVerifyCode(); break;
     }
   }
@@ -317,9 +321,6 @@
     } else {
       $('dash-billing-desc').textContent = 'View billing details';
     }
-
-    // Opening hours
-    renderOpeningHours(partner.openingHours);
 
     // Pie chart
     renderPieChart(analytics);
@@ -656,8 +657,10 @@
       var codeCount = d.influencer_code_count || 0;
       var hasInsider = codeCount > 0 || d.insider_code;
 
+      var isGiveawayDeal = d.discount_type === 'giveaway';
+
       var badgesHTML = '<div class="deal-badges">' +
-        '<span class="deal-badge">' + escapeHTML(shortLabel(d)) + '</span>' +
+        '<span class="deal-badge' + (isGiveawayDeal ? ' giveaway' : '') + '">' + escapeHTML(shortLabel(d)) + '</span>' +
         (hasInsider ? '<span class="deal-badge insider">Insider' + (codeCount > 0 ? ' (' + codeCount + ')' : '') + '</span>' : '') +
         '</div>';
 
@@ -797,13 +800,16 @@
       validDays: new Set(),
       cooldownDays: null,
       insiderEnabled: false,
-      influencerCodes: []
+      influencerCodes: [],
+      giveawayRecipients: []
     };
     $('included-items-list').innerHTML = '';
     $('event-date-chips').innerHTML = '';
+    $('giveaway-recipients-list').innerHTML = '';
     $('insider-toggle').checked = false;
     hide($('insider-code-section'));
     renderInfluencerCodes();
+    renderGiveawayRecipients();
     updateTypePills();
     updateCooldownChips();
     updateDayToggles();
@@ -848,6 +854,17 @@
     }
     renderInfluencerCodes();
 
+    // Load giveaway recipients
+    if (editingDealId && deal.discount_type === 'giveaway') {
+      try {
+        var recipients = await apiFetch('/partner/deals/' + editingDealId + '/giveaway-grants');
+        formState.giveawayRecipients = recipients || [];
+      } catch (e) {
+        formState.giveawayRecipients = [];
+      }
+    }
+    renderGiveawayRecipients();
+
     updateTypePills();
     updateCooldownChips();
     updateDayToggles();
@@ -869,6 +886,9 @@
   }
   function isEvent() {
     return formState.discountType === 'special_event';
+  }
+  function isGiveaway() {
+    return formState.discountType === 'giveaway';
   }
 
   function updateFormVisibility() {
@@ -907,14 +927,26 @@
     // Cooldown
     !isEvent() ? show($('field-cooldown')) : hide($('field-cooldown'));
 
-    // Schedule vs Event dates
-    if (isEvent()) {
+    // Schedule vs Event dates vs Giveaway
+    if (isGiveaway()) {
+      hide($('field-schedule'));
+      hide($('field-event-dates'));
+    } else if (isEvent()) {
       hide($('field-schedule'));
       show($('field-event-dates'));
       renderCalendar();
     } else {
       show($('field-schedule'));
       hide($('field-event-dates'));
+    }
+
+    // Giveaway recipients
+    isGiveaway() ? show($('giveaway-section')) : hide($('giveaway-section'));
+
+    // Insider deal (hide for giveaways)
+    var insiderPanel = $('insider-panel');
+    if (insiderPanel) {
+      isGiveaway() ? hide(insiderPanel) : show(insiderPanel);
     }
   }
 
@@ -1355,6 +1387,14 @@
       this.value = this.value.toUpperCase().replace(/[^A-Z0-9_]/g, '');
     });
 
+    // Giveaway recipients
+    $('add-giveaway-btn').addEventListener('click', function () {
+      handleAddGiveawayRecipient();
+    });
+    $('giveaway-email').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); handleAddGiveawayRecipient(); }
+    });
+
     // Handle autocomplete
     setupHandleAutocomplete();
 
@@ -1397,7 +1437,11 @@
       $('deal-price').focus();
       return;
     }
-    if (formState.insiderEnabled && formState.influencerCodes.length === 0) {
+    if (isGiveaway() && formState.giveawayRecipients.length === 0) {
+      $('giveaway-name').focus();
+      return;
+    }
+    if (formState.insiderEnabled && !isGiveaway() && formState.influencerCodes.length === 0) {
       $('new-influencer-handle').focus();
       return;
     }
@@ -1424,11 +1468,11 @@
         return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' +
           String(d.getDate()).padStart(2, '0');
       }) : [],
-      valid_days: !isEvent() ? Array.from(formState.validDays) : [],
-      valid_from: !isEvent() && $('deal-valid-from').value ? $('deal-valid-from').value : null,
-      valid_until: !isEvent() && $('deal-valid-until').value ? $('deal-valid-until').value : null,
-      valid_time_start: !isEvent() && $('deal-time-start').value ? $('deal-time-start').value : null,
-      valid_time_end: !isEvent() && $('deal-time-end').value ? $('deal-time-end').value : null,
+      valid_days: !isEvent() && !isGiveaway() ? Array.from(formState.validDays) : [],
+      valid_from: !isEvent() && !isGiveaway() && $('deal-valid-from').value ? $('deal-valid-from').value : null,
+      valid_until: !isEvent() && !isGiveaway() && $('deal-valid-until').value ? $('deal-valid-until').value : null,
+      valid_time_start: !isEvent() && !isGiveaway() && $('deal-time-start').value ? $('deal-time-start').value : null,
+      valid_time_end: !isEvent() && !isGiveaway() && $('deal-time-end').value ? $('deal-time-end').value : null,
       is_active: true
     };
 
@@ -1447,6 +1491,16 @@
             });
           }
         }
+        // Post buffered giveaway recipients for new deal
+        if (formState.giveawayRecipients.length > 0 && created && created.id) {
+          for (var gi = 0; gi < formState.giveawayRecipients.length; gi++) {
+            var gr = formState.giveawayRecipients[gi];
+            await apiFetch('/partner/deals/' + created.id + '/giveaway-grants', {
+              method: 'POST',
+              body: { name: gr.name, email: gr.email }
+            });
+          }
+        }
       }
       location.hash = '#deals';
     } catch (err) {
@@ -1459,7 +1513,146 @@
   }
 
   // ============================================================
-  //  SETTINGS
+  //  GIVEAWAY RECIPIENTS
+  // ============================================================
+  function renderGiveawayRecipients() {
+    var list = $('giveaway-recipients-list');
+    if (!list) return;
+
+    if (formState.giveawayRecipients.length === 0) {
+      list.innerHTML = '<div class="giveaway-recipients-empty">No recipients yet. Add users below to grant this giveaway.</div>';
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < formState.giveawayRecipients.length; i++) {
+      var r = formState.giveawayRecipients[i];
+      html += '<div class="giveaway-recipient-row">' +
+        '<span class="giveaway-recipient-name">' + escapeHTML(r.name) + '</span>' +
+        '<span class="giveaway-recipient-email">' + escapeHTML(r.email) + '</span>' +
+        '<button type="button" class="btn-icon danger giveaway-remove-btn" data-giveaway-idx="' + i + '" title="Remove">&#10005;</button>' +
+      '</div>';
+    }
+    list.innerHTML = html;
+
+    // Bind remove
+    var removeBtns = list.querySelectorAll('[data-giveaway-idx]');
+    for (var j = 0; j < removeBtns.length; j++) {
+      removeBtns[j].addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-giveaway-idx'));
+        handleRemoveGiveawayRecipient(idx);
+      });
+    }
+  }
+
+  async function handleRemoveGiveawayRecipient(idx) {
+    var recipient = formState.giveawayRecipients[idx];
+    if (!recipient) return;
+
+    if (editingDealId && recipient.id) {
+      try {
+        await apiFetch('/partner/deals/' + editingDealId + '/giveaway-grants/' + recipient.id, { method: 'DELETE' });
+      } catch (e) {
+        alert('Failed to remove recipient: ' + (e.message || e));
+        return;
+      }
+    }
+    formState.giveawayRecipients.splice(idx, 1);
+    renderGiveawayRecipients();
+  }
+
+  async function handleAddGiveawayRecipient() {
+    var nameInput = $('giveaway-name');
+    var emailInput = $('giveaway-email');
+    var name = nameInput.value.trim();
+    var email = emailInput.value.trim();
+
+    if (!name) { nameInput.focus(); return; }
+    if (!email || !email.includes('@')) { emailInput.focus(); return; }
+
+    // Check for duplicate email
+    var dupEmail = formState.giveawayRecipients.some(function (r) {
+      return r.email.toLowerCase() === email.toLowerCase();
+    });
+    if (dupEmail) {
+      alert('This email has already been granted this giveaway.');
+      return;
+    }
+
+    var payload = { name: name, email: email };
+
+    if (editingDealId) {
+      try {
+        var created = await apiFetch('/partner/deals/' + editingDealId + '/giveaway-grants', {
+          method: 'POST',
+          body: payload
+        });
+        formState.giveawayRecipients.push(created);
+      } catch (e) {
+        alert('Failed to grant giveaway: ' + (e.message || e));
+        return;
+      }
+    } else {
+      formState.giveawayRecipients.push(payload);
+    }
+
+    nameInput.value = '';
+    emailInput.value = '';
+    renderGiveawayRecipients();
+  }
+
+  // ============================================================
+  //  RESTAURANT SETTINGS
+  // ============================================================
+  function initRestaurantSettings() {
+    if (!partner) return;
+
+    $('rs-avatar').innerHTML = avatarHTML(partner.restaurantName, partner.restaurantPhotos);
+    $('rs-name').textContent = partner.restaurantName;
+    $('rs-address').textContent = partner.restaurantAddress || '';
+
+    // Pre-fill contact info from partner data
+    $('rs-phone').value = partner.restaurantPhone || '';
+    $('rs-website').value = partner.restaurantWebsite || '';
+    $('rs-contact-status').textContent = '';
+
+    // Render opening hours
+    renderOpeningHours(partner.openingHours);
+  }
+
+  function setupRestaurantSettings() {
+    $('rs-contact-save').addEventListener('click', async function () {
+      var phone = $('rs-phone').value.trim();
+      var website = $('rs-website').value.trim();
+      var btn = $('rs-contact-save');
+      var status = $('rs-contact-status');
+
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      status.textContent = '';
+
+      try {
+        var result = await apiFetch('/partner/restaurant/contact', {
+          method: 'PATCH',
+          body: { phone: phone, website: website }
+        });
+        partner.restaurantPhone = phone;
+        partner.restaurantWebsite = website;
+        status.textContent = 'Saved!';
+        status.style.color = 'var(--green-500)';
+        setTimeout(function () { status.textContent = ''; }, 2000);
+      } catch (e) {
+        status.textContent = 'Failed to save';
+        status.style.color = 'var(--red-500)';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save';
+      }
+    });
+  }
+
+  // ============================================================
+  //  SETTINGS (Billing)
   // ============================================================
   async function initSettings() {
     if (!partner) return;
@@ -1666,6 +1859,7 @@
     setupDealsPage();
     setupDealForm();
     setupSettings();
+    setupRestaurantSettings();
     setupVerifyCode();
     setupOpeningHours();
 
