@@ -1021,11 +1021,17 @@
 
     try {
       deals = await apiFetch('/partner/deals');
+      console.log('[BookedEat] Loaded', deals.length, 'deals');
     } catch (e) {
+      console.error('[BookedEat] Failed to load deals:', e);
       deals = [];
     }
     hide($('deals-loading'));
-    renderDeals();
+    try {
+      renderDeals();
+    } catch (e) {
+      console.error('[BookedEat] Failed to render deals:', e);
+    }
   }
 
   function renderDeals() {
