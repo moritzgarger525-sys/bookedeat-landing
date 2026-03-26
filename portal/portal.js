@@ -1089,8 +1089,8 @@
 
     // Bind toggle events
     var toggles = $('deals-list').querySelectorAll('[data-toggle-id]');
-    for (var t = 0; t < toggles.length; t++) {
-      toggles[t].addEventListener('change', handleToggle);
+    for (var ti = 0; ti < toggles.length; ti++) {
+      toggles[ti].addEventListener('change', handleToggle);
     }
     // Bind edit events
     var edits = $('deals-list').querySelectorAll('[data-edit-id]');
