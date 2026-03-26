@@ -10,6 +10,394 @@
   var editingDealId = null;
   var pieChart = null;
   var lineChart = null;
+  var currentLang = localStorage.getItem('portal_lang') || 'en';
+
+  // ============================================================
+  //  TRANSLATIONS
+  // ============================================================
+  var TRANSLATIONS = {
+    en: {
+      'nav.restaurant_settings': 'Restaurant Settings',
+      'nav.sign_out': 'Sign Out',
+      'login.title': 'Partner Sign In',
+      'login.subtitle': 'Sign in with your restaurant account',
+      'login.email': 'Email',
+      'login.password': 'Password',
+      'login.submit': 'Sign In',
+      'login.email_placeholder': 'you@restaurant.com',
+      'login.password_placeholder': 'Your password',
+      'dashboard.subtitle': 'Partner Dashboard',
+      'dashboard.active_deals': 'Active Deals',
+      'dashboard.redemptions': 'Redemptions',
+      'dashboard.guests': 'Guests',
+      'dashboard.chart_pie': 'Redemptions by Deal',
+      'dashboard.chart_line': 'Daily Guests',
+      'dashboard.chart_line_sub': 'Last 30 days',
+      'dashboard.pie_empty': 'No redemption data yet',
+      'dashboard.line_empty': 'No guest data yet',
+      'dashboard.manage_deals': 'Manage Deals',
+      'dashboard.verify_code': 'Verify Code',
+      'dashboard.check_codes': 'Check customer codes',
+      'dashboard.billing': 'Billing & Receipts',
+      'dashboard.view_billing': 'View billing details',
+      'dashboard.total_deals': '{0} total deals',
+      'dashboard.outstanding': 'CHF {0} outstanding',
+      'dashboard.value_text': '{0} unique customers brought to your restaurant',
+      'deals.title': 'Manage Deals',
+      'deals.all': 'All',
+      'deals.active': 'Active',
+      'deals.inactive': 'Inactive',
+      'deals.empty': 'No deals yet',
+      'deals.create_first': 'Create First Deal',
+      'deals.redemptions': '{0} redemptions',
+      'deals.delete_title': 'Delete Deal',
+      'deals.delete_message': 'Are you sure you want to delete "{0}"? This cannot be undone.',
+      'form.create_deal': 'Create Deal',
+      'form.edit_deal': 'Edit Deal',
+      'form.save_changes': 'Save Changes',
+      'form.deal_type': 'Deal Type',
+      'form.deal_details': 'Deal Details',
+      'form.title': 'Title *',
+      'form.title_placeholder': 'e.g., 20% off lunch menu',
+      'form.description': 'Description (optional)',
+      'form.description_placeholder': 'Brief description of the deal',
+      'form.percentage': 'Percentage (1-100)',
+      'form.amount_chf': 'Amount (CHF)',
+      'form.item_bogo': 'Item (e.g., "main dish")',
+      'form.item_free': 'Free item (e.g., "dessert")',
+      'form.item_menu': 'Menu item (e.g., "pasta menu")',
+      'form.menu_pricing': 'Menu Pricing',
+      'form.event_pricing': 'Event Pricing',
+      'form.price': 'Price (CHF) *',
+      'form.price_placeholder': 'e.g., 49',
+      'form.original_price': 'Original Price (CHF)',
+      'form.original_price_placeholder': 'e.g., 65',
+      'form.included_items': 'Included Items',
+      'form.included_items_placeholder': 'e.g., Starter, Main Course, Dessert',
+      'form.limits': 'Limits',
+      'form.max_per_user': 'Max uses per customer (empty = unlimited)',
+      'form.cooldown': 'Cooldown Period',
+      'form.cooldown_none': 'None',
+      'form.cooldown_7': '7 days',
+      'form.cooldown_14': '14 days',
+      'form.cooldown_30': '30 days',
+      'form.schedule': 'Schedule',
+      'form.schedule_helper': 'Leave blank for always available',
+      'form.valid_days': 'Valid days',
+      'form.start_date': 'Start date',
+      'form.end_date': 'End date',
+      'form.start_time': 'Start time',
+      'form.end_time': 'End time',
+      'form.event_dates': 'Event Dates',
+      'form.insider_deal': 'Insider Deal',
+      'form.insider_helper': 'Add unique codes for each influencer. Their followers enter the code to unlock this deal.',
+      'form.no_codes': 'No influencer codes yet. Add one below.',
+      'form.giveaway_recipients': 'Giveaway Recipients',
+      'form.giveaway_helper': 'Enter the name and email of users to grant this giveaway to.',
+      'form.no_recipients': 'No recipients yet. Add users below to grant this giveaway.',
+      'form.grant': 'Grant',
+      'form.add': 'Add',
+      'form.full_name': 'Full name',
+      'form.email_address': 'Email address',
+      'form.per_unlock': 'Per unlock',
+      'form.fixed': 'Fixed',
+      'type.percent': 'Percent Off',
+      'type.fixed': 'CHF Off',
+      'type.bogo': 'BOGO',
+      'type.free_item': 'Free Item',
+      'type.menu_discount': 'Menu Discount',
+      'type.set_menu': 'Set Menu',
+      'type.special_event': 'Special Event',
+      'type.giveaway': 'Giveaway',
+      'day.mon': 'Mon', 'day.tue': 'Tue', 'day.wed': 'Wed', 'day.thu': 'Thu',
+      'day.fri': 'Fri', 'day.sat': 'Sat', 'day.sun': 'Sun',
+      'day.monday': 'Monday', 'day.tuesday': 'Tuesday', 'day.wednesday': 'Wednesday',
+      'day.thursday': 'Thursday', 'day.friday': 'Friday', 'day.saturday': 'Saturday', 'day.sunday': 'Sunday',
+      'billing.title': 'Billing & Receipts',
+      'billing.billing': 'Billing',
+      'billing.total_redemptions': 'Total Redemptions',
+      'billing.fee': 'BookedEat Fee',
+      'billing.fee_note': 'CHF 0.50 per redemption',
+      'billing.influencer_comp': 'Influencer Compensation',
+      'billing.total_owed': 'Total Owed',
+      'billing.contact': 'Contact for Payment',
+      'billing.payment_method': 'Payment Method',
+      'billing.save_card': 'Save Card',
+      'billing.saving_card': 'Saving...',
+      'billing.no_payment_method': 'No payment method on file. Add a card to enable automatic monthly billing.',
+      'billing.card_saved': 'Card saved successfully',
+      'billing.change_card': 'Change',
+      'billing.remove_card': 'Remove',
+      'billing.payment_history': 'Payment History',
+      'billing.no_receipts': 'No payment history yet',
+      'billing.download': 'Download',
+      'billing.paid': 'Paid',
+      'billing.pending': 'Pending',
+      'billing.receipt_redemptions': '{0} redemptions',
+      'billing.receipt_paid_with': 'Paid with {0}',
+      'billing.receipt_title': 'Receipt',
+      'billing.receipt_number': 'Receipt No',
+      'billing.receipt_date': 'Date',
+      'billing.receipt_period': 'Period',
+      'billing.receipt_bill_to': 'Bill To',
+      'billing.receipt_description': 'Description',
+      'billing.receipt_amount': 'Amount',
+      'billing.receipt_platform_fee': 'BookedEat Platform Fee',
+      'billing.receipt_line_detail': '{0} redemptions x CHF 0.50',
+      'billing.receipt_total': 'Total',
+      'billing.receipt_payment': 'Payment',
+      'billing.receipt_status': 'Status',
+      'billing.receipt_thank_you': 'Thank you for partnering with BookedEat.',
+      'rs.title': 'Restaurant Settings',
+      'rs.contact_info': 'Contact Information',
+      'rs.phone': 'Phone Number',
+      'rs.phone_placeholder': 'e.g., +41 44 123 45 67',
+      'rs.website': 'Website',
+      'rs.website_placeholder': 'e.g., https://www.myrestaurant.ch',
+      'rs.save': 'Save',
+      'rs.saving': 'Saving...',
+      'rs.saved': 'Saved!',
+      'rs.failed': 'Failed to save',
+      'rs.opening_hours': 'Opening Hours',
+      'rs.edit': 'Edit',
+      'rs.no_hours': 'No opening hours set',
+      'rs.cancel': 'Cancel',
+      'rs.closed': 'Closed',
+      'verify.title': 'Verify Code',
+      'verify.info': '<strong>Automatic verification</strong> &mdash; Customers can only redeem deals when they are within 100 metres of your restaurant. Codes are confirmed automatically upon redemption, so manual verification is typically not required. Use this tool if you\'d like to double-check a code on the spot.',
+      'verify.heading': 'Enter Customer Code',
+      'verify.subtitle': 'Enter the 6-character code shown by your customer',
+      'verify.button': 'Verify',
+      'verify.confirmed': 'Code Confirmed!',
+      'verify.failed': 'Verification Failed',
+      'verify.another': 'Verify Another Code',
+      'verify.try_again': 'Try Again',
+      'dialog.cancel': 'Cancel',
+      'dialog.delete': 'Delete',
+      'dialog.sign_out': 'Sign Out',
+      'dialog.sign_out_confirm': 'Are you sure you want to sign out?',
+      'month.0': 'January', 'month.1': 'February', 'month.2': 'March',
+      'month.3': 'April', 'month.4': 'May', 'month.5': 'June',
+      'month.6': 'July', 'month.7': 'August', 'month.8': 'September',
+      'month.9': 'October', 'month.10': 'November', 'month.11': 'December',
+      'cal.su': 'Su', 'cal.mo': 'Mo', 'cal.tu': 'Tu', 'cal.we': 'We',
+      'cal.th': 'Th', 'cal.fr': 'Fr', 'cal.sa': 'Sa',
+      'today': 'today'
+    },
+    de: {
+      'nav.restaurant_settings': 'Restaurant-Einstellungen',
+      'nav.sign_out': 'Abmelden',
+      'login.title': 'Partner-Anmeldung',
+      'login.subtitle': 'Melden Sie sich mit Ihrem Restaurant-Konto an',
+      'login.email': 'E-Mail',
+      'login.password': 'Passwort',
+      'login.submit': 'Anmelden',
+      'login.email_placeholder': 'sie@restaurant.com',
+      'login.password_placeholder': 'Ihr Passwort',
+      'dashboard.subtitle': 'Partner-Dashboard',
+      'dashboard.active_deals': 'Aktive Deals',
+      'dashboard.redemptions': 'Einl\u00f6sungen',
+      'dashboard.guests': 'G\u00e4ste',
+      'dashboard.chart_pie': 'Einl\u00f6sungen nach Deal',
+      'dashboard.chart_line': 'T\u00e4gliche G\u00e4ste',
+      'dashboard.chart_line_sub': 'Letzte 30 Tage',
+      'dashboard.pie_empty': 'Noch keine Einl\u00f6sungsdaten',
+      'dashboard.line_empty': 'Noch keine G\u00e4stedaten',
+      'dashboard.manage_deals': 'Deals verwalten',
+      'dashboard.verify_code': 'Code pr\u00fcfen',
+      'dashboard.check_codes': 'Kundencodes pr\u00fcfen',
+      'dashboard.billing': 'Abrechnung & Belege',
+      'dashboard.view_billing': 'Abrechnungsdetails anzeigen',
+      'dashboard.total_deals': '{0} Deals insgesamt',
+      'dashboard.outstanding': 'CHF {0} ausstehend',
+      'dashboard.value_text': '{0} einzigartige Kunden in Ihr Restaurant gebracht',
+      'deals.title': 'Deals verwalten',
+      'deals.all': 'Alle',
+      'deals.active': 'Aktiv',
+      'deals.inactive': 'Inaktiv',
+      'deals.empty': 'Noch keine Deals',
+      'deals.create_first': 'Ersten Deal erstellen',
+      'deals.redemptions': '{0} Einl\u00f6sungen',
+      'deals.delete_title': 'Deal l\u00f6schen',
+      'deals.delete_message': 'Sind Sie sicher, dass Sie \u201e{0}\u201c l\u00f6schen m\u00f6chten? Dies kann nicht r\u00fcckg\u00e4ngig gemacht werden.',
+      'form.create_deal': 'Deal erstellen',
+      'form.edit_deal': 'Deal bearbeiten',
+      'form.save_changes': '\u00c4nderungen speichern',
+      'form.deal_type': 'Deal-Typ',
+      'form.deal_details': 'Deal-Details',
+      'form.title': 'Titel *',
+      'form.title_placeholder': 'z.B. 20% Rabatt auf Mittagsmen\u00fc',
+      'form.description': 'Beschreibung (optional)',
+      'form.description_placeholder': 'Kurze Beschreibung des Deals',
+      'form.percentage': 'Prozentsatz (1\u2013100)',
+      'form.amount_chf': 'Betrag (CHF)',
+      'form.item_bogo': 'Artikel (z.B. \u201eHauptgericht\u201c)',
+      'form.item_free': 'Gratisartikel (z.B. \u201eDessert\u201c)',
+      'form.item_menu': 'Men\u00fcartikel (z.B. \u201ePasta-Men\u00fc\u201c)',
+      'form.menu_pricing': 'Men\u00fcpreise',
+      'form.event_pricing': 'Eventpreise',
+      'form.price': 'Preis (CHF) *',
+      'form.price_placeholder': 'z.B. 49',
+      'form.original_price': 'Originalpreis (CHF)',
+      'form.original_price_placeholder': 'z.B. 65',
+      'form.included_items': 'Enthaltene Artikel',
+      'form.included_items_placeholder': 'z.B. Vorspeise, Hauptgang, Dessert',
+      'form.limits': 'Limits',
+      'form.max_per_user': 'Max. Nutzungen pro Kunde (leer = unbegrenzt)',
+      'form.cooldown': 'Wartezeit',
+      'form.cooldown_none': 'Keine',
+      'form.cooldown_7': '7 Tage',
+      'form.cooldown_14': '14 Tage',
+      'form.cooldown_30': '30 Tage',
+      'form.schedule': 'Zeitplan',
+      'form.schedule_helper': 'Leer lassen f\u00fcr immer verf\u00fcgbar',
+      'form.valid_days': 'G\u00fcltige Tage',
+      'form.start_date': 'Startdatum',
+      'form.end_date': 'Enddatum',
+      'form.start_time': 'Startzeit',
+      'form.end_time': 'Endzeit',
+      'form.event_dates': 'Eventdaten',
+      'form.insider_deal': 'Insider-Deal',
+      'form.insider_helper': 'F\u00fcgen Sie einzigartige Codes f\u00fcr jeden Influencer hinzu. Deren Follower geben den Code ein, um diesen Deal freizuschalten.',
+      'form.no_codes': 'Noch keine Influencer-Codes. F\u00fcgen Sie unten einen hinzu.',
+      'form.giveaway_recipients': 'Gewinnspiel-Empf\u00e4nger',
+      'form.giveaway_helper': 'Geben Sie den Namen und die E-Mail der Benutzer ein, denen dieses Gewinnspiel gew\u00e4hrt werden soll.',
+      'form.no_recipients': 'Noch keine Empf\u00e4nger. F\u00fcgen Sie unten Benutzer hinzu.',
+      'form.grant': 'Gew\u00e4hren',
+      'form.add': 'Hinzuf\u00fcgen',
+      'form.full_name': 'Vollst\u00e4ndiger Name',
+      'form.email_address': 'E-Mail-Adresse',
+      'form.per_unlock': 'Pro Freischaltung',
+      'form.fixed': 'Pauschal',
+      'type.percent': 'Prozent-Rabatt',
+      'type.fixed': 'CHF-Rabatt',
+      'type.bogo': 'BOGO',
+      'type.free_item': 'Gratisartikel',
+      'type.menu_discount': 'Men\u00fc-Rabatt',
+      'type.set_menu': 'Set-Men\u00fc',
+      'type.special_event': 'Spezialevent',
+      'type.giveaway': 'Gewinnspiel',
+      'day.mon': 'Mo', 'day.tue': 'Di', 'day.wed': 'Mi', 'day.thu': 'Do',
+      'day.fri': 'Fr', 'day.sat': 'Sa', 'day.sun': 'So',
+      'day.monday': 'Montag', 'day.tuesday': 'Dienstag', 'day.wednesday': 'Mittwoch',
+      'day.thursday': 'Donnerstag', 'day.friday': 'Freitag', 'day.saturday': 'Samstag', 'day.sunday': 'Sonntag',
+      'billing.title': 'Abrechnung & Belege',
+      'billing.billing': 'Abrechnung',
+      'billing.total_redemptions': 'Gesamteinl\u00f6sungen',
+      'billing.fee': 'BookedEat-Geb\u00fchr',
+      'billing.fee_note': 'CHF 0.50 pro Einl\u00f6sung',
+      'billing.influencer_comp': 'Influencer-Verg\u00fctung',
+      'billing.total_owed': 'Gesamtbetrag',
+      'billing.contact': 'Zahlung kontaktieren',
+      'billing.payment_method': 'Zahlungsmethode',
+      'billing.save_card': 'Karte speichern',
+      'billing.saving_card': 'Speichern\u2026',
+      'billing.no_payment_method': 'Keine Zahlungsmethode hinterlegt. F\u00fcgen Sie eine Karte hinzu, um die automatische monatliche Abrechnung zu aktivieren.',
+      'billing.card_saved': 'Karte erfolgreich gespeichert',
+      'billing.change_card': '\u00c4ndern',
+      'billing.remove_card': 'Entfernen',
+      'billing.payment_history': 'Zahlungsverlauf',
+      'billing.no_receipts': 'Noch kein Zahlungsverlauf',
+      'billing.download': 'Herunterladen',
+      'billing.paid': 'Bezahlt',
+      'billing.pending': 'Ausstehend',
+      'billing.receipt_redemptions': '{0} Einl\u00f6sungen',
+      'billing.receipt_paid_with': 'Bezahlt mit {0}',
+      'billing.receipt_title': 'Beleg',
+      'billing.receipt_number': 'Belegnr.',
+      'billing.receipt_date': 'Datum',
+      'billing.receipt_period': 'Zeitraum',
+      'billing.receipt_bill_to': 'Rechnungsempf\u00e4nger',
+      'billing.receipt_description': 'Beschreibung',
+      'billing.receipt_amount': 'Betrag',
+      'billing.receipt_platform_fee': 'BookedEat Plattformgeb\u00fchr',
+      'billing.receipt_line_detail': '{0} Einl\u00f6sungen x CHF 0.50',
+      'billing.receipt_total': 'Gesamt',
+      'billing.receipt_payment': 'Zahlung',
+      'billing.receipt_status': 'Status',
+      'billing.receipt_thank_you': 'Vielen Dank f\u00fcr Ihre Partnerschaft mit BookedEat.',
+      'rs.title': 'Restaurant-Einstellungen',
+      'rs.contact_info': 'Kontaktinformationen',
+      'rs.phone': 'Telefonnummer',
+      'rs.phone_placeholder': 'z.B. +41 44 123 45 67',
+      'rs.website': 'Webseite',
+      'rs.website_placeholder': 'z.B. https://www.meinrestaurant.ch',
+      'rs.save': 'Speichern',
+      'rs.saving': 'Speichern\u2026',
+      'rs.saved': 'Gespeichert!',
+      'rs.failed': 'Speichern fehlgeschlagen',
+      'rs.opening_hours': '\u00d6ffnungszeiten',
+      'rs.edit': 'Bearbeiten',
+      'rs.no_hours': 'Keine \u00d6ffnungszeiten festgelegt',
+      'rs.cancel': 'Abbrechen',
+      'rs.closed': 'Geschlossen',
+      'verify.title': 'Code pr\u00fcfen',
+      'verify.info': '<strong>Automatische Verifizierung</strong> &mdash; Kunden k\u00f6nnen Deals nur einl\u00f6sen, wenn sie sich innerhalb von 100 Metern von Ihrem Restaurant befinden. Codes werden bei der Einl\u00f6sung automatisch best\u00e4tigt, sodass eine manuelle \u00dcberpr\u00fcfung in der Regel nicht erforderlich ist. Verwenden Sie dieses Tool, wenn Sie einen Code vor Ort \u00fcberpr\u00fcfen m\u00f6chten.',
+      'verify.heading': 'Kundencode eingeben',
+      'verify.subtitle': 'Geben Sie den 6-stelligen Code Ihres Kunden ein',
+      'verify.button': 'Pr\u00fcfen',
+      'verify.confirmed': 'Code best\u00e4tigt!',
+      'verify.failed': 'Verifizierung fehlgeschlagen',
+      'verify.another': 'Weiteren Code pr\u00fcfen',
+      'verify.try_again': 'Erneut versuchen',
+      'dialog.cancel': 'Abbrechen',
+      'dialog.delete': 'L\u00f6schen',
+      'dialog.sign_out': 'Abmelden',
+      'dialog.sign_out_confirm': 'Sind Sie sicher, dass Sie sich abmelden m\u00f6chten?',
+      'month.0': 'Januar', 'month.1': 'Februar', 'month.2': 'M\u00e4rz',
+      'month.3': 'April', 'month.4': 'Mai', 'month.5': 'Juni',
+      'month.6': 'Juli', 'month.7': 'August', 'month.8': 'September',
+      'month.9': 'Oktober', 'month.10': 'November', 'month.11': 'Dezember',
+      'cal.su': 'So', 'cal.mo': 'Mo', 'cal.tu': 'Di', 'cal.we': 'Mi',
+      'cal.th': 'Do', 'cal.fr': 'Fr', 'cal.sa': 'Sa',
+      'today': 'heute'
+    }
+  };
+
+  function t(key) {
+    return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) ||
+           TRANSLATIONS.en[key] || key;
+  }
+
+  function translatePage() {
+    // Translate text content
+    var els = document.querySelectorAll('[data-i18n]');
+    for (var i = 0; i < els.length; i++) {
+      els[i].textContent = t(els[i].getAttribute('data-i18n'));
+    }
+    // Translate innerHTML (for elements with HTML content)
+    var htmlEls = document.querySelectorAll('[data-i18n-html]');
+    for (var j = 0; j < htmlEls.length; j++) {
+      htmlEls[j].innerHTML = t(htmlEls[j].getAttribute('data-i18n-html'));
+    }
+    // Translate placeholders
+    var phEls = document.querySelectorAll('[data-i18n-placeholder]');
+    for (var k = 0; k < phEls.length; k++) {
+      phEls[k].placeholder = t(phEls[k].getAttribute('data-i18n-placeholder'));
+    }
+  }
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('portal_lang', lang);
+    $('lang-switcher-label').textContent = lang.toUpperCase();
+    // Update active state on options
+    var opts = document.querySelectorAll('.lang-option');
+    for (var i = 0; i < opts.length; i++) {
+      opts[i].classList.toggle('active', opts[i].getAttribute('data-lang') === lang);
+    }
+    translatePage();
+    // Re-render dynamic content for current screen
+    if (currentScreen) {
+      switch (currentScreen) {
+        case 'dashboard': initDashboard(); break;
+        case 'deals': renderDeals(); break;
+        case 'deal-form': updateTypePills(); updateDayToggles(); updateFormVisibility(); renderInfluencerCodes(); renderGiveawayRecipients(); break;
+        case 'settings': initSettings(); break;
+        case 'restaurant-settings': initRestaurantSettings(); break;
+      }
+    }
+  }
 
   // Chart colors (matching Flutter)
   var CHART_COLORS = [
@@ -19,18 +407,19 @@
 
   // Deal types config
   var DEAL_TYPES = [
-    { key: 'percent',       label: 'Percent Off',     icon: '%' },
-    { key: 'fixed',         label: 'CHF Off',         icon: 'CHF' },
-    { key: 'bogo',          label: 'BOGO',            icon: '2x' },
-    { key: 'free_item',     label: 'Free Item',       icon: '&#127873;' },
-    { key: 'menu_discount', label: 'Menu Discount',   icon: '&#127860;' },
-    { key: 'set_menu',      label: 'Set Menu',        icon: '&#128214;' },
-    { key: 'special_event', label: 'Special Event',   icon: '&#127881;' },
-    { key: 'giveaway',      label: 'Giveaway',        icon: '&#127775;' }
+    { key: 'percent',       labelKey: 'type.percent',       icon: '%' },
+    { key: 'fixed',         labelKey: 'type.fixed',         icon: 'CHF' },
+    { key: 'bogo',          labelKey: 'type.bogo',          icon: '2x' },
+    { key: 'free_item',     labelKey: 'type.free_item',     icon: '&#127873;' },
+    { key: 'menu_discount', labelKey: 'type.menu_discount', icon: '&#127860;' },
+    { key: 'set_menu',      labelKey: 'type.set_menu',      icon: '&#128214;' },
+    { key: 'special_event', labelKey: 'type.special_event', icon: '&#127881;' },
+    { key: 'giveaway',      labelKey: 'type.giveaway',      icon: '&#127775;' }
   ];
 
   var DAY_NAMES = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-  var DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  var DAY_KEY_SHORT = ['day.mon', 'day.tue', 'day.wed', 'day.thu', 'day.fri', 'day.sat', 'day.sun'];
+  var DAY_KEY_FULL = ['day.monday', 'day.tuesday', 'day.wednesday', 'day.thursday', 'day.friday', 'day.saturday', 'day.sunday'];
 
   // Form state
   var formState = {
@@ -269,7 +658,7 @@
         showLoginError(err.message || 'Invalid email or password.');
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Sign In';
+        btn.textContent = t('login.submit');
       }
     });
   }
@@ -308,18 +697,18 @@
     } catch (e) { /* ignore */ }
 
     // Render stats
-    $('dash-value-text').textContent = (stats.unique_guests || 0) + ' unique customers brought to your restaurant';
+    $('dash-value-text').textContent = t('dashboard.value_text').replace('{0}', stats.unique_guests || 0);
     $('dash-active-deals').textContent = stats.active_deals || 0;
     $('dash-redemptions').textContent = stats.total_redemptions || 0;
     $('dash-guests').textContent = stats.unique_guests || 0;
-    $('dash-deal-count').textContent = deals.length + ' total deals';
+    $('dash-deal-count').textContent = t('dashboard.total_deals').replace('{0}', deals.length);
 
     // Billing card description
     var amountOwed = stats.amount_owed;
     if (typeof amountOwed === 'number' && amountOwed > 0) {
-      $('dash-billing-desc').textContent = 'CHF ' + amountOwed.toFixed(2) + ' outstanding';
+      $('dash-billing-desc').textContent = t('dashboard.outstanding').replace('{0}', amountOwed.toFixed(2));
     } else {
-      $('dash-billing-desc').textContent = 'View billing details';
+      $('dash-billing-desc').textContent = t('dashboard.view_billing');
     }
 
     // Pie chart
@@ -330,8 +719,12 @@
   }
 
   // ── Opening Hours ──────────────────────────────────────────────
-  var DAY_LABELS_FULL = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  var DAY_LABELS_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  function getDayLabelsFull() {
+    return DAY_KEY_FULL.map(function (k) { return t(k); });
+  }
+  function getDayLabelsShort() {
+    return DAY_KEY_SHORT.map(function (k) { return t(k); });
+  }
   var hoursEditing = false;
 
   function renderOpeningHours(oh) {
@@ -355,11 +748,11 @@
     var html = '';
     for (var i = 0; i < weekdayText.length; i++) {
       var parts = weekdayText[i].split(': ');
-      var dayName = parts[0] || DAY_LABELS_FULL[i];
+      var dayName = parts[0] || getDayLabelsFull()[i];
       var timeStr = parts.slice(1).join(': ') || '';
       var isToday = i === todayIdx;
       html += '<div class="hours-row' + (isToday ? ' today' : '') + '">' +
-        '<span class="hours-day">' + escapeHTML(dayName) + (isToday ? ' (today)' : '') + '</span>' +
+        '<span class="hours-day">' + escapeHTML(dayName) + (isToday ? ' (' + t('today') + ')' : '') + '</span>' +
         '<span class="hours-time">' + escapeHTML(timeStr) + '</span>' +
         '</div>';
     }
@@ -396,11 +789,11 @@
         }
 
         html += '<div class="hours-edit-row" data-day="' + i + '">' +
-          '<label>' + DAY_LABELS_SHORT[i] + '</label>' +
+          '<label>' + getDayLabelsShort()[i] + '</label>' +
           '<input type="time" class="hours-open" value="' + openTime + '"' + (isClosed ? ' disabled' : '') + '>' +
           '<span style="color:var(--text-tertiary);font-size:13px;">–</span>' +
           '<input type="time" class="hours-close" value="' + closeTime + '"' + (isClosed ? ' disabled' : '') + '>' +
-          '<button type="button" class="hours-closed-toggle' + (isClosed ? ' active' : '') + '">Closed</button>' +
+          '<button type="button" class="hours-closed-toggle' + (isClosed ? ' active' : '') + '">' + t('rs.closed') + '</button>' +
           '</div>';
       }
       $('hours-edit-grid').innerHTML = html;
@@ -435,20 +828,20 @@
         var dayIdx = parseInt(rows[i].getAttribute('data-day'));
         var closed = rows[i].querySelector('.hours-closed-toggle').classList.contains('active');
         if (closed) {
-          weekdayText.push(DAY_LABELS_FULL[dayIdx] + ': Closed');
+          weekdayText.push(getDayLabelsFull()[dayIdx] + ': Closed');
         } else {
           var openVal = rows[i].querySelector('.hours-open').value;
           var closeVal = rows[i].querySelector('.hours-close').value;
           if (openVal && closeVal) {
-            weekdayText.push(DAY_LABELS_FULL[dayIdx] + ': ' + formatTime(openVal) + ' \u2013 ' + formatTime(closeVal));
+            weekdayText.push(getDayLabelsFull()[dayIdx] + ': ' + formatTime(openVal) + ' \u2013 ' + formatTime(closeVal));
           } else {
-            weekdayText.push(DAY_LABELS_FULL[dayIdx] + ': Closed');
+            weekdayText.push(getDayLabelsFull()[dayIdx] + ': Closed');
           }
         }
       }
 
       $('hours-save-btn').disabled = true;
-      $('hours-save-btn').textContent = 'Saving...';
+      $('hours-save-btn').textContent = t('rs.saving');
       try {
         var result = await apiFetch('/partner/restaurant/opening-hours', {
           method: 'PATCH',
@@ -460,7 +853,7 @@
         alert('Failed to save opening hours: ' + (e.message || 'Unknown error'));
       } finally {
         $('hours-save-btn').disabled = false;
-        $('hours-save-btn').textContent = 'Save';
+        $('hours-save-btn').textContent = t('rs.save');
         hoursEditing = false;
         show($('hours-display'));
         hide($('hours-edit'));
@@ -651,7 +1044,7 @@
     var html = '';
     for (var i = 0; i < filtered.length; i++) {
       var d = filtered[i];
-      var redemptionText = d.current_redemptions + ' redemptions' +
+      var redemptionText = t('deals.redemptions').replace('{0}', d.current_redemptions) +
         (d.max_redemptions ? ' / ' + d.max_redemptions : '');
 
       var codeCount = d.influencer_code_count || 0;
@@ -722,8 +1115,8 @@
     var deal = deals.find(function (d) { return d.id === id; });
     if (!deal) return;
 
-    $('dialog-title').textContent = 'Delete Deal';
-    $('dialog-message').textContent = 'Are you sure you want to delete "' + deal.title + '"? This cannot be undone.';
+    $('dialog-title').textContent = t('deals.delete_title');
+    $('dialog-message').textContent = t('deals.delete_message').replace('{0}', deal.title);
     $('confirm-dialog').classList.remove('hidden');
 
     var confirmBtn = $('dialog-confirm');
@@ -772,8 +1165,8 @@
   // ============================================================
   async function initDealForm(dealId) {
     editingDealId = dealId || null;
-    $('form-title').textContent = editingDealId ? 'Edit Deal' : 'Create Deal';
-    $('deal-submit-btn').textContent = editingDealId ? 'Save Changes' : 'Create Deal';
+    $('form-title').textContent = editingDealId ? t('form.edit_deal') : t('form.create_deal');
+    $('deal-submit-btn').textContent = editingDealId ? t('form.save_changes') : t('form.create_deal');
 
     // Reset form
     resetForm();
@@ -897,7 +1290,7 @@
     // Discount value
     if (showDiscountValue()) {
       show($('field-discount-value'));
-      $('discount-value-label').textContent = type === 'fixed' ? 'Amount (CHF)' : 'Percentage (1-100)';
+      $('discount-value-label').textContent = type === 'fixed' ? t('form.amount_chf') : t('form.percentage');
     } else {
       hide($('field-discount-value'));
     }
@@ -905,9 +1298,9 @@
     // Item description
     if (showItemDescription()) {
       show($('field-item-description'));
-      var lbl = type === 'bogo' ? 'Item (e.g., "main dish")' :
-                type === 'free_item' ? 'Free item (e.g., "dessert")' :
-                'Menu item (e.g., "pasta menu")';
+      var lbl = type === 'bogo' ? t('form.item_bogo') :
+                type === 'free_item' ? t('form.item_free') :
+                t('form.item_menu');
       $('item-description-label').textContent = lbl;
     } else {
       hide($('field-item-description'));
@@ -916,7 +1309,7 @@
     // Pricing
     if (showPrice()) {
       show($('field-pricing'));
-      $('pricing-label').textContent = isEvent() ? 'Event Pricing' : 'Menu Pricing';
+      $('pricing-label').textContent = isEvent() ? t('form.event_pricing') : t('form.menu_pricing');
     } else {
       hide($('field-pricing'));
     }
@@ -954,11 +1347,11 @@
   function updateTypePills() {
     var html = '';
     for (var i = 0; i < DEAL_TYPES.length; i++) {
-      var t = DEAL_TYPES[i];
-      var sel = formState.discountType === t.key;
-      html += '<button type="button" class="type-pill' + (sel ? ' active' : '') + '" data-type="' + t.key + '">' +
-        '<span class="type-pill-icon">' + t.icon + '</span>' +
-        escapeHTML(t.label) +
+      var dt = DEAL_TYPES[i];
+      var sel = formState.discountType === dt.key;
+      html += '<button type="button" class="type-pill' + (sel ? ' active' : '') + '" data-type="' + dt.key + '">' +
+        '<span class="type-pill-icon">' + dt.icon + '</span>' +
+        escapeHTML(t(dt.labelKey)) +
       '</button>';
     }
     $('deal-type-pills').innerHTML = html;
@@ -981,7 +1374,7 @@
     for (var i = 0; i < DAY_NAMES.length; i++) {
       var sel = formState.validDays.has(DAY_NAMES[i]);
       html += '<button type="button" class="day-toggle' + (sel ? ' active' : '') + '" data-day="' + DAY_NAMES[i] + '">' +
-        DAY_LABELS[i] + '</button>';
+        getDayLabelsShort()[i] + '</button>';
     }
     $('day-toggles').innerHTML = html;
   }
@@ -1019,18 +1412,17 @@
     var today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    var monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'];
+    var monthName = t('month.' + calendarMonth);
 
     var html = '<div class="calendar">' +
       '<div class="calendar-header">' +
         '<button type="button" class="calendar-nav" id="cal-prev">&#8249;</button>' +
-        '<span class="calendar-title">' + monthNames[calendarMonth] + ' ' + calendarYear + '</span>' +
+        '<span class="calendar-title">' + monthName + ' ' + calendarYear + '</span>' +
         '<button type="button" class="calendar-nav" id="cal-next">&#8250;</button>' +
       '</div>' +
       '<div class="calendar-grid">';
 
-    var weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    var weekdays = [t('cal.su'), t('cal.mo'), t('cal.tu'), t('cal.we'), t('cal.th'), t('cal.fr'), t('cal.sa')];
     for (var w = 0; w < 7; w++) {
       html += '<div class="calendar-weekday">' + weekdays[w] + '</div>';
     }
@@ -1118,7 +1510,7 @@
     if (!list) return;
 
     if (formState.influencerCodes.length === 0) {
-      list.innerHTML = '<div class="influencer-codes-empty">No influencer codes yet. Add one below.</div>';
+      list.innerHTML = '<div class="influencer-codes-empty">' + escapeHTML(t('form.no_codes')) + '</div>';
       return;
     }
 
@@ -1508,7 +1900,7 @@
       alert('Failed to save deal: ' + msg);
     } finally {
       btn.disabled = false;
-      btn.textContent = editingDealId ? 'Save Changes' : 'Create Deal';
+      btn.textContent = editingDealId ? t('form.save_changes') : t('form.create_deal');
     }
   }
 
@@ -1520,7 +1912,7 @@
     if (!list) return;
 
     if (formState.giveawayRecipients.length === 0) {
-      list.innerHTML = '<div class="giveaway-recipients-empty">No recipients yet. Add users below to grant this giveaway.</div>';
+      list.innerHTML = '<div class="giveaway-recipients-empty">' + escapeHTML(t('form.no_recipients')) + '</div>';
       return;
     }
 
@@ -1628,7 +2020,7 @@
       var status = $('rs-contact-status');
 
       btn.disabled = true;
-      btn.textContent = 'Saving...';
+      btn.textContent = t('rs.saving');
       status.textContent = '';
 
       try {
@@ -1638,15 +2030,15 @@
         });
         partner.restaurantPhone = phone;
         partner.restaurantWebsite = website;
-        status.textContent = 'Saved!';
+        status.textContent = t('rs.saved');
         status.style.color = 'var(--green-500)';
         setTimeout(function () { status.textContent = ''; }, 2000);
       } catch (e) {
-        status.textContent = 'Failed to save';
+        status.textContent = t('rs.failed');
         status.style.color = 'var(--red-500)';
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Save';
+        btn.textContent = t('rs.save');
       }
     });
   }
@@ -1654,6 +2046,239 @@
   // ============================================================
   //  SETTINGS (Billing)
   // ============================================================
+  // ── Stripe & Payment Method ────────────────────────────────
+  var stripe = null;
+  var cardElement = null;
+  var stripeInitialized = false;
+  var savedPaymentMethod = null; // { brand, last4 }
+
+  // Example past receipt (February 2026)
+  var pastReceipts = [
+    {
+      id: 'REC-2026-02',
+      monthKey: 1, // February (0-indexed)
+      year: 2026,
+      date: '2026-03-01',
+      periodStart: '1 Feb 2026',
+      periodEnd: '28 Feb 2026',
+      redemptions: 40,
+      total: 20.00,
+      paymentMethod: 'Visa \u2022\u2022\u2022\u2022 4242',
+      status: 'paid'
+    }
+  ];
+
+  function initStripe() {
+    if (stripeInitialized) return;
+    stripeInitialized = true;
+
+    try {
+      stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+    } catch (e) {
+      // Stripe.js failed to load (e.g. offline)
+      $('stripe-card-form').innerHTML = '<div class="no-payment-method">Stripe could not be loaded. Please check your connection.</div>';
+      return;
+    }
+
+    var elements = stripe.elements();
+    cardElement = elements.create('card', {
+      style: {
+        base: {
+          fontSize: '14px',
+          fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+          color: 'rgba(0,0,0,0.85)',
+          '::placeholder': { color: 'rgba(0,0,0,0.35)' }
+        },
+        invalid: { color: '#FF3B30' }
+      }
+    });
+    cardElement.mount('#stripe-card-element');
+
+    cardElement.on('change', function (event) {
+      $('card-errors').textContent = event.error ? event.error.message : '';
+      $('save-card-btn').disabled = !event.complete;
+    });
+
+    $('save-card-btn').addEventListener('click', async function () {
+      var btn = $('save-card-btn');
+      btn.disabled = true;
+      btn.textContent = t('billing.saving_card');
+
+      var result = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
+
+      if (result.error) {
+        $('card-errors').textContent = result.error.message;
+        btn.disabled = false;
+        btn.textContent = t('billing.save_card');
+      } else {
+        var pm = result.paymentMethod;
+        savedPaymentMethod = {
+          brand: pm.card.brand,
+          last4: pm.card.last4
+        };
+        renderPaymentMethod();
+      }
+    });
+  }
+
+  function brandIcon(brand) {
+    switch ((brand || '').toLowerCase()) {
+      case 'visa': return '\uD83D\uDCB3';
+      case 'mastercard': return '\uD83D\uDCB3';
+      case 'amex': return '\uD83D\uDCB3';
+      default: return '\uD83D\uDCB3';
+    }
+  }
+
+  function brandLabel(brand) {
+    switch ((brand || '').toLowerCase()) {
+      case 'visa': return 'Visa';
+      case 'mastercard': return 'Mastercard';
+      case 'amex': return 'Amex';
+      default: return brand ? brand.charAt(0).toUpperCase() + brand.slice(1) : 'Card';
+    }
+  }
+
+  function renderPaymentMethod() {
+    var display = $('payment-method-display');
+    var form = $('stripe-card-form');
+
+    if (savedPaymentMethod) {
+      display.innerHTML =
+        '<div class="payment-method-saved">' +
+          '<div class="payment-method-info">' +
+            '<span class="payment-method-card-icon">' + brandIcon(savedPaymentMethod.brand) + '</span>' +
+            '<span class="payment-method-text">' + brandLabel(savedPaymentMethod.brand) + ' \u2022\u2022\u2022\u2022 ' + savedPaymentMethod.last4 + '</span>' +
+          '</div>' +
+          '<div class="payment-method-actions">' +
+            '<button class="pm-change" id="pm-change-btn">' + t('billing.change_card') + '</button>' +
+            '<button class="pm-remove" id="pm-remove-btn">' + t('billing.remove_card') + '</button>' +
+          '</div>' +
+        '</div>';
+      hide(form);
+
+      $('pm-change-btn').addEventListener('click', function () {
+        show(form);
+        $('save-card-btn').textContent = t('billing.save_card');
+        $('save-card-btn').disabled = true;
+        if (cardElement) cardElement.clear();
+      });
+      $('pm-remove-btn').addEventListener('click', function () {
+        savedPaymentMethod = null;
+        renderPaymentMethod();
+      });
+    } else {
+      display.innerHTML = '<div class="no-payment-method">' + t('billing.no_payment_method') + '</div>';
+      show(form);
+      $('save-card-btn').textContent = t('billing.save_card');
+      $('save-card-btn').disabled = true;
+    }
+  }
+
+  function renderReceipts() {
+    var list = $('receipts-list');
+    if (pastReceipts.length === 0) {
+      list.innerHTML = '<div class="receipts-empty">' + escapeHTML(t('billing.no_receipts')) + '</div>';
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < pastReceipts.length; i++) {
+      var r = pastReceipts[i];
+      var monthLabel = t('month.' + r.monthKey) + ' ' + r.year;
+      var detailText = t('billing.receipt_redemptions').replace('{0}', r.redemptions) +
+        ' \u2022 ' + t('billing.receipt_paid_with').replace('{0}', r.paymentMethod);
+      var statusLabel = r.status === 'paid' ? t('billing.paid') : t('billing.pending');
+
+      html += '<div class="receipt-row">' +
+        '<div class="receipt-info">' +
+          '<div class="receipt-month">' + escapeHTML(monthLabel) + '</div>' +
+          '<div class="receipt-detail">' + escapeHTML(detailText) + '</div>' +
+        '</div>' +
+        '<div class="receipt-right">' +
+          '<span class="receipt-status ' + r.status + '">' + statusLabel + '</span>' +
+          '<span class="receipt-amount">CHF ' + r.total.toFixed(2) + '</span>' +
+          '<button class="receipt-download-btn" data-receipt-idx="' + i + '">' + t('billing.download') + '</button>' +
+        '</div>' +
+      '</div>';
+    }
+    list.innerHTML = html;
+
+    // Bind download buttons
+    var btns = list.querySelectorAll('[data-receipt-idx]');
+    for (var j = 0; j < btns.length; j++) {
+      btns[j].addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-receipt-idx'));
+        downloadReceipt(pastReceipts[idx]);
+      });
+    }
+  }
+
+  function generateReceiptHTML(r) {
+    var restaurantName = partner ? partner.restaurantName : 'Restaurant';
+    var restaurantAddr = partner ? (partner.restaurantAddress || '') : '';
+    var monthLabel = t('month.' + r.monthKey) + ' ' + r.year;
+    var lineDetail = t('billing.receipt_line_detail').replace('{0}', r.redemptions);
+
+    return '<!DOCTYPE html>' +
+      '<html><head><meta charset="UTF-8"><title>BookedEat ' + t('billing.receipt_title') + ' ' + r.id + '</title>' +
+      '<style>' +
+        'body{font-family:Inter,-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;max-width:600px;margin:40px auto;padding:0 24px;color:#1a1a1a;font-size:14px;line-height:1.6;}' +
+        '.logo{font-size:22px;font-weight:700;margin-bottom:4px;}' +
+        '.logo span{color:#007AFF;}' +
+        '.subtitle{color:#888;font-size:13px;margin-bottom:32px;}' +
+        'h1{font-size:20px;font-weight:700;margin:0 0 24px;}' +
+        '.meta{display:grid;grid-template-columns:140px 1fr;gap:6px 16px;margin-bottom:28px;font-size:13px;}' +
+        '.meta-label{color:#888;font-weight:500;}' +
+        'table{width:100%;border-collapse:collapse;margin-bottom:24px;}' +
+        'th{text-align:left;border-bottom:2px solid #e0e0e0;padding:8px 0;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;color:#888;}' +
+        'th:last-child{text-align:right;}' +
+        'td{padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;}' +
+        'td:last-child{text-align:right;font-variant-numeric:tabular-nums;}' +
+        '.item-detail{font-size:12px;color:#888;margin-top:2px;}' +
+        '.total-row td{border-bottom:2px solid #1a1a1a;font-weight:700;font-size:15px;}' +
+        '.payment-section{margin-top:24px;padding:16px;background:#f8f8f8;border-radius:8px;font-size:13px;}' +
+        '.payment-section div{display:flex;justify-content:space-between;padding:3px 0;}' +
+        '.thank-you{margin-top:40px;padding-top:20px;border-top:1px solid #e0e0e0;font-size:13px;color:#888;text-align:center;}' +
+        '.company{text-align:center;font-size:11px;color:#aaa;margin-top:8px;}' +
+        '@media print{body{margin:0;padding:20px;}}' +
+      '</style></head><body>' +
+      '<div class="logo">Booked<span>Eat</span></div>' +
+      '<div class="subtitle">Restaurant Partner Platform</div>' +
+      '<h1>' + t('billing.receipt_title') + '</h1>' +
+      '<div class="meta">' +
+        '<span class="meta-label">' + t('billing.receipt_number') + '</span><span>' + r.id + '</span>' +
+        '<span class="meta-label">' + t('billing.receipt_date') + '</span><span>' + r.date + '</span>' +
+        '<span class="meta-label">' + t('billing.receipt_period') + '</span><span>' + r.periodStart + ' \u2013 ' + r.periodEnd + '</span>' +
+        '<span class="meta-label">' + t('billing.receipt_bill_to') + '</span><span>' + escapeHTML(restaurantName) + '<br>' + escapeHTML(restaurantAddr) + '</span>' +
+      '</div>' +
+      '<table>' +
+        '<tr><th>' + t('billing.receipt_description') + '</th><th>' + t('billing.receipt_amount') + '</th></tr>' +
+        '<tr><td>' + t('billing.receipt_platform_fee') + '<div class="item-detail">' + lineDetail + '</div></td><td>CHF ' + r.total.toFixed(2) + '</td></tr>' +
+        '<tr class="total-row"><td>' + t('billing.receipt_total') + '</td><td>CHF ' + r.total.toFixed(2) + '</td></tr>' +
+      '</table>' +
+      '<div class="payment-section">' +
+        '<div><span>' + t('billing.receipt_payment') + '</span><span>' + escapeHTML(r.paymentMethod) + '</span></div>' +
+        '<div><span>' + t('billing.receipt_status') + '</span><span style="color:#34C759;font-weight:600;">' + t('billing.paid') + '</span></div>' +
+      '</div>' +
+      '<div class="thank-you">' + t('billing.receipt_thank_you') + '</div>' +
+      '<div class="company">BookedEat GmbH \u2022 Z\u00fcrich, Switzerland</div>' +
+      '</body></html>';
+  }
+
+  function downloadReceipt(r) {
+    var html = generateReceiptHTML(r);
+    var blob = new Blob([html], { type: 'text/html' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'BookedEat-Receipt-' + r.id + '.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   async function initSettings() {
     if (!partner) return;
 
@@ -1692,16 +2317,21 @@
       var amount = stats.amount_owed || 0;
       $('billing-amount').textContent = 'CHF ' + (typeof amount === 'number' ? amount.toFixed(2) : '0.00');
     } catch (e) { /* ignore */ }
+
+    // Payment method & receipts
+    initStripe();
+    renderPaymentMethod();
+    renderReceipts();
   }
 
   function setupSettings() {
-    // Settings page no longer has sign-out button — it's in the profile dropdown
+    // Stripe is initialized lazily in initSettings() on first visit
   }
 
   function doSignOut() {
-    $('dialog-title').textContent = 'Sign Out';
-    $('dialog-message').textContent = 'Are you sure you want to sign out?';
-    $('dialog-confirm').textContent = 'Sign Out';
+    $('dialog-title').textContent = t('dialog.sign_out');
+    $('dialog-message').textContent = t('dialog.sign_out_confirm');
+    $('dialog-confirm').textContent = t('dialog.sign_out');
     $('dialog-confirm').className = 'dialog-btn dialog-btn-danger';
     $('confirm-dialog').classList.remove('hidden');
 
@@ -1709,7 +2339,7 @@
       $('confirm-dialog').classList.add('hidden');
       $('dialog-confirm').removeEventListener('click', onConfirm);
       $('dialog-cancel').removeEventListener('click', onCancel);
-      $('dialog-confirm').textContent = 'Delete';
+      $('dialog-confirm').textContent = t('dialog.delete');
     }
     function onConfirm() {
       cleanup();
@@ -1768,10 +2398,10 @@
         $('verify-result').innerHTML =
           '<div class="result-card success">' +
             '<div class="result-icon">&#9989;</div>' +
-            '<div class="result-title" style="color:var(--green-500);">Code Confirmed!</div>' +
+            '<div class="result-title" style="color:var(--green-500);">' + escapeHTML(t('verify.confirmed')) + '</div>' +
             '<div class="result-deal">' + escapeHTML(result.deal_title || 'Deal') + '</div>' +
             (result.discount_label ? '<div class="result-discount">' + escapeHTML(result.discount_label) + '</div>' : '') +
-            '<button class="btn-portal-text" id="verify-another" style="margin-top:16px;">Verify Another Code</button>' +
+            '<button class="btn-portal-text" id="verify-another" style="margin-top:16px;">' + escapeHTML(t('verify.another')) + '</button>' +
           '</div>';
       } else {
         var error = result.error || 'Unknown error';
@@ -1783,9 +2413,9 @@
         $('verify-result').innerHTML =
           '<div class="result-card ' + cardClass + '">' +
             '<div class="result-icon">' + iconChar + '</div>' +
-            '<div class="result-title" style="color:' + titleColor + ';">Verification Failed</div>' +
+            '<div class="result-title" style="color:' + titleColor + ';">' + escapeHTML(t('verify.failed')) + '</div>' +
             '<div class="result-error-text">' + escapeHTML(error) + '</div>' +
-            '<button class="btn-portal-text" id="verify-another" style="margin-top:16px;">Try Again</button>' +
+            '<button class="btn-portal-text" id="verify-another" style="margin-top:16px;">' + escapeHTML(t('verify.try_again')) + '</button>' +
           '</div>';
       }
 
@@ -1800,15 +2430,15 @@
       $('verify-result').innerHTML =
         '<div class="result-card error">' +
           '<div class="result-icon">&#10060;</div>' +
-          '<div class="result-title" style="color:var(--red-500);">Verification Failed</div>' +
-          '<div class="result-error-text">' + escapeHTML(err.message || 'Failed to verify code') + '</div>' +
-          '<button class="btn-portal-text" id="verify-another" style="margin-top:16px;">Try Again</button>' +
+          '<div class="result-title" style="color:var(--red-500);">' + escapeHTML(t('verify.failed')) + '</div>' +
+          '<div class="result-error-text">' + escapeHTML(err.message || t('verify.failed')) + '</div>' +
+          '<button class="btn-portal-text" id="verify-another" style="margin-top:16px;">' + escapeHTML(t('verify.try_again')) + '</button>' +
         '</div>';
       var anotherBtn2 = document.getElementById('verify-another');
       if (anotherBtn2) anotherBtn2.addEventListener('click', function () { initVerifyCode(); });
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Verify';
+      btn.textContent = t('verify.button');
     }
   }
 
@@ -1819,15 +2449,35 @@
     // Profile dropdown toggle
     $('profile-btn').addEventListener('click', function (e) {
       e.stopPropagation();
+      $('lang-switcher-dropdown').classList.add('hidden');
       var dd = $('profile-dropdown');
       dd.classList.toggle('hidden');
     });
 
-    // Close dropdown when clicking outside
+    // Language switcher
+    $('lang-switcher-btn').addEventListener('click', function (e) {
+      e.stopPropagation();
+      $('profile-dropdown').classList.add('hidden');
+      $('lang-switcher-dropdown').classList.toggle('hidden');
+    });
+
+    var langOpts = document.querySelectorAll('.lang-option');
+    for (var i = 0; i < langOpts.length; i++) {
+      langOpts[i].addEventListener('click', function () {
+        setLang(this.getAttribute('data-lang'));
+        $('lang-switcher-dropdown').classList.add('hidden');
+      });
+    }
+
+    // Close dropdowns when clicking outside
     document.addEventListener('click', function (e) {
       var dd = $('profile-dropdown');
       if (!dd.classList.contains('hidden') && !e.target.closest('.portal-nav-right')) {
         dd.classList.add('hidden');
+      }
+      var ld = $('lang-switcher-dropdown');
+      if (!ld.classList.contains('hidden') && !e.target.closest('.lang-switcher-wrap')) {
+        ld.classList.add('hidden');
       }
     });
 
@@ -1836,6 +2486,13 @@
       $('profile-dropdown').classList.add('hidden');
       doSignOut();
     });
+
+    // Init language switcher state
+    $('lang-switcher-label').textContent = currentLang.toUpperCase();
+    var opts = document.querySelectorAll('.lang-option');
+    for (var j = 0; j < opts.length; j++) {
+      opts[j].classList.toggle('active', opts[j].getAttribute('data-lang') === currentLang);
+    }
   }
 
   function updateNavProfile() {
@@ -1866,6 +2523,9 @@
     // Initialize type pills and day toggles in DOM
     updateTypePills();
     updateDayToggles();
+
+    // Apply translations
+    translatePage();
 
     // Check session
     checkSession();

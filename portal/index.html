@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="api-config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body class="portal-body">
 
@@ -19,6 +20,16 @@
   <header class="portal-nav" id="portal-nav">
     <a href="#dashboard" class="portal-nav-brand">Booked<span>Eat</span></a>
     <div class="portal-nav-right">
+      <div class="lang-switcher-wrap">
+        <button class="lang-switcher-btn" id="lang-switcher-btn">
+          <span id="lang-switcher-label">EN</span>
+          <span class="lang-switcher-arrow">&#9662;</span>
+        </button>
+        <div class="lang-switcher-dropdown hidden" id="lang-switcher-dropdown">
+          <button class="lang-option" data-lang="en">English</button>
+          <button class="lang-option" data-lang="de">Deutsch</button>
+        </div>
+      </div>
       <button class="portal-profile-btn" id="profile-btn">
         <div class="portal-profile-avatar" id="nav-avatar"></div>
       </button>
@@ -26,9 +37,9 @@
         <div class="profile-dropdown-name" id="dropdown-name"></div>
         <div class="profile-dropdown-email" id="dropdown-email"></div>
         <div class="profile-dropdown-divider"></div>
-        <a class="profile-dropdown-item" href="#restaurant-settings" id="dropdown-settings">&#9881; Restaurant Settings</a>
+        <a class="profile-dropdown-item" href="#restaurant-settings" id="dropdown-settings">&#9881; <span data-i18n="nav.restaurant_settings">Restaurant Settings</span></a>
         <div class="profile-dropdown-divider"></div>
-        <button class="profile-dropdown-item danger" id="dropdown-sign-out">&#128682; Sign Out</button>
+        <button class="profile-dropdown-item danger" id="dropdown-sign-out">&#128682; <span data-i18n="nav.sign_out">Sign Out</span></button>
       </div>
     </div>
   </header>
@@ -40,24 +51,24 @@
       <div class="login-wrapper">
         <div class="login-card">
           <div class="login-icon">&#127978;</div>
-          <h1 class="login-title">Partner Sign In</h1>
-          <p class="login-subtitle">Sign in with your restaurant account</p>
+          <h1 class="login-title" data-i18n="login.title">Partner Sign In</h1>
+          <p class="login-subtitle" data-i18n="login.subtitle">Sign in with your restaurant account</p>
 
           <div id="login-error" class="alert alert-error" style="display:none;"></div>
 
           <form id="login-form" autocomplete="on">
             <div class="form-group">
-              <label class="form-label" for="login-email">Email</label>
-              <input type="email" id="login-email" class="form-input" placeholder="you@restaurant.com" required autocomplete="email">
+              <label class="form-label" for="login-email" data-i18n="login.email">Email</label>
+              <input type="email" id="login-email" class="form-input" data-i18n-placeholder="login.email_placeholder" placeholder="you@restaurant.com" required autocomplete="email">
             </div>
             <div class="form-group">
-              <label class="form-label" for="login-password">Password</label>
+              <label class="form-label" for="login-password" data-i18n="login.password">Password</label>
               <div class="form-input-wrapper">
-                <input type="password" id="login-password" class="form-input" placeholder="Your password" required autocomplete="current-password">
+                <input type="password" id="login-password" class="form-input" data-i18n-placeholder="login.password_placeholder" placeholder="Your password" required autocomplete="current-password">
                 <button type="button" class="password-toggle" id="password-toggle">&#128065;</button>
               </div>
             </div>
-            <button type="submit" class="btn-portal btn-portal-primary" id="login-btn">
+            <button type="submit" class="btn-portal btn-portal-primary" id="login-btn" data-i18n="login.submit">
               Sign In
             </button>
           </form>
@@ -73,7 +84,7 @@
           <div class="dashboard-avatar" id="dash-avatar"></div>
           <div>
             <div class="dashboard-name" id="dash-name"></div>
-            <div class="dashboard-subtitle">Partner Dashboard</div>
+            <div class="dashboard-subtitle" data-i18n="dashboard.subtitle">Partner Dashboard</div>
           </div>
         </div>
 
@@ -89,17 +100,17 @@
           <div class="stats-row">
             <div class="stat-item">
               <div class="stat-value blue" id="dash-active-deals">0</div>
-              <div class="stat-label">Active Deals</div>
+              <div class="stat-label" data-i18n="dashboard.active_deals">Active Deals</div>
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
               <div class="stat-value purple" id="dash-redemptions">0</div>
-              <div class="stat-label">Redemptions</div>
+              <div class="stat-label" data-i18n="dashboard.redemptions">Redemptions</div>
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
               <div class="stat-value green" id="dash-guests">0</div>
-              <div class="stat-label">Guests</div>
+              <div class="stat-label" data-i18n="dashboard.guests">Guests</div>
             </div>
           </div>
         </div>
@@ -108,22 +119,22 @@
         <div class="dashboard-charts-grid">
           <!-- Pie Chart -->
           <div class="portal-card chart-section">
-            <div class="chart-title">Redemptions by Deal</div>
+            <div class="chart-title" data-i18n="dashboard.chart_pie">Redemptions by Deal</div>
             <div id="pie-chart-area">
               <div class="chart-container"><canvas id="pie-chart"></canvas></div>
               <div class="chart-legend" id="pie-legend"></div>
             </div>
-            <div class="chart-empty" id="pie-empty" style="display:none;">No redemption data yet</div>
+            <div class="chart-empty" id="pie-empty" style="display:none;" data-i18n="dashboard.pie_empty">No redemption data yet</div>
           </div>
 
           <!-- Line Chart -->
           <div class="portal-card chart-section">
-            <div class="chart-title">Daily Guests</div>
-            <div class="chart-subtitle">Last 30 days</div>
+            <div class="chart-title" data-i18n="dashboard.chart_line">Daily Guests</div>
+            <div class="chart-subtitle" data-i18n="dashboard.chart_line_sub">Last 30 days</div>
             <div id="line-chart-area">
               <div class="chart-container"><canvas id="line-chart"></canvas></div>
             </div>
-            <div class="chart-empty" id="line-empty" style="display:none;">No guest data yet</div>
+            <div class="chart-empty" id="line-empty" style="display:none;" data-i18n="dashboard.line_empty">No guest data yet</div>
           </div>
         </div>
 
@@ -132,7 +143,7 @@
           <a class="dashboard-action-card" href="#deals">
             <div class="dashboard-action-icon" style="background:rgba(0,122,255,0.1);">&#127991;</div>
             <div class="dashboard-action-info">
-              <div class="dashboard-action-title">Manage Deals</div>
+              <div class="dashboard-action-title" data-i18n="dashboard.manage_deals">Manage Deals</div>
               <div class="dashboard-action-desc" id="dash-deal-count">0 total deals</div>
             </div>
             <div class="dashboard-action-arrow">&#8250;</div>
@@ -140,16 +151,16 @@
           <a class="dashboard-action-card" href="#verify-code">
             <div class="dashboard-action-icon" style="background:rgba(52,199,89,0.1);">&#128274;</div>
             <div class="dashboard-action-info">
-              <div class="dashboard-action-title">Verify Code</div>
-              <div class="dashboard-action-desc">Check customer codes</div>
+              <div class="dashboard-action-title" data-i18n="dashboard.verify_code">Verify Code</div>
+              <div class="dashboard-action-desc" data-i18n="dashboard.check_codes">Check customer codes</div>
             </div>
             <div class="dashboard-action-arrow">&#8250;</div>
           </a>
           <a class="dashboard-action-card" href="#settings">
             <div class="dashboard-action-icon" style="background:rgba(175,82,222,0.1);">&#128196;</div>
             <div class="dashboard-action-info">
-              <div class="dashboard-action-title">Billing & Receipts</div>
-              <div class="dashboard-action-desc" id="dash-billing-desc">View billing details</div>
+              <div class="dashboard-action-title" data-i18n="dashboard.billing">Billing & Receipts</div>
+              <div class="dashboard-action-desc" id="dash-billing-desc" data-i18n="dashboard.view_billing">View billing details</div>
             </div>
             <div class="dashboard-action-arrow">&#8250;</div>
           </a>
@@ -162,22 +173,22 @@
       <div class="portal-container portal-container-wide">
         <div class="deals-header">
           <button class="form-back-btn" onclick="location.hash='#dashboard'" style="margin-right:8px;">&#8592;</button>
-          <h1 class="deals-title">Manage Deals</h1>
+          <h1 class="deals-title" data-i18n="deals.title">Manage Deals</h1>
           <div style="flex:1;"></div>
           <button class="deals-add-btn" id="deals-add-btn" title="Create deal">+</button>
         </div>
 
         <div class="filter-chips" id="deals-filter-chips">
-          <button class="filter-chip active" data-filter="all">All</button>
-          <button class="filter-chip" data-filter="active">Active</button>
-          <button class="filter-chip" data-filter="inactive">Inactive</button>
+          <button class="filter-chip active" data-filter="all" data-i18n="deals.all">All</button>
+          <button class="filter-chip" data-filter="active" data-i18n="deals.active">Active</button>
+          <button class="filter-chip" data-filter="inactive" data-i18n="deals.inactive">Inactive</button>
         </div>
 
         <div id="deals-list" class="deals-grid"></div>
         <div id="deals-empty" class="empty-state" style="display:none;">
           <div class="empty-state-icon">&#127991;</div>
-          <div class="empty-state-text">No deals yet</div>
-          <button class="btn-portal btn-portal-primary" style="width:auto;padding:12px 24px;" id="deals-create-first">Create First Deal</button>
+          <div class="empty-state-text" data-i18n="deals.empty">No deals yet</div>
+          <button class="btn-portal btn-portal-primary" style="width:auto;padding:12px 24px;" id="deals-create-first" data-i18n="deals.create_first">Create First Deal</button>
         </div>
         <div id="deals-loading" class="loading-center" style="display:none;"><div class="spinner dark"></div></div>
       </div>
@@ -188,13 +199,13 @@
       <div class="portal-container portal-container-wide">
         <div class="form-screen-header">
           <button class="form-back-btn" id="form-back-btn">&#8592;</button>
-          <h1 class="form-screen-title" id="form-title">Create Deal</h1>
+          <h1 class="form-screen-title" id="form-title" data-i18n="form.create_deal">Create Deal</h1>
         </div>
 
         <form id="deal-form" novalidate>
           <!-- Row 1: Deal Type (full width) -->
           <div class="form-panel">
-            <div class="section-label">Deal Type</div>
+            <div class="section-label" data-i18n="form.deal_type">Deal Type</div>
             <div class="type-pills" id="deal-type-pills"></div>
           </div>
 
@@ -203,17 +214,17 @@
             <!-- LEFT: Deal Details + Pricing + Included Items -->
             <div class="form-col">
               <div class="form-panel">
-                <div class="section-label">Deal Details</div>
+                <div class="section-label" data-i18n="form.deal_details">Deal Details</div>
                 <div class="form-group">
-                  <label class="form-label" for="deal-title">Title *</label>
-                  <input type="text" id="deal-title" class="form-input" placeholder="e.g., 20% off lunch menu" required>
+                  <label class="form-label" for="deal-title" data-i18n="form.title">Title *</label>
+                  <input type="text" id="deal-title" class="form-input" data-i18n-placeholder="form.title_placeholder" placeholder="e.g., 20% off lunch menu" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="deal-description">Description (optional)</label>
-                  <textarea id="deal-description" class="form-input" rows="2" placeholder="Brief description of the deal"></textarea>
+                  <label class="form-label" for="deal-description" data-i18n="form.description">Description (optional)</label>
+                  <textarea id="deal-description" class="form-input" rows="2" data-i18n-placeholder="form.description_placeholder" placeholder="Brief description of the deal"></textarea>
                 </div>
                 <div class="form-group" id="field-discount-value" style="display:none;">
-                  <label class="form-label" for="deal-discount-value" id="discount-value-label">Percentage (1-100)</label>
+                  <label class="form-label" for="deal-discount-value" id="discount-value-label" data-i18n="form.percentage">Percentage (1-100)</label>
                   <input type="number" id="deal-discount-value" class="form-input" min="1" step="1">
                 </div>
                 <div class="form-group" id="field-item-description" style="display:none;">
@@ -225,15 +236,15 @@
               <!-- Price fields -->
               <div id="field-pricing" style="display:none;">
                 <div class="form-panel">
-                  <div class="section-label" id="pricing-label">Menu Pricing</div>
+                  <div class="section-label" id="pricing-label" data-i18n="form.menu_pricing">Menu Pricing</div>
                   <div class="form-row">
                     <div class="form-group">
-                      <label class="form-label" for="deal-price">Price (CHF) *</label>
-                      <input type="number" id="deal-price" class="form-input" min="0" step="0.01" placeholder="e.g., 49">
+                      <label class="form-label" for="deal-price" data-i18n="form.price">Price (CHF) *</label>
+                      <input type="number" id="deal-price" class="form-input" min="0" step="0.01" data-i18n-placeholder="form.price_placeholder" placeholder="e.g., 49">
                     </div>
                     <div class="form-group">
-                      <label class="form-label" for="deal-original-price">Original Price (CHF)</label>
-                      <input type="number" id="deal-original-price" class="form-input" min="0" step="0.01" placeholder="e.g., 65">
+                      <label class="form-label" for="deal-original-price" data-i18n="form.original_price">Original Price (CHF)</label>
+                      <input type="number" id="deal-original-price" class="form-input" min="0" step="0.01" data-i18n-placeholder="form.original_price_placeholder" placeholder="e.g., 65">
                     </div>
                   </div>
                 </div>
@@ -242,10 +253,10 @@
               <!-- Included items -->
               <div id="field-included-items" style="display:none;">
                 <div class="form-panel">
-                  <div class="section-label">Included Items</div>
+                  <div class="section-label" data-i18n="form.included_items">Included Items</div>
                   <div id="included-items-list"></div>
                   <div class="add-item-row">
-                    <input type="text" id="new-item-input" class="form-input" placeholder="e.g., Starter, Main Course, Dessert">
+                    <input type="text" id="new-item-input" class="form-input" data-i18n-placeholder="form.included_items_placeholder" placeholder="e.g., Starter, Main Course, Dessert">
                     <button type="button" class="add-item-btn" id="add-item-btn">&#10753;</button>
                   </div>
                 </div>
@@ -255,19 +266,19 @@
             <!-- RIGHT: Limits + Cooldown + Schedule / Event Dates -->
             <div class="form-col">
               <div class="form-panel">
-                <div class="section-label">Limits</div>
+                <div class="section-label" data-i18n="form.limits">Limits</div>
                 <div class="form-group">
-                  <label class="form-label" for="deal-max-per-user">Max uses per customer (empty = unlimited)</label>
+                  <label class="form-label" for="deal-max-per-user" data-i18n="form.max_per_user">Max uses per customer (empty = unlimited)</label>
                   <input type="number" id="deal-max-per-user" class="form-input" min="1" step="1">
                 </div>
 
                 <div id="field-cooldown" style="display:none;">
-                  <div class="section-label" style="margin-top:16px;">Cooldown Period</div>
+                  <div class="section-label" style="margin-top:16px;" data-i18n="form.cooldown">Cooldown Period</div>
                   <div class="cooldown-chips" id="cooldown-chips">
-                    <button type="button" class="cooldown-chip active" data-value="">None</button>
-                    <button type="button" class="cooldown-chip" data-value="7">7 days</button>
-                    <button type="button" class="cooldown-chip" data-value="14">14 days</button>
-                    <button type="button" class="cooldown-chip" data-value="30">30 days</button>
+                    <button type="button" class="cooldown-chip active" data-value="" data-i18n="form.cooldown_none">None</button>
+                    <button type="button" class="cooldown-chip" data-value="7" data-i18n="form.cooldown_7">7 days</button>
+                    <button type="button" class="cooldown-chip" data-value="14" data-i18n="form.cooldown_14">14 days</button>
+                    <button type="button" class="cooldown-chip" data-value="30" data-i18n="form.cooldown_30">30 days</button>
                   </div>
                 </div>
               </div>
@@ -275,28 +286,28 @@
               <!-- Schedule -->
               <div id="field-schedule" style="display:none;">
                 <div class="form-panel">
-                  <div class="section-label">Schedule</div>
-                  <div class="form-helper" style="margin-bottom:10px;">Leave blank for always available</div>
-                  <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">Valid days</div>
+                  <div class="section-label" data-i18n="form.schedule">Schedule</div>
+                  <div class="form-helper" style="margin-bottom:10px;" data-i18n="form.schedule_helper">Leave blank for always available</div>
+                  <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;" data-i18n="form.valid_days">Valid days</div>
                   <div class="day-toggles" id="day-toggles"></div>
 
                   <div class="form-row" style="margin-top:14px;">
                     <div class="form-group">
-                      <label class="form-label">Start date</label>
+                      <label class="form-label" data-i18n="form.start_date">Start date</label>
                       <input type="date" id="deal-valid-from" class="form-input">
                     </div>
                     <div class="form-group">
-                      <label class="form-label">End date</label>
+                      <label class="form-label" data-i18n="form.end_date">End date</label>
                       <input type="date" id="deal-valid-until" class="form-input">
                     </div>
                   </div>
                   <div class="form-row">
                     <div class="form-group">
-                      <label class="form-label">Start time</label>
+                      <label class="form-label" data-i18n="form.start_time">Start time</label>
                       <input type="time" id="deal-time-start" class="form-input">
                     </div>
                     <div class="form-group">
-                      <label class="form-label">End time</label>
+                      <label class="form-label" data-i18n="form.end_time">End time</label>
                       <input type="time" id="deal-time-end" class="form-input">
                     </div>
                   </div>
@@ -306,7 +317,7 @@
               <!-- Event Dates -->
               <div id="field-event-dates" style="display:none;">
                 <div class="form-panel">
-                  <div class="section-label">Event Dates</div>
+                  <div class="section-label" data-i18n="form.event_dates">Event Dates</div>
                   <div id="event-calendar"></div>
                   <div class="event-date-chips" id="event-date-chips"></div>
                 </div>
@@ -316,27 +327,27 @@
 
           <!-- Giveaway Recipients (full width) -->
           <div class="form-panel" id="giveaway-section" style="display:none;">
-            <div class="section-label">Giveaway Recipients</div>
-            <div class="form-helper" style="margin-bottom:12px;">Enter the name and email of users to grant this giveaway to.</div>
+            <div class="section-label" data-i18n="form.giveaway_recipients">Giveaway Recipients</div>
+            <div class="form-helper" style="margin-bottom:12px;" data-i18n="form.giveaway_helper">Enter the name and email of users to grant this giveaway to.</div>
             <div id="giveaway-recipients-list"></div>
             <div class="giveaway-add-row">
-              <input type="text" id="giveaway-name" class="form-input" placeholder="Full name" autocomplete="off" style="flex:1;">
-              <input type="email" id="giveaway-email" class="form-input" placeholder="Email address" autocomplete="off" style="flex:1;">
-              <button type="button" class="btn-portal btn-portal-primary" id="add-giveaway-btn" style="width:auto;padding:10px 16px;font-size:13px;">Grant</button>
+              <input type="text" id="giveaway-name" class="form-input" data-i18n-placeholder="form.full_name" placeholder="Full name" autocomplete="off" style="flex:1;">
+              <input type="email" id="giveaway-email" class="form-input" data-i18n-placeholder="form.email_address" placeholder="Email address" autocomplete="off" style="flex:1;">
+              <button type="button" class="btn-portal btn-portal-primary" id="add-giveaway-btn" style="width:auto;padding:10px 16px;font-size:13px;" data-i18n="form.grant">Grant</button>
             </div>
           </div>
 
           <!-- Insider Deal (full width) -->
           <div class="form-panel" id="insider-panel">
             <div class="insider-header">
-              <div class="section-label" style="margin-bottom:0;">Insider Deal</div>
+              <div class="section-label" style="margin-bottom:0;" data-i18n="form.insider_deal">Insider Deal</div>
               <label class="deal-toggle">
                 <input type="checkbox" id="insider-toggle">
                 <span class="deal-toggle-slider"></span>
               </label>
             </div>
             <div id="insider-code-section" style="display:none;">
-              <div class="form-helper" style="margin-top:8px;margin-bottom:12px;">Add unique codes for each influencer. Their followers enter the code to unlock this deal.</div>
+              <div class="form-helper" style="margin-top:8px;margin-bottom:12px;" data-i18n="form.insider_helper">Add unique codes for each influencer. Their followers enter the code to unlock this deal.</div>
               <div id="influencer-codes-list"></div>
               <div class="influencer-add-row">
                 <div class="ac-wrapper" style="flex:1;">
@@ -347,17 +358,17 @@
                 <button type="button" class="btn-icon" id="influencer-generate-btn" title="Generate code">&#8635;</button>
                 <input type="number" id="new-influencer-rate" class="form-input" placeholder="CHF rate" min="0" step="0.01" style="width:90px;" autocomplete="off">
                 <select id="new-influencer-comp-type" class="form-input" style="width:110px;">
-                  <option value="per_unlock">Per unlock</option>
-                  <option value="fixed">Fixed</option>
+                  <option value="per_unlock" data-i18n="form.per_unlock">Per unlock</option>
+                  <option value="fixed" data-i18n="form.fixed">Fixed</option>
                 </select>
-                <button type="button" class="btn-portal btn-portal-primary" id="add-influencer-btn" style="width:auto;padding:10px 16px;font-size:13px;">Add</button>
+                <button type="button" class="btn-portal btn-portal-primary" id="add-influencer-btn" style="width:auto;padding:10px 16px;font-size:13px;" data-i18n="form.add">Add</button>
               </div>
             </div>
           </div>
 
           <!-- Submit (full width) -->
           <div style="margin-top:24px;">
-            <button type="submit" class="btn-portal btn-portal-primary" id="deal-submit-btn">
+            <button type="submit" class="btn-portal btn-portal-primary" id="deal-submit-btn" data-i18n="form.create_deal">
               Create Deal
             </button>
           </div>
@@ -370,7 +381,7 @@
       <div class="portal-container">
         <div class="form-screen-header">
           <button class="form-back-btn" onclick="location.hash='#dashboard'">&#8592;</button>
-          <h1 class="form-screen-title">Billing & Receipts</h1>
+          <h1 class="form-screen-title" data-i18n="billing.title">Billing & Receipts</h1>
         </div>
 
         <!-- Restaurant info -->
@@ -386,33 +397,53 @@
         <div class="portal-card" id="settings-billing">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
             <span style="font-size:20px;">&#128196;</span>
-            <span style="font-size:16px;font-weight:600;">Billing</span>
+            <span style="font-size:16px;font-weight:600;" data-i18n="billing.billing">Billing</span>
           </div>
           <div class="billing-row">
-            <span class="billing-label">Total Redemptions</span>
+            <span class="billing-label" data-i18n="billing.total_redemptions">Total Redemptions</span>
             <span class="billing-value" id="billing-redemptions">0</span>
           </div>
           <div style="border-top:1px solid rgba(0,0,0,0.08);margin:10px 0;"></div>
           <div class="billing-row">
-            <span class="billing-label">BookedEat Fee</span>
+            <span class="billing-label" data-i18n="billing.fee">BookedEat Fee</span>
             <span class="billing-value" id="billing-bookedeat-fee">CHF 0.00</span>
           </div>
-          <div class="billing-note" style="margin-bottom:8px;">CHF 0.50 per redemption</div>
+          <div class="billing-note" style="margin-bottom:8px;" data-i18n="billing.fee_note">CHF 0.50 per redemption</div>
           <div id="billing-influencer-section" style="display:none;">
             <div class="billing-row" style="margin-top:4px;">
-              <span class="billing-label">Influencer Compensation</span>
+              <span class="billing-label" data-i18n="billing.influencer_comp">Influencer Compensation</span>
               <span class="billing-value" id="billing-influencer-total">CHF 0.00</span>
             </div>
             <div id="billing-influencer-breakdown" style="padding-left:12px;margin:6px 0 10px;"></div>
           </div>
           <div style="border-top:1px solid rgba(0,0,0,0.08);margin:10px 0;"></div>
           <div class="billing-row">
-            <span class="billing-label" style="font-weight:600;">Total Owed</span>
+            <span class="billing-label" style="font-weight:600;" data-i18n="billing.total_owed">Total Owed</span>
             <span class="billing-value bold" id="billing-amount">CHF 0.00</span>
           </div>
-          <button class="btn-portal btn-portal-outline warning" style="padding:12px;margin-top:12px;">
-            &#9993; Contact for Payment
-          </button>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="portal-card" id="payment-method-card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <span style="font-size:20px;">&#128179;</span>
+            <span style="font-size:16px;font-weight:600;" data-i18n="billing.payment_method">Payment Method</span>
+          </div>
+          <div id="payment-method-display"></div>
+          <div id="stripe-card-form">
+            <div id="stripe-card-element" class="stripe-card-wrapper"></div>
+            <div id="card-errors" class="card-errors"></div>
+            <button class="btn-portal btn-portal-primary" id="save-card-btn" style="margin-top:12px;width:auto;padding:10px 20px;" data-i18n="billing.save_card" disabled>Save Card</button>
+          </div>
+        </div>
+
+        <!-- Payment History -->
+        <div class="portal-card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <span style="font-size:20px;">&#128451;</span>
+            <span style="font-size:16px;font-weight:600;" data-i18n="billing.payment_history">Payment History</span>
+          </div>
+          <div id="receipts-list"></div>
         </div>
 
       </div>
@@ -423,7 +454,7 @@
       <div class="portal-container">
         <div class="form-screen-header">
           <button class="form-back-btn" onclick="location.hash='#dashboard'">&#8592;</button>
-          <h1 class="form-screen-title">Restaurant Settings</h1>
+          <h1 class="form-screen-title" data-i18n="rs.title">Restaurant Settings</h1>
         </div>
 
         <!-- Restaurant info -->
@@ -439,19 +470,19 @@
         <div class="portal-card">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
             <span style="font-size:18px;">&#128222;</span>
-            <span style="font-size:16px;font-weight:600;">Contact Information</span>
+            <span style="font-size:16px;font-weight:600;" data-i18n="rs.contact_info">Contact Information</span>
           </div>
           <div class="form-group">
-            <label class="form-label" for="rs-phone">Phone Number</label>
-            <input type="tel" id="rs-phone" class="form-input" placeholder="e.g., +41 44 123 45 67">
+            <label class="form-label" for="rs-phone" data-i18n="rs.phone">Phone Number</label>
+            <input type="tel" id="rs-phone" class="form-input" data-i18n-placeholder="rs.phone_placeholder" placeholder="e.g., +41 44 123 45 67">
           </div>
           <div class="form-group">
-            <label class="form-label" for="rs-website">Website</label>
-            <input type="url" id="rs-website" class="form-input" placeholder="e.g., https://www.myrestaurant.ch">
+            <label class="form-label" for="rs-website" data-i18n="rs.website">Website</label>
+            <input type="url" id="rs-website" class="form-input" data-i18n-placeholder="rs.website_placeholder" placeholder="e.g., https://www.myrestaurant.ch">
           </div>
           <div class="rs-contact-actions">
             <span class="rs-save-status" id="rs-contact-status"></span>
-            <button class="btn-portal btn-portal-primary" id="rs-contact-save" style="width:auto;padding:10px 20px;">Save</button>
+            <button class="btn-portal btn-portal-primary" id="rs-contact-save" style="width:auto;padding:10px 20px;" data-i18n="rs.save">Save</button>
           </div>
         </div>
 
@@ -460,19 +491,19 @@
           <div class="opening-hours-header">
             <div style="display:flex;align-items:center;gap:8px;">
               <span style="font-size:18px;">&#128336;</span>
-              <span class="opening-hours-title">Opening Hours</span>
+              <span class="opening-hours-title" data-i18n="rs.opening_hours">Opening Hours</span>
             </div>
-            <button class="btn-portal-text" id="hours-edit-btn">Edit</button>
+            <button class="btn-portal-text" id="hours-edit-btn" data-i18n="rs.edit">Edit</button>
           </div>
           <div id="hours-display">
-            <div class="hours-empty" id="hours-empty" style="display:none;">No opening hours set</div>
+            <div class="hours-empty" id="hours-empty" style="display:none;" data-i18n="rs.no_hours">No opening hours set</div>
             <div class="hours-list" id="hours-list"></div>
           </div>
           <div id="hours-edit" style="display:none;">
             <div class="hours-edit-grid" id="hours-edit-grid"></div>
             <div class="hours-edit-actions">
-              <button class="btn-portal btn-portal-outline" id="hours-cancel-btn" style="padding:10px 20px;width:auto;">Cancel</button>
-              <button class="btn-portal btn-portal-primary" id="hours-save-btn" style="padding:10px 20px;width:auto;">Save</button>
+              <button class="btn-portal btn-portal-outline" id="hours-cancel-btn" style="padding:10px 20px;width:auto;" data-i18n="rs.cancel">Cancel</button>
+              <button class="btn-portal btn-portal-primary" id="hours-save-btn" style="padding:10px 20px;width:auto;" data-i18n="rs.save">Save</button>
             </div>
           </div>
         </div>
@@ -484,12 +515,12 @@
       <div class="portal-container">
         <div class="form-screen-header">
           <button class="form-back-btn" onclick="location.hash='#dashboard'">&#8592;</button>
-          <h1 class="form-screen-title">Verify Code</h1>
+          <h1 class="form-screen-title" data-i18n="verify.title">Verify Code</h1>
         </div>
 
         <div class="verify-info-banner">
           <div class="verify-info-icon">&#128205;</div>
-          <div class="verify-info-text">
+          <div class="verify-info-text" data-i18n-html="verify.info">
             <strong>Automatic verification</strong> &mdash; Customers can only redeem deals when they are within 100 metres of your restaurant. Codes are confirmed automatically upon redemption, so manual verification is typically not required. Use this tool if you'd like to double-check a code on the spot.
           </div>
         </div>
@@ -497,14 +528,14 @@
         <div class="verify-wrapper">
           <div class="verify-card">
             <div class="verify-icon">&#128274;</div>
-            <h2 class="verify-title">Enter Customer Code</h2>
-            <p class="verify-subtitle">Enter the 6-character code shown by your customer</p>
+            <h2 class="verify-title" data-i18n="verify.heading">Enter Customer Code</h2>
+            <p class="verify-subtitle" data-i18n="verify.subtitle">Enter the 6-character code shown by your customer</p>
 
             <div class="form-group" style="text-align:center;">
               <input type="text" id="verify-code-input" class="form-input code-input" maxlength="6" placeholder="------" autocomplete="off">
             </div>
 
-            <button class="btn-portal btn-portal-green" id="verify-btn" disabled>
+            <button class="btn-portal btn-portal-green" id="verify-btn" disabled data-i18n="verify.button">
               Verify
             </button>
 
@@ -522,8 +553,8 @@
       <div class="dialog-title" id="dialog-title"></div>
       <div class="dialog-message" id="dialog-message"></div>
       <div class="dialog-actions">
-        <button class="dialog-btn dialog-btn-cancel" id="dialog-cancel">Cancel</button>
-        <button class="dialog-btn dialog-btn-danger" id="dialog-confirm">Delete</button>
+        <button class="dialog-btn dialog-btn-cancel" id="dialog-cancel" data-i18n="dialog.cancel">Cancel</button>
+        <button class="dialog-btn dialog-btn-danger" id="dialog-confirm" data-i18n="dialog.delete">Delete</button>
       </div>
     </div>
   </div>
