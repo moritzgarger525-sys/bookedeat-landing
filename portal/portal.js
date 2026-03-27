@@ -628,7 +628,7 @@
       return;
     }
     google.accounts.id.initialize({
-      client_id: '522919588868-2gfkakjr4r4h4ospim7okgtck2q3mnd3.apps.googleusercontent.com',
+      client_id: '522919588868-0rmqil1cpa2fuf27glua50bpb89crjgr.apps.googleusercontent.com',
       callback: handleGoogleCredential,
     });
     google.accounts.id.renderButton(
