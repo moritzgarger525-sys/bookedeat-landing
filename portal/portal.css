@@ -303,6 +303,22 @@
   margin-bottom: 32px;
 }
 
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
 /* --- Form Elements --- */
 .form-group {
   margin-bottom: 14px;

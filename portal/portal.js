@@ -26,6 +26,9 @@
       'login.submit': 'Sign In',
       'login.email_placeholder': 'you@restaurant.com',
       'login.password_placeholder': 'Your password',
+      'login.or': 'or',
+      'login.pending_verification': 'Your account is pending verification. We will contact you soon.',
+      'login.no_partner': 'No partner account found for this Google account. Contact us at partners@bookedeat.com to register your restaurant.',
       'dashboard.subtitle': 'Partner Dashboard',
       'dashboard.active_deals': 'Active Deals',
       'dashboard.redemptions': 'Redemptions',
@@ -194,6 +197,9 @@
       'login.submit': 'Anmelden',
       'login.email_placeholder': 'sie@restaurant.com',
       'login.password_placeholder': 'Ihr Passwort',
+      'login.or': 'oder',
+      'login.pending_verification': 'Ihr Konto wird gerade verifiziert. Wir melden uns bei Ihnen.',
+      'login.no_partner': 'Kein Partner-Konto f\u00fcr dieses Google-Konto gefunden. Kontaktieren Sie uns unter partners@bookedeat.com, um Ihr Restaurant zu registrieren.',
       'dashboard.subtitle': 'Partner-Dashboard',
       'dashboard.active_deals': 'Aktive Deals',
       'dashboard.redemptions': 'Einl\u00f6sungen',
@@ -614,8 +620,57 @@
     }
   }
 
+  // Google Sign-In for partners
+  function initGoogleSignIn() {
+    if (typeof google === 'undefined' || !google.accounts) {
+      // GSI library not loaded yet — retry
+      setTimeout(initGoogleSignIn, 200);
+      return;
+    }
+    google.accounts.id.initialize({
+      client_id: '522919588868-2gfkakjr4r4h4ospim7okgtck2q3mnd3.apps.googleusercontent.com',
+      callback: handleGoogleCredential,
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('google-signin-btn'),
+      { theme: 'outline', size: 'large', width: 320, text: 'signin_with', shape: 'pill' }
+    );
+  }
+
+  async function handleGoogleCredential(response) {
+    var errorEl = $('google-login-error');
+    hide(errorEl);
+    try {
+      var resp = await fetch(API_BASE_URL + '/partner/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken: response.credential })
+      });
+      var data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || 'Google sign-in failed.');
+
+      if (data.status === 'verified') {
+        setToken(data.access_token);
+        partner = data.partner;
+        updateNavProfile();
+        location.hash = '#dashboard';
+      } else if (data.status === 'pending_verification') {
+        errorEl.textContent = t('login.pending_verification') || 'Your account is pending verification. We will contact you soon.';
+        show(errorEl);
+      } else {
+        // no_partner
+        errorEl.textContent = t('login.no_partner') || 'No partner account found for this Google account. Contact us at partners@bookedeat.com to register your restaurant.';
+        show(errorEl);
+      }
+    } catch (err) {
+      errorEl.textContent = err.message || 'Google sign-in failed.';
+      show(errorEl);
+    }
+  }
+
   // Login form
   function setupLogin() {
+    initGoogleSignIn();
     var form = $('login-form');
     var btn = $('login-btn');
     var toggle = $('password-toggle');
