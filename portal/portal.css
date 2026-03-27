@@ -262,6 +262,9 @@
 .portal-card + .portal-card {
   margin-top: 16px;
 }
+.dashboard-charts-grid > .portal-card + .portal-card {
+  margin-top: 0;
+}
 
 /* --- Login Screen --- */
 .login-wrapper {
@@ -708,7 +711,7 @@ textarea.form-input {
 }
 #line-chart-area .chart-container {
   position: relative;
-  height: 200px;
+  min-height: 200px;
   flex: 1;
 }
 .chart-empty {
