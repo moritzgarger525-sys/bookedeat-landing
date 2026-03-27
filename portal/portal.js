@@ -59,6 +59,7 @@
       'deals.inactive': 'Inactive',
       'deals.empty': 'No deals yet',
       'deals.create_first': 'Create First Deal',
+      'deals.payment_required': 'Please add a payment method in Billing before creating deals.',
       'deals.redemptions': '{0} redemptions',
       'deals.delete_title': 'Delete Deal',
       'deals.delete_message': 'Are you sure you want to delete "{0}"? This cannot be undone.',
@@ -237,6 +238,7 @@
       'deals.inactive': 'Inaktiv',
       'deals.empty': 'Noch keine Deals',
       'deals.create_first': 'Ersten Deal erstellen',
+      'deals.payment_required': 'Bitte f\u00fcgen Sie zuerst eine Zahlungsmethode unter Abrechnung hinzu.',
       'deals.redemptions': '{0} Einl\u00f6sungen',
       'deals.delete_title': 'Deal l\u00f6schen',
       'deals.delete_message': 'Sind Sie sicher, dass Sie \u201e{0}\u201c l\u00f6schen m\u00f6chten? Dies kann nicht r\u00fcckg\u00e4ngig gemacht werden.',
@@ -823,6 +825,14 @@
     $('dash-avatar').innerHTML = avatarHTML(partner.restaurantName, partner.restaurantPhotos);
     $('dash-name').textContent = partner.restaurantName;
 
+    // Load payment method status for deal creation gate
+    try {
+      var pmData = await apiFetch('/partner/payment-method');
+      if (pmData.has_payment_method) {
+        savedPaymentMethod = { brand: pmData.brand, last4: pmData.last4 };
+      }
+    } catch (e) { /* ignore */ }
+
     setupTimeFilter();
     await loadDashboardData(currentTimeRange);
   }
@@ -1292,9 +1302,19 @@
     });
 
     $('deals-add-btn').addEventListener('click', function () {
+      if (!savedPaymentMethod) {
+        alert(t('deals.payment_required'));
+        location.hash = '#settings';
+        return;
+      }
       location.hash = '#deal-form';
     });
     $('deals-create-first').addEventListener('click', function () {
+      if (!savedPaymentMethod) {
+        alert(t('deals.payment_required'));
+        location.hash = '#settings';
+        return;
+      }
       location.hash = '#deal-form';
     });
   }
@@ -2212,7 +2232,7 @@
     stripeInitialized = true;
 
     try {
-      stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+      stripe = Stripe('pk_test_51TFbwfEACmd1kHXfwdxAyvGOS7frn4jOHNKzLJXHPaufyCf3Y6QTAzburK6JmDAUiruiBRb1d0RCd3MLFYSXJhUK006HPwBx9r');
     } catch (e) {
       // Stripe.js failed to load (e.g. offline)
       $('stripe-card-form').innerHTML = '<div class="no-payment-method">Stripe could not be loaded. Please check your connection.</div>';
@@ -2251,11 +2271,21 @@
         btn.textContent = t('billing.save_card');
       } else {
         var pm = result.paymentMethod;
-        savedPaymentMethod = {
-          brand: pm.card.brand,
-          last4: pm.card.last4
-        };
-        renderPaymentMethod();
+        try {
+          await apiFetch('/partner/payment-method', {
+            method: 'PATCH',
+            body: { payment_method_id: pm.id }
+          });
+          savedPaymentMethod = {
+            brand: pm.card.brand,
+            last4: pm.card.last4
+          };
+          renderPaymentMethod();
+        } catch (e) {
+          $('card-errors').textContent = e.message || 'Failed to save card.';
+          btn.disabled = false;
+          btn.textContent = t('billing.save_card');
+        }
       }
     });
   }
@@ -2457,7 +2487,14 @@
       $('billing-amount').textContent = 'CHF ' + (typeof amount === 'number' ? amount.toFixed(2) : '0.00');
     } catch (e) { /* ignore */ }
 
-    // Payment method & receipts
+    // Load payment method from backend
+    try {
+      var pmData = await apiFetch('/partner/payment-method');
+      if (pmData.has_payment_method) {
+        savedPaymentMethod = { brand: pmData.brand, last4: pmData.last4 };
+      }
+    } catch (e) { /* ignore */ }
+
     initStripe();
     renderPaymentMethod();
     renderReceipts();
