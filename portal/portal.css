@@ -683,9 +683,10 @@ textarea.form-input {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   margin-bottom: 12px;
+  min-height: 28px;
 }
 .chart-header .dashboard-time-filter {
   margin-bottom: 0;
