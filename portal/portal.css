@@ -628,9 +628,21 @@ textarea.form-input {
   grid-template-columns: 1fr;
   gap: 24px;
   margin-bottom: 24px;
+  align-items: stretch;
 }
-.dashboard-charts-grid .chart-section {
+.dashboard-charts-grid > .chart-section {
   margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-charts-grid > .chart-section #pie-chart-area,
+.dashboard-charts-grid > .chart-section #line-chart-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-charts-grid > .chart-section .chart-container {
+  flex: 1;
 }
 
 /* Stats Row */
