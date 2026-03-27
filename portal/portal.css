@@ -636,14 +636,10 @@ textarea.form-input {
   display: flex;
   flex-direction: column;
 }
-.dashboard-charts-grid > .chart-section #pie-chart-area,
 .dashboard-charts-grid > .chart-section #line-chart-area {
   flex: 1;
   display: flex;
   flex-direction: column;
-}
-.dashboard-charts-grid > .chart-section .chart-container {
-  flex: 1;
 }
 
 /* Stats Row */
@@ -704,10 +700,15 @@ textarea.form-input {
   color: var(--text-tertiary);
   margin-bottom: 16px;
 }
-.chart-container {
+#pie-chart-area .chart-container {
   position: relative;
   height: 200px;
   max-height: 200px;
+}
+#line-chart-area .chart-container {
+  position: relative;
+  height: 200px;
+  flex: 1;
 }
 .chart-empty {
   text-align: center;
