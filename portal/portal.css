@@ -717,8 +717,25 @@ textarea.form-input {
 }
 .chart-legend {
   margin-top: 14px;
-  max-height: 120px;
-  overflow-y: auto;
+}
+.legend-item-hidden {
+  display: none !important;
+}
+.chart-legend.legend-expanded .legend-item-hidden {
+  display: flex !important;
+}
+.legend-toggle {
+  background: none;
+  border: none;
+  color: #007AFF;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 0;
+  margin-top: 2px;
+}
+.legend-toggle:hover {
+  text-decoration: underline;
 }
 .legend-item {
   display: flex;

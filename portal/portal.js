@@ -43,6 +43,8 @@
       'dashboard.filter_30d': '30 Days',
       'dashboard.filter_90d': '90 Days',
       'dashboard.filter_ytd': 'YTD',
+      'dashboard.more_deals': 'more',
+      'dashboard.show_less': 'Show less',
       'dashboard.manage_deals': 'Manage Deals',
       'dashboard.verify_code': 'Verify Code',
       'dashboard.check_codes': 'Check customer codes',
@@ -217,6 +219,8 @@
       'dashboard.filter_30d': '30 Tage',
       'dashboard.filter_90d': '90 Tage',
       'dashboard.filter_ytd': 'Dieses Jahr',
+      'dashboard.more_deals': 'weitere',
+      'dashboard.show_less': 'Weniger',
       'dashboard.pie_empty': 'Noch keine Einl\u00f6sungsdaten',
       'dashboard.line_empty': 'Noch keine G\u00e4stedaten',
       'dashboard.manage_deals': 'Deals verwalten',
@@ -1029,16 +1033,36 @@
       }
     });
 
-    // Legend
+    // Legend — show top 2, collapse the rest
     var legendHTML = '';
+    var VISIBLE_COUNT = 2;
     for (var i = 0; i < withData.length; i++) {
-      legendHTML += '<div class="legend-item">' +
+      var hiddenClass = i >= VISIBLE_COUNT ? ' legend-item-hidden' : '';
+      legendHTML += '<div class="legend-item' + hiddenClass + '">' +
         '<div class="legend-dot" style="background:' + colors[i] + ';"></div>' +
         '<span class="legend-label">' + escapeHTML(labels[i]) + '</span>' +
         '<span class="legend-value">' + values[i] + '</span>' +
         '</div>';
     }
+    if (withData.length > VISIBLE_COUNT) {
+      var moreCount = withData.length - VISIBLE_COUNT;
+      legendHTML += '<button class="legend-toggle" id="legend-toggle">' +
+        '<span class="legend-toggle-text">+' + moreCount + ' ' + t('dashboard.more_deals') + '</span>' +
+        '</button>';
+    }
     $('pie-legend').innerHTML = legendHTML;
+
+    if (withData.length > VISIBLE_COUNT) {
+      $('legend-toggle').addEventListener('click', function () {
+        var expanded = $('pie-legend').classList.toggle('legend-expanded');
+        var btn = $('legend-toggle');
+        if (expanded) {
+          btn.querySelector('.legend-toggle-text').textContent = t('dashboard.show_less');
+        } else {
+          btn.querySelector('.legend-toggle-text').textContent = '+' + moreCount + ' ' + t('dashboard.more_deals');
+        }
+      });
+    }
   }
 
   function renderLineChart(dailyStats) {
