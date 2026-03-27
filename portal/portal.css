@@ -305,20 +305,21 @@
 
 .dashboard-time-filter {
   display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 0;
+  flex-wrap: nowrap;
 }
 .time-filter-btn {
-  padding: 6px 14px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  padding: 4px 10px;
+  border: 1px solid var(--border, #e0e0e0);
+  border-radius: 16px;
   background: var(--bg-card, #fff);
   color: var(--text-secondary, #666);
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
+  white-space: nowrap;
 }
 .time-filter-btn:hover {
   border-color: #007AFF;
@@ -716,6 +717,8 @@ textarea.form-input {
 }
 .chart-legend {
   margin-top: 14px;
+  max-height: 120px;
+  overflow-y: auto;
 }
 .legend-item {
   display: flex;
