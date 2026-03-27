@@ -141,6 +141,15 @@
       'billing.remove_card': 'Remove',
       'billing.payment_history': 'Payment History',
       'billing.no_receipts': 'No payment history yet',
+      'billing.spending_limit': 'Spending Limit',
+      'billing.spending_limit_desc': 'Set a maximum spend. Deals auto-deactivate when reached.',
+      'billing.save_limit': 'Save',
+      'billing.current_spend': 'Current spend: CHF {0}',
+      'billing.trial_active': 'Free Trial Active',
+      'billing.trial_days_left': '{0} days remaining',
+      'billing.try_free': 'Try BookedEat Free',
+      'billing.trial_desc': 'Start a 7-day free trial to create deals without a payment method.',
+      'billing.start_trial': 'Start Free Trial',
       'billing.download': 'Download',
       'billing.paid': 'Paid',
       'billing.pending': 'Pending',
@@ -320,6 +329,15 @@
       'billing.remove_card': 'Entfernen',
       'billing.payment_history': 'Zahlungsverlauf',
       'billing.no_receipts': 'Noch kein Zahlungsverlauf',
+      'billing.spending_limit': 'Ausgabenlimit',
+      'billing.spending_limit_desc': 'Maximales Budget festlegen. Deals werden automatisch deaktiviert.',
+      'billing.save_limit': 'Speichern',
+      'billing.current_spend': 'Aktuelle Ausgaben: CHF {0}',
+      'billing.trial_active': 'Kostenlose Testphase aktiv',
+      'billing.trial_days_left': 'Noch {0} Tage',
+      'billing.try_free': 'BookedEat kostenlos testen',
+      'billing.trial_desc': 'Starten Sie eine 7-t\u00e4gige Testphase, um Deals ohne Zahlungsmethode zu erstellen.',
+      'billing.start_trial': 'Testphase starten',
       'billing.download': 'Herunterladen',
       'billing.paid': 'Bezahlt',
       'billing.pending': 'Ausstehend',
@@ -825,12 +843,16 @@
     $('dash-avatar').innerHTML = avatarHTML(partner.restaurantName, partner.restaurantPhotos);
     $('dash-name').textContent = partner.restaurantName;
 
-    // Load payment method status for deal creation gate
+    // Load payment method + trial status for deal creation gate
     try {
       var pmData = await apiFetch('/partner/payment-method');
       if (pmData.has_payment_method) {
         savedPaymentMethod = { brand: pmData.brand, last4: pmData.last4 };
       }
+    } catch (e) { /* ignore */ }
+    try {
+      var limitData = await apiFetch('/partner/spending-limit');
+      isInTrial = !!limitData.is_trial;
     } catch (e) { /* ignore */ }
 
     setupTimeFilter();
@@ -1302,7 +1324,7 @@
     });
 
     $('deals-add-btn').addEventListener('click', function () {
-      if (!savedPaymentMethod) {
+      if (!savedPaymentMethod && !isInTrial) {
         alert(t('deals.payment_required'));
         location.hash = '#settings';
         return;
@@ -1310,7 +1332,7 @@
       location.hash = '#deal-form';
     });
     $('deals-create-first').addEventListener('click', function () {
-      if (!savedPaymentMethod) {
+      if (!savedPaymentMethod && !isInTrial) {
         alert(t('deals.payment_required'));
         location.hash = '#settings';
         return;
@@ -2210,6 +2232,7 @@
   var cardElement = null;
   var stripeInitialized = false;
   var savedPaymentMethod = null; // { brand, last4 }
+  var isInTrial = false;
 
   // Example past receipt (February 2026)
   var pastReceipts = [
@@ -2332,7 +2355,10 @@
         $('save-card-btn').disabled = true;
         if (cardElement) cardElement.clear();
       });
-      $('pm-remove-btn').addEventListener('click', function () {
+      $('pm-remove-btn').addEventListener('click', async function () {
+        try {
+          await apiFetch('/partner/payment-method', { method: 'DELETE' });
+        } catch (e) { /* best-effort */ }
         savedPaymentMethod = null;
         renderPaymentMethod();
       });
@@ -2494,6 +2520,55 @@
         savedPaymentMethod = { brand: pmData.brand, last4: pmData.last4 };
       }
     } catch (e) { /* ignore */ }
+
+    // Load spending limit & trial status
+    try {
+      var limitData = await apiFetch('/partner/spending-limit');
+      if (limitData.spending_limit != null) {
+        $('spending-limit-input').value = limitData.spending_limit;
+      }
+      $('current-spend-text').textContent = t('billing.current_spend').replace('{0}', (limitData.current_spend || 0).toFixed(2));
+
+      // Trial
+      if (limitData.is_trial) {
+        show($('trial-banner'));
+        hide($('trial-offer'));
+        var ends = new Date(limitData.trial_ends_at);
+        var daysLeft = Math.ceil((ends - new Date()) / 86400000);
+        $('trial-ends-text').textContent = t('billing.trial_days_left').replace('{0}', daysLeft);
+      } else if (!limitData.trial_ends_at && !savedPaymentMethod) {
+        hide($('trial-banner'));
+        show($('trial-offer'));
+      } else {
+        hide($('trial-banner'));
+        hide($('trial-offer'));
+      }
+    } catch (e) { /* ignore */ }
+
+    // Spending limit save
+    $('save-limit-btn').addEventListener('click', async function () {
+      var val = $('spending-limit-input').value;
+      var limit = val ? parseFloat(val) : null;
+      try {
+        await apiFetch('/partner/spending-limit', { method: 'PATCH', body: { spending_limit: limit } });
+        $('save-limit-btn').textContent = '\u2713';
+        setTimeout(function () { $('save-limit-btn').textContent = t('billing.save_limit'); }, 1500);
+      } catch (e) { /* ignore */ }
+    });
+
+    // Start trial
+    $('start-trial-btn').addEventListener('click', async function () {
+      try {
+        var result = await apiFetch('/partner/start-trial', { method: 'POST' });
+        hide($('trial-offer'));
+        show($('trial-banner'));
+        var ends = new Date(result.trial_ends_at);
+        var daysLeft = Math.ceil((ends - new Date()) / 86400000);
+        $('trial-ends-text').textContent = t('billing.trial_days_left').replace('{0}', daysLeft);
+      } catch (e) {
+        alert(e.message || 'Could not start trial.');
+      }
+    });
 
     initStripe();
     renderPaymentMethod();
