@@ -303,6 +303,33 @@
   margin-bottom: 32px;
 }
 
+.dashboard-time-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.time-filter-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg-card, #fff);
+  color: var(--text-secondary, #666);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.time-filter-btn:hover {
+  border-color: #007AFF;
+  color: #007AFF;
+}
+.time-filter-btn.active {
+  background: #007AFF;
+  color: #fff;
+  border-color: #007AFF;
+}
+
 .login-divider {
   display: flex;
   align-items: center;

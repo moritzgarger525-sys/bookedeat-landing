@@ -38,6 +38,11 @@
       'dashboard.chart_line_sub': 'Last 30 days',
       'dashboard.pie_empty': 'No redemption data yet',
       'dashboard.line_empty': 'No guest data yet',
+      'dashboard.filter_all': 'All Time',
+      'dashboard.filter_7d': '7 Days',
+      'dashboard.filter_30d': '30 Days',
+      'dashboard.filter_90d': '90 Days',
+      'dashboard.filter_ytd': 'YTD',
       'dashboard.manage_deals': 'Manage Deals',
       'dashboard.verify_code': 'Verify Code',
       'dashboard.check_codes': 'Check customer codes',
@@ -207,6 +212,11 @@
       'dashboard.chart_pie': 'Einl\u00f6sungen nach Deal',
       'dashboard.chart_line': 'T\u00e4gliche G\u00e4ste',
       'dashboard.chart_line_sub': 'Letzte 30 Tage',
+      'dashboard.filter_all': 'Gesamt',
+      'dashboard.filter_7d': '7 Tage',
+      'dashboard.filter_30d': '30 Tage',
+      'dashboard.filter_90d': '90 Tage',
+      'dashboard.filter_ytd': 'Dieses Jahr',
       'dashboard.pie_empty': 'Noch keine Einl\u00f6sungsdaten',
       'dashboard.line_empty': 'Noch keine G\u00e4stedaten',
       'dashboard.manage_deals': 'Deals verwalten',
@@ -727,28 +737,47 @@
   // ============================================================
   //  DASHBOARD
   // ============================================================
-  async function initDashboard() {
-    if (!partner) return;
+  var currentTimeRange = 'all';
 
-    // Set header
-    $('dash-avatar').innerHTML = avatarHTML(partner.restaurantName, partner.restaurantPhotos);
-    $('dash-name').textContent = partner.restaurantName;
+  function getDateRange(range) {
+    var now = new Date();
+    var to = now.toISOString().slice(0, 10);
+    var from = null;
+    if (range === '7d') {
+      from = new Date(now - 7 * 86400000).toISOString().slice(0, 10);
+    } else if (range === '30d') {
+      from = new Date(now - 30 * 86400000).toISOString().slice(0, 10);
+    } else if (range === '90d') {
+      from = new Date(now - 90 * 86400000).toISOString().slice(0, 10);
+    } else if (range === 'ytd') {
+      from = now.getFullYear() + '-01-01';
+    }
+    return { from: from, to: from ? to : null };
+  }
 
-    // Load data
+  function buildQueryString(range) {
+    var dr = getDateRange(range);
+    var qs = '';
+    if (dr.from) qs += '?from=' + dr.from + '&to=' + dr.to;
+    return qs;
+  }
+
+  async function loadDashboardData(range) {
+    var qs = buildQueryString(range);
+
     var results = await Promise.all([
-      apiFetch('/partner/dashboard/stats'),
+      apiFetch('/partner/dashboard/stats' + qs),
       apiFetch('/partner/deals'),
-      apiFetch('/partner/deals/analytics')
+      apiFetch('/partner/deals/analytics' + qs)
     ]);
 
     var stats = results[0] || {};
     deals = results[1] || [];
     var analytics = results[2] || [];
 
-    // Daily stats
     var dailyStats = [];
     try {
-      dailyStats = await apiFetch('/partner/analytics/daily-redemptions');
+      dailyStats = await apiFetch('/partner/analytics/daily-redemptions' + qs);
     } catch (e) { /* ignore */ }
 
     // Render stats
@@ -766,11 +795,32 @@
       $('dash-billing-desc').textContent = t('dashboard.view_billing');
     }
 
-    // Pie chart
+    // Charts
     renderPieChart(analytics);
-
-    // Line chart
     renderLineChart(dailyStats);
+  }
+
+  function setupTimeFilter() {
+    var btns = document.querySelectorAll('.time-filter-btn');
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btns.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentTimeRange = btn.getAttribute('data-range');
+        loadDashboardData(currentTimeRange);
+      });
+    });
+  }
+
+  async function initDashboard() {
+    if (!partner) return;
+
+    // Set header
+    $('dash-avatar').innerHTML = avatarHTML(partner.restaurantName, partner.restaurantPhotos);
+    $('dash-name').textContent = partner.restaurantName;
+
+    setupTimeFilter();
+    await loadDashboardData(currentTimeRange);
   }
 
   // ── Opening Hours ──────────────────────────────────────────────
