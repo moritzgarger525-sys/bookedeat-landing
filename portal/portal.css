@@ -707,7 +707,7 @@ textarea.form-input {
 .chart-container {
   position: relative;
   height: 200px;
-  flex: 1;
+  max-height: 200px;
 }
 .chart-empty {
   text-align: center;

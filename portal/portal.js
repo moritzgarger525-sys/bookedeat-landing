@@ -1061,6 +1061,10 @@
         } else {
           btn.querySelector('.legend-toggle-text').textContent = '+' + moreCount + ' ' + t('dashboard.more_deals');
         }
+        // Force Chart.js to recalculate size after legend toggle
+        if (pieChart) {
+          setTimeout(function () { pieChart.resize(); }, 10);
+        }
       });
     }
   }
