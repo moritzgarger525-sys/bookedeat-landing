@@ -3121,8 +3121,10 @@
     var imageInput = $('post-image-input');
     if (imageInput) {
       imageInput.addEventListener('change', function () {
-        uploadPostImages(this.files);
+        // Copy files to Array before clearing input — FileList is a live object
+        var fileArray = Array.prototype.slice.call(this.files);
         this.value = '';
+        uploadPostImages(fileArray);
       });
     }
 
