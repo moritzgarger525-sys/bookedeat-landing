@@ -47,6 +47,8 @@
       'dashboard.filter_30d': '30 Days',
       'dashboard.filter_90d': '90 Days',
       'dashboard.filter_ytd': 'YTD',
+      'dashboard.subscribers': 'Subscribers',
+      'dashboard.subscribers_tooltip': '{0} deal notifications, {1} followers',
       'dashboard.more_deals': 'more',
       'dashboard.show_less': 'Show less',
       'dashboard.manage_deals': 'Manage Deals',
@@ -264,6 +266,8 @@
       'dashboard.filter_30d': '30 Tage',
       'dashboard.filter_90d': '90 Tage',
       'dashboard.filter_ytd': 'Dieses Jahr',
+      'dashboard.subscribers': 'Abonnenten',
+      'dashboard.subscribers_tooltip': '{0} Deal-Benachrichtigungen, {1} Follower',
       'dashboard.more_deals': 'weitere',
       'dashboard.show_less': 'Weniger',
       'dashboard.pie_empty': 'Noch keine Einl\u00f6sungsdaten',
@@ -880,6 +884,14 @@
     $('dash-redemptions').textContent = stats.total_redemptions || 0;
     $('dash-guests').textContent = stats.unique_guests || 0;
     $('dash-deal-count').textContent = t('dashboard.total_deals').replace('{0}', deals.length);
+
+    // Subscribers = deal notifications + followers (deduplicated on server, but show combined for simplicity)
+    var notifCount = stats.deal_notification_count || 0;
+    var followCount = stats.follower_count || 0;
+    var totalSubs = notifCount + followCount;
+    $('dash-subscribers').textContent = totalSubs;
+    $('dash-subscribers').title = t('dashboard.subscribers_tooltip')
+      .replace('{0}', notifCount).replace('{1}', followCount);
 
     // Billing card description
     var amountOwed = stats.amount_owed;

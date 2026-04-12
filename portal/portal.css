@@ -665,6 +665,7 @@ textarea.form-input {
 .stat-value.blue { color: var(--blue-500); }
 .stat-value.purple { color: var(--purple-500); }
 .stat-value.green { color: var(--green-500); }
+.stat-value.orange { color: #FF9500; }
 .stat-label {
   font-size: 12px;
   color: var(--text-tertiary);
