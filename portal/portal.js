@@ -2895,7 +2895,21 @@
       }
       var imagePreview = '';
       if (p.image_urls && p.image_urls.length > 0) {
-        imagePreview = '<div class="post-card-image"><img src="' + escapeHTML(p.image_urls[0]) + '" alt=""></div>';
+        var imgCount = p.image_urls.length > 1 ? '<span class="post-card-img-count">+' + (p.image_urls.length - 1) + '</span>' : '';
+        imagePreview = '<div class="post-card-image"><img src="' + escapeHTML(p.image_urls[0]) + '" alt="">' + imgCount + '</div>';
+      }
+
+      // Build deal info row if deal is attached
+      var dealRow = '';
+      if (p.deal_id) {
+        var attachedDeal = deals.find(function (d) { return d.id === p.deal_id; });
+        if (attachedDeal) {
+          dealRow = '<div class="post-card-deal-row">' +
+            '<span class="post-card-deal-icon">🏷️</span>' +
+            '<span class="post-card-deal-name">' + escapeHTML(attachedDeal.title) + '</span>' +
+            '<span class="post-card-deal-label">' + escapeHTML(shortLabel(attachedDeal)) + '</span>' +
+          '</div>';
+        }
       }
 
       html += '<div class="deal-card" data-post-id="' + p.id + '">' +
@@ -2910,6 +2924,7 @@
         '<div class="deal-card-body" data-post-edit-id="' + p.id + '" style="cursor:pointer;">' +
           '<div class="deal-card-title">' + escapeHTML(p.title) + '</div>' +
           '<div class="deal-card-validity">' + escapeHTML(p.body ? p.body.substring(0, 100) + (p.body.length > 100 ? '...' : '') : '') + '</div>' +
+          dealRow +
           '<div class="deal-card-redemptions">' + dateStr + '</div>' +
         '</div>' +
         '<div class="deal-card-actions">' +
@@ -3079,17 +3094,22 @@
         body: { count: files.length, prefix: 'post' }
       });
       for (var i = 0; i < presignData.length; i++) {
-        await fetch(presignData[i].uploadUrl, {
+        var resp = await fetch(presignData[i].uploadUrl, {
           method: 'PUT',
           body: files[i],
           headers: { 'Content-Type': 'image/jpeg' }
         });
+        if (!resp.ok) {
+          console.error('[BookedEat] S3 upload failed:', resp.status, resp.statusText);
+          continue;
+        }
         postImageKeys.push(presignData[i].key);
         postImagePreviews.push(URL.createObjectURL(files[i]));
       }
       renderPostImagePreviews();
     } catch (e) {
       console.error('[BookedEat] Image upload failed:', e);
+      alert('Image upload failed: ' + (e.message || 'Unknown error'));
     }
     uploadLabel.textContent = origText;
   }
