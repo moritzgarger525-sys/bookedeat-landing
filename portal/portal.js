@@ -10,7 +10,8 @@
   var editingDealId = null;
   var posts = [];
   var editingPostId = null;
-  var postImageKeys = [];
+  var postImageKeys = [];     // S3 keys to save
+  var postImagePreviews = []; // display URLs (blob or signed)
   var pieChart = null;
   var lineChart = null;
   var currentLang = localStorage.getItem('portal_lang') || 'en';
@@ -2854,7 +2855,12 @@
     hide($('posts-list'));
     hide($('posts-empty'));
     try {
-      posts = await apiFetch('/partner/posts');
+      var results = await Promise.all([
+        apiFetch('/partner/posts'),
+        apiFetch('/partner/deals')
+      ]);
+      posts = results[0];
+      deals = results[1];
     } catch (e) {
       console.error('[BookedEat] Failed to load posts:', e);
       posts = [];
@@ -2880,6 +2886,13 @@
       var statusBadge = p.published
         ? '<span class="deal-badge">' + t('posts.published') + '</span>'
         : '<span class="deal-badge insider">' + t('posts.draft') + '</span>';
+      // Show attached deal name
+      var dealBadge = '';
+      if (p.deal_id) {
+        var attachedDeal = deals.find(function (d) { return d.id === p.deal_id; });
+        dealBadge = '<span class="deal-badge" style="background:rgba(255,59,48,0.1);color:#FF3B30;">🏷️ ' +
+          (attachedDeal ? escapeHTML(attachedDeal.title) : 'Deal attached') + '</span>';
+      }
       var imagePreview = '';
       if (p.image_urls && p.image_urls.length > 0) {
         imagePreview = '<div class="post-card-image"><img src="' + escapeHTML(p.image_urls[0]) + '" alt=""></div>';
@@ -2887,7 +2900,7 @@
 
       html += '<div class="deal-card" data-post-id="' + p.id + '">' +
         '<div class="deal-card-top">' +
-          '<div class="deal-badges">' + statusBadge + '<span class="deal-badge">' + typeObj.icon + ' ' + t(typeObj.label) + '</span></div>' +
+          '<div class="deal-badges">' + statusBadge + '<span class="deal-badge">' + typeObj.icon + ' ' + t(typeObj.label) + '</span>' + dealBadge + '</div>' +
           '<label class="deal-toggle">' +
             '<input type="checkbox"' + (p.published ? ' checked' : '') + ' data-post-toggle-id="' + p.id + '">' +
             '<span class="deal-toggle-slider"></span>' +
@@ -2979,6 +2992,7 @@
   async function initPostForm(postId) {
     editingPostId = postId || null;
     postImageKeys = [];
+    postImagePreviews = [];
     selectedPostType = 'update';
 
     var titleEl = $('post-form-title');
@@ -3010,6 +3024,7 @@
         $('post-event-date').value = existingPost.event_date ? existingPost.event_date.substring(0, 10) : '';
         $('post-published').checked = existingPost.published;
         postImageKeys = existingPost.image_urls || [];
+        postImagePreviews = existingPost.image_urls || []; // already signed URLs from API
         renderPostImagePreviews();
       }
     } else {
@@ -3034,7 +3049,7 @@
     }
     var html = '';
     for (var i = 0; i < postImageKeys.length; i++) {
-      var url = postImageKeys[i];
+      var url = postImagePreviews[i] || postImageKeys[i];
       html += '<div class="post-image-thumb">' +
         '<img src="' + escapeHTML(url) + '" alt="">' +
         '<button type="button" class="post-image-remove" data-img-idx="' + i + '">&times;</button>' +
@@ -3046,6 +3061,7 @@
       removes[j].addEventListener('click', function () {
         var idx = parseInt(this.getAttribute('data-img-idx'));
         postImageKeys.splice(idx, 1);
+        postImagePreviews.splice(idx, 1);
         renderPostImagePreviews();
       });
     }
@@ -3069,6 +3085,7 @@
           headers: { 'Content-Type': 'image/jpeg' }
         });
         postImageKeys.push(presignData[i].key);
+        postImagePreviews.push(URL.createObjectURL(files[i]));
       }
       renderPostImagePreviews();
     } catch (e) {
