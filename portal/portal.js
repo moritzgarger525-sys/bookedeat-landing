@@ -8,6 +8,9 @@
   var deals = [];       // array of deal objects
   var currentScreen = null;
   var editingDealId = null;
+  var posts = [];
+  var editingPostId = null;
+  var postImageKeys = [];
   var pieChart = null;
   var lineChart = null;
   var currentLang = localStorage.getItem('portal_lang') || 'en';
@@ -202,7 +205,38 @@
       'month.9': 'October', 'month.10': 'November', 'month.11': 'December',
       'cal.su': 'Su', 'cal.mo': 'Mo', 'cal.tu': 'Tu', 'cal.we': 'We',
       'cal.th': 'Th', 'cal.fr': 'Fr', 'cal.sa': 'Sa',
-      'today': 'today'
+      'today': 'today',
+      'dashboard.news_posts': 'News Posts',
+      'dashboard.share_updates': 'Share updates with followers',
+      'posts.title': 'News Posts',
+      'posts.empty': 'No posts yet',
+      'posts.create_first': 'Create First Post',
+      'posts.delete_title': 'Delete Post',
+      'posts.delete_message': 'Are you sure you want to delete "{0}"? This cannot be undone.',
+      'posts.draft': 'Draft',
+      'posts.published': 'Published',
+      'post_form.create': 'Create Post',
+      'post_form.edit': 'Edit Post',
+      'post_form.save': 'Save Changes',
+      'post_form.title': 'Title *',
+      'post_form.title_placeholder': 'e.g., New summer menu now available!',
+      'post_form.body': 'Body',
+      'post_form.body_placeholder': 'Tell your followers about what\'s new...',
+      'post_form.post_type': 'Post Type',
+      'post_form.type_update': 'Update',
+      'post_form.type_event': 'Event',
+      'post_form.type_menu': 'Menu',
+      'post_form.type_announcement': 'Announcement',
+      'post_form.type_promotion': 'Promotion',
+      'post_form.images': 'Images',
+      'post_form.upload_images': 'Upload Images',
+      'post_form.uploading': 'Uploading...',
+      'post_form.attach_deal': 'Attach Deal (optional)',
+      'post_form.no_deal': 'No deal attached',
+      'post_form.event_date': 'Event Date (optional)',
+      'post_form.publish': 'Publish',
+      'post_form.creating': 'Creating...',
+      'post_form.saving': 'Saving...'
     },
     de: {
       'nav.restaurant_settings': 'Restaurant-Einstellungen',
@@ -390,7 +424,38 @@
       'month.9': 'Oktober', 'month.10': 'November', 'month.11': 'Dezember',
       'cal.su': 'So', 'cal.mo': 'Mo', 'cal.tu': 'Di', 'cal.we': 'Mi',
       'cal.th': 'Do', 'cal.fr': 'Fr', 'cal.sa': 'Sa',
-      'today': 'heute'
+      'today': 'heute',
+      'dashboard.news_posts': 'News-Beiträge',
+      'dashboard.share_updates': 'Teilen Sie Updates mit Followern',
+      'posts.title': 'News-Beiträge',
+      'posts.empty': 'Noch keine Beiträge',
+      'posts.create_first': 'Ersten Beitrag erstellen',
+      'posts.delete_title': 'Beitrag löschen',
+      'posts.delete_message': 'Sind Sie sicher, dass Sie \u201e{0}\u201c löschen möchten? Dies kann nicht rückgängig gemacht werden.',
+      'posts.draft': 'Entwurf',
+      'posts.published': 'Veröffentlicht',
+      'post_form.create': 'Beitrag erstellen',
+      'post_form.edit': 'Beitrag bearbeiten',
+      'post_form.save': 'Änderungen speichern',
+      'post_form.title': 'Titel *',
+      'post_form.title_placeholder': 'z.B. Neue Sommerkarte jetzt verfügbar!',
+      'post_form.body': 'Inhalt',
+      'post_form.body_placeholder': 'Erzählen Sie Ihren Followern, was es Neues gibt...',
+      'post_form.post_type': 'Beitragstyp',
+      'post_form.type_update': 'Update',
+      'post_form.type_event': 'Event',
+      'post_form.type_menu': 'Menü',
+      'post_form.type_announcement': 'Ankündigung',
+      'post_form.type_promotion': 'Aktion',
+      'post_form.images': 'Bilder',
+      'post_form.upload_images': 'Bilder hochladen',
+      'post_form.uploading': 'Wird hochgeladen...',
+      'post_form.attach_deal': 'Deal anhängen (optional)',
+      'post_form.no_deal': 'Kein Deal angehängt',
+      'post_form.event_date': 'Eventdatum (optional)',
+      'post_form.publish': 'Veröffentlichen',
+      'post_form.creating': 'Wird erstellt...',
+      'post_form.saving': 'Wird gespeichert...'
     }
   };
 
@@ -433,6 +498,8 @@
         case 'dashboard': initDashboard(); break;
         case 'deals': renderDeals(); break;
         case 'deal-form': updateTypePills(); updateDayToggles(); updateFormVisibility(); renderInfluencerCodes(); renderGiveawayRecipients(); break;
+        case 'posts': renderPosts(); break;
+        case 'post-form': updatePostTypePills(); break;
         case 'settings': initSettings(); break;
         case 'restaurant-settings': initRestaurantSettings(); break;
       }
@@ -624,6 +691,8 @@
       case 'dashboard': initDashboard(); break;
       case 'deals': initDeals(); break;
       case 'deal-form': initDealForm(param); break;
+      case 'posts': initPosts(); break;
+      case 'post-form': initPostForm(param); break;
       case 'settings': initSettings(); break;
       case 'restaurant-settings': initRestaurantSettings(); break;
       case 'verify-code': initVerifyCode(); break;
@@ -2761,11 +2830,309 @@
     $('dropdown-email').textContent = partner.restaurantAddress || '';
   }
 
+  // ============================================================
+  //  NEWS POSTS
+  // ============================================================
+  var POST_TYPES = [
+    { value: 'update', label: 'post_form.type_update', icon: '📝' },
+    { value: 'event', label: 'post_form.type_event', icon: '🎉' },
+    { value: 'menu', label: 'post_form.type_menu', icon: '🍽️' },
+    { value: 'announcement', label: 'post_form.type_announcement', icon: '📢' },
+    { value: 'promotion', label: 'post_form.type_promotion', icon: '🏷️' }
+  ];
+  var selectedPostType = 'update';
+
+  function setupPostsPage() {
+    var addBtn = $('posts-add-btn');
+    if (addBtn) addBtn.addEventListener('click', function () { location.hash = '#post-form'; });
+    var createFirst = $('posts-create-first');
+    if (createFirst) createFirst.addEventListener('click', function () { location.hash = '#post-form'; });
+  }
+
+  async function initPosts() {
+    show($('posts-loading'));
+    hide($('posts-list'));
+    hide($('posts-empty'));
+    try {
+      posts = await apiFetch('/partner/posts');
+    } catch (e) {
+      console.error('[BookedEat] Failed to load posts:', e);
+      posts = [];
+    }
+    hide($('posts-loading'));
+    renderPosts();
+  }
+
+  function renderPosts() {
+    if (posts.length === 0) {
+      hide($('posts-list'));
+      show($('posts-empty'));
+      return;
+    }
+    hide($('posts-empty'));
+    show($('posts-list'));
+
+    var html = '';
+    for (var i = 0; i < posts.length; i++) {
+      var p = posts[i];
+      var typeObj = POST_TYPES.find(function (pt) { return pt.value === p.post_type; }) || POST_TYPES[0];
+      var dateStr = new Date(p.created_at).toLocaleDateString();
+      var statusBadge = p.published
+        ? '<span class="deal-badge">' + t('posts.published') + '</span>'
+        : '<span class="deal-badge insider">' + t('posts.draft') + '</span>';
+      var imagePreview = '';
+      if (p.image_urls && p.image_urls.length > 0) {
+        imagePreview = '<div class="post-card-image"><img src="' + escapeHTML(p.image_urls[0]) + '" alt=""></div>';
+      }
+
+      html += '<div class="deal-card" data-post-id="' + p.id + '">' +
+        '<div class="deal-card-top">' +
+          '<div class="deal-badges">' + statusBadge + '<span class="deal-badge">' + typeObj.icon + ' ' + t(typeObj.label) + '</span></div>' +
+          '<label class="deal-toggle">' +
+            '<input type="checkbox"' + (p.published ? ' checked' : '') + ' data-post-toggle-id="' + p.id + '">' +
+            '<span class="deal-toggle-slider"></span>' +
+          '</label>' +
+        '</div>' +
+        imagePreview +
+        '<div class="deal-card-body" data-post-edit-id="' + p.id + '" style="cursor:pointer;">' +
+          '<div class="deal-card-title">' + escapeHTML(p.title) + '</div>' +
+          '<div class="deal-card-validity">' + escapeHTML(p.body ? p.body.substring(0, 100) + (p.body.length > 100 ? '...' : '') : '') + '</div>' +
+          '<div class="deal-card-redemptions">' + dateStr + '</div>' +
+        '</div>' +
+        '<div class="deal-card-actions">' +
+          '<button class="btn-icon" data-post-edit-id="' + p.id + '" title="Edit">&#9998;</button>' +
+          '<button class="btn-icon danger" data-post-delete-id="' + p.id + '" title="Delete">&#128465;</button>' +
+        '</div>' +
+      '</div>';
+    }
+    $('posts-list').innerHTML = html;
+
+    // Bind toggle
+    var toggles = $('posts-list').querySelectorAll('[data-post-toggle-id]');
+    for (var ti = 0; ti < toggles.length; ti++) {
+      toggles[ti].addEventListener('change', function () {
+        var id = this.getAttribute('data-post-toggle-id');
+        apiFetch('/partner/posts/' + id + '/toggle', { method: 'PATCH' }).then(function () { initPosts(); });
+      });
+    }
+    // Bind edit
+    var edits = $('posts-list').querySelectorAll('[data-post-edit-id]');
+    for (var e = 0; e < edits.length; e++) {
+      edits[e].addEventListener('click', function () { location.hash = '#post-form/' + this.getAttribute('data-post-edit-id'); });
+    }
+    // Bind delete
+    var deletes = $('posts-list').querySelectorAll('[data-post-delete-id]');
+    for (var d = 0; d < deletes.length; d++) {
+      deletes[d].addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        handlePostDelete(this.getAttribute('data-post-delete-id'));
+      });
+    }
+  }
+
+  function handlePostDelete(id) {
+    var post = posts.find(function (p) { return p.id === id; });
+    if (!post) return;
+    $('dialog-title').textContent = t('posts.delete_title');
+    $('dialog-message').textContent = t('posts.delete_message').replace('{0}', post.title);
+    $('confirm-dialog').classList.remove('hidden');
+
+    var confirmBtn = $('dialog-confirm');
+    var cancelBtn = $('dialog-cancel');
+    function cleanup() {
+      $('confirm-dialog').classList.add('hidden');
+      confirmBtn.removeEventListener('click', onConfirm);
+      cancelBtn.removeEventListener('click', onCancel);
+    }
+    async function onConfirm() {
+      cleanup();
+      try { await apiFetch('/partner/posts/' + id, { method: 'DELETE' }); } catch (e) { /* ignore */ }
+      initPosts();
+    }
+    function onCancel() { cleanup(); }
+    confirmBtn.addEventListener('click', onConfirm);
+    cancelBtn.addEventListener('click', onCancel);
+  }
+
+  // ── Post Form ──
+
+  function updatePostTypePills() {
+    var container = $('post-type-pills');
+    if (!container) return;
+    var html = '';
+    for (var i = 0; i < POST_TYPES.length; i++) {
+      var pt = POST_TYPES[i];
+      var active = pt.value === selectedPostType ? ' active' : '';
+      html += '<button type="button" class="type-pill' + active + '" data-post-type="' + pt.value + '">' +
+        pt.icon + ' ' + t(pt.label) + '</button>';
+    }
+    container.innerHTML = html;
+    var pills = container.querySelectorAll('[data-post-type]');
+    for (var j = 0; j < pills.length; j++) {
+      pills[j].addEventListener('click', function () {
+        selectedPostType = this.getAttribute('data-post-type');
+        updatePostTypePills();
+      });
+    }
+  }
+
+  async function initPostForm(postId) {
+    editingPostId = postId || null;
+    postImageKeys = [];
+    selectedPostType = 'update';
+
+    var titleEl = $('post-form-title');
+    var submitEl = $('post-submit-btn');
+
+    // Load deals for the deal selector
+    try {
+      var partnerDeals = await apiFetch('/partner/deals');
+      var select = $('post-deal-select');
+      select.innerHTML = '<option value="">' + t('post_form.no_deal') + '</option>';
+      for (var i = 0; i < partnerDeals.length; i++) {
+        var d = partnerDeals[i];
+        if (d.is_active) {
+          select.innerHTML += '<option value="' + d.id + '">' + escapeHTML(d.title) + '</option>';
+        }
+      }
+    } catch (e) { /* ignore */ }
+
+    if (editingPostId) {
+      titleEl.textContent = t('post_form.edit');
+      submitEl.querySelector('span').textContent = t('post_form.save');
+      // Load existing post
+      var existingPost = posts.find(function (p) { return p.id === editingPostId; });
+      if (existingPost) {
+        $('post-title').value = existingPost.title;
+        $('post-body').value = existingPost.body || '';
+        selectedPostType = existingPost.post_type || 'update';
+        $('post-deal-select').value = existingPost.deal_id || '';
+        $('post-event-date').value = existingPost.event_date ? existingPost.event_date.substring(0, 10) : '';
+        $('post-published').checked = existingPost.published;
+        postImageKeys = existingPost.image_urls || [];
+        renderPostImagePreviews();
+      }
+    } else {
+      titleEl.textContent = t('post_form.create');
+      submitEl.querySelector('span').textContent = t('post_form.create');
+      $('post-title').value = '';
+      $('post-body').value = '';
+      $('post-deal-select').value = '';
+      $('post-event-date').value = '';
+      $('post-published').checked = true;
+      renderPostImagePreviews();
+    }
+    updatePostTypePills();
+  }
+
+  function renderPostImagePreviews() {
+    var container = $('post-image-previews');
+    if (!container) return;
+    if (postImageKeys.length === 0) {
+      container.innerHTML = '';
+      return;
+    }
+    var html = '';
+    for (var i = 0; i < postImageKeys.length; i++) {
+      var url = postImageKeys[i];
+      html += '<div class="post-image-thumb">' +
+        '<img src="' + escapeHTML(url) + '" alt="">' +
+        '<button type="button" class="post-image-remove" data-img-idx="' + i + '">&times;</button>' +
+      '</div>';
+    }
+    container.innerHTML = html;
+    var removes = container.querySelectorAll('[data-img-idx]');
+    for (var j = 0; j < removes.length; j++) {
+      removes[j].addEventListener('click', function () {
+        var idx = parseInt(this.getAttribute('data-img-idx'));
+        postImageKeys.splice(idx, 1);
+        renderPostImagePreviews();
+      });
+    }
+  }
+
+  async function uploadPostImages(files) {
+    if (!files || files.length === 0) return;
+    var uploadLabel = $('post-upload-label');
+    var origText = uploadLabel.textContent;
+    uploadLabel.textContent = t('post_form.uploading');
+
+    try {
+      var presignData = await apiFetch('/images/presign', {
+        method: 'POST',
+        body: { count: files.length, prefix: 'post' }
+      });
+      for (var i = 0; i < presignData.length; i++) {
+        await fetch(presignData[i].uploadUrl, {
+          method: 'PUT',
+          body: files[i],
+          headers: { 'Content-Type': 'image/jpeg' }
+        });
+        postImageKeys.push(presignData[i].key);
+      }
+      renderPostImagePreviews();
+    } catch (e) {
+      console.error('[BookedEat] Image upload failed:', e);
+    }
+    uploadLabel.textContent = origText;
+  }
+
+  function setupPostForm() {
+    var backBtn = $('post-form-back-btn');
+    if (backBtn) backBtn.addEventListener('click', function () { location.hash = '#posts'; });
+
+    var imageInput = $('post-image-input');
+    if (imageInput) {
+      imageInput.addEventListener('change', function () {
+        uploadPostImages(this.files);
+        this.value = '';
+      });
+    }
+
+    var form = $('post-form');
+    if (form) {
+      form.addEventListener('submit', async function (ev) {
+        ev.preventDefault();
+        var title = $('post-title').value.trim();
+        if (!title) { $('post-title').focus(); return; }
+
+        var submitBtn = $('post-submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.querySelector('span').textContent = editingPostId ? t('post_form.saving') : t('post_form.creating');
+
+        var body = {
+          title: title,
+          body: $('post-body').value.trim(),
+          post_type: selectedPostType,
+          image_urls: postImageKeys,
+          deal_id: $('post-deal-select').value || null,
+          event_date: $('post-event-date').value || null,
+          published: $('post-published').checked
+        };
+
+        try {
+          if (editingPostId) {
+            await apiFetch('/partner/posts/' + editingPostId, { method: 'PATCH', body: body });
+          } else {
+            await apiFetch('/partner/posts', { method: 'POST', body: body });
+          }
+          location.hash = '#posts';
+        } catch (e) {
+          console.error('[BookedEat] Post save failed:', e);
+          submitBtn.disabled = false;
+          submitBtn.querySelector('span').textContent = editingPostId ? t('post_form.save') : t('post_form.create');
+        }
+      });
+    }
+  }
+
   function init() {
     setupNav();
     setupLogin();
     setupDealsPage();
     setupDealForm();
+    setupPostsPage();
+    setupPostForm();
     setupSettings();
     setupRestaurantSettings();
     setupVerifyCode();
@@ -2774,6 +3141,7 @@
     // Initialize type pills and day toggles in DOM
     updateTypePills();
     updateDayToggles();
+    updatePostTypePills();
 
     // Apply translations
     translatePage();
