@@ -363,8 +363,9 @@
       var ratio = (x / w - 0.5) * 2;
       // Dead zone in center 20%
       if (Math.abs(ratio) < 0.1) { scrollSpeed = 0; return; }
-      // Speed scales with distance from center, max ~4px/frame
-      scrollSpeed = ratio * 4;
+      // Exponential ramp — gentle near center, fast at edges, max ~10px/frame
+      var sign = ratio > 0 ? 1 : -1;
+      scrollSpeed = sign * Math.pow(Math.abs(ratio), 1.8) * 10;
     });
 
     function animate() {
