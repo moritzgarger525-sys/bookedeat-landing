@@ -7,7 +7,7 @@
   // ============================================================
   var phoneConfig = {
     dashboard: {
-      image: '../screenshots/customer_restaurant.jpeg',
+      image: '../screenshots/filter_nearby_deals.jpeg',
       phrases: [
         'Customers discover your restaurant on the map.',
         'They browse your deals, read reviews, and follow you.',
@@ -15,7 +15,7 @@
       ]
     },
     deals: {
-      image: '../screenshots/customer_deals.jpeg',
+      image: '../screenshots/Navigate_like_notify_save_deals.jpeg',
       phrases: [
         'Your deals appear on the map nearby.',
         'Customers redeem with one tap.',
@@ -23,7 +23,7 @@
       ]
     },
     posts: {
-      image: '../screenshots/customer_news.jpeg',
+      image: '../screenshots/news_feed.jpeg',
       phrases: [
         'News posts reach every follower instantly.',
         'Share menus, events, and promotions.',
