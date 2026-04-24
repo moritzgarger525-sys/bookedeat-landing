@@ -150,20 +150,41 @@
     });
   }
 
-  // Language toggle
+  // Language dropdown
   var langBtn = document.getElementById('demo-lang-btn');
-  if (langBtn) {
-    langBtn.textContent = lang.toUpperCase();
-    if (lang !== 'en') translatePage();
-    langBtn.addEventListener('click', function () {
-      lang = lang === 'en' ? 'de' : 'en';
-      localStorage.setItem(LANG_KEY, lang);
-      langBtn.textContent = lang.toUpperCase();
-      translatePage();
-      // Restart typewriter with new language phrases
-      var cfg = phoneScreenMap[currentScreen];
-      if (cfg) startTypewriter((phonePhrases[lang] || phonePhrases.en)[currentScreen]);
+  var langDrop = document.getElementById('demo-lang-dropdown');
+
+  function updateDemoLangUI() {
+    if (langBtn) langBtn.innerHTML = lang.toUpperCase() + ' &#9662;';
+    if (langDrop) langDrop.querySelectorAll('.demo-lang-option').forEach(function (o) {
+      o.classList.toggle('active', o.dataset.lang === lang);
     });
+  }
+
+  function setDemoLang(newLang) {
+    lang = newLang;
+    localStorage.setItem(LANG_KEY, lang);
+    updateDemoLangUI();
+    translatePage();
+    startTypewriter((phonePhrases[lang] || phonePhrases.en)[currentScreen]);
+  }
+
+  if (langBtn && langDrop) {
+    updateDemoLangUI();
+    if (lang !== 'en') translatePage();
+    langBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      langDrop.classList.toggle('hidden');
+    });
+    langDrop.querySelectorAll('.demo-lang-option').forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        setDemoLang(this.dataset.lang);
+        langDrop.classList.add('hidden');
+      });
+    });
+    document.addEventListener('click', function () { langDrop.classList.add('hidden'); });
+  } else if (lang !== 'en') {
+    translatePage();
   }
 
   // ============================================================

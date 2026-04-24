@@ -57,6 +57,7 @@
     .demo-nav-link.active { background: var(--blue-500); color: #fff; }
 
     /* Language switcher in demo */
+    .demo-lang-wrap { position: relative; }
     .demo-lang-btn {
       display: flex; align-items: center; gap: 4px;
       background: none; border: 1px solid var(--border-default); border-radius: 10px;
@@ -65,6 +66,20 @@
       transition: all 200ms;
     }
     .demo-lang-btn:hover { background: var(--surface-secondary); color: var(--text-primary); }
+    .demo-lang-dropdown {
+      position: absolute; top: calc(100% + 6px); right: 0; min-width: 120px;
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06);
+      border: 1px solid var(--border-default); padding: 4px; z-index: 200;
+    }
+    .demo-lang-dropdown.hidden { display: none; }
+    .demo-lang-option {
+      display: block; width: 100%; padding: 8px 12px; border: none; background: none;
+      font-size: 13px; font-weight: 500; color: var(--text-primary); text-align: left;
+      cursor: pointer; border-radius: 6px; font-family: inherit; transition: background 200ms;
+    }
+    .demo-lang-option:hover { background: var(--surface-secondary); }
+    .demo-lang-option.active { color: var(--blue-500); font-weight: 600; }
 
     /* Two-column layout */
     .demo-layout {
@@ -273,7 +288,7 @@
 
   <!-- Portal Navigation -->
   <header class="portal-nav" id="portal-nav">
-    <a href="../" class="portal-nav-brand"><img src="../logo.png" alt="" style="width:28px;height:28px;border-radius:6px;object-fit:cover;margin-right:6px;">Booked<span>Eat</span></a>
+    <a href="../" class="portal-nav-brand" style="display:flex;align-items:center;gap:6px;"><img src="../logo.png" alt="" style="width:28px;height:28px;border-radius:6px;object-fit:cover;">Booked<span>Eat</span></a>
     <div class="demo-nav-links">
       <button class="demo-nav-link active" data-screen="dashboard" data-i18n="demo.nav_dashboard">Dashboard</button>
       <button class="demo-nav-link" data-screen="deals" data-i18n="demo.nav_deals">Deals</button>
@@ -281,7 +296,13 @@
       <button class="demo-nav-link" data-screen="billing" data-i18n="demo.nav_billing">Billing</button>
     </div>
     <div class="portal-nav-right" style="display:flex;align-items:center;gap:8px;">
-      <button class="demo-lang-btn" id="demo-lang-btn">EN</button>
+      <div class="demo-lang-wrap">
+        <button class="demo-lang-btn" id="demo-lang-btn">EN &#9662;</button>
+        <div class="demo-lang-dropdown hidden" id="demo-lang-dropdown">
+          <button class="demo-lang-option" data-lang="en">English</button>
+          <button class="demo-lang-option" data-lang="de">Deutsch</button>
+        </div>
+      </div>
       <div class="portal-profile-avatar" style="font-size:13px;">DA</div>
     </div>
   </header>
