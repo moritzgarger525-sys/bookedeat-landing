@@ -737,12 +737,12 @@ img {
 
 .pricing-banner {
   padding: 24px 32px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.3));
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.7), rgba(26, 26, 46, 0.55));
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-2xl);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
   max-width: 640px;
   margin: 0 auto;
 }
@@ -1759,69 +1759,96 @@ img {
 }
 
 /* ============================================================
-   Waitlist / Book a Call Form
+   CTA Cards — Prominent centered form cards
    ============================================================ */
-.waitlist-form-wrap {
+.cta-card {
   max-width: 480px;
-  margin: 0 auto 16px;
+  margin: 0 auto;
+  padding: 48px 40px;
+  border-radius: var(--radius-2xl);
+  text-align: center;
 }
 
-.waitlist-form {
+.cta-card-blue {
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,122,255,0.25) 0%, rgba(0,122,255,0.08) 60%, transparent 100%),
+              rgba(255,255,255,0.12);
+  border: 1px solid rgba(0,122,255,0.25);
+  box-shadow: 0 8px 32px rgba(0,122,255,0.1), 0 0 80px rgba(0,122,255,0.06);
+}
+
+.cta-card-orange {
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,149,0,0.25) 0%, rgba(255,149,0,0.08) 60%, transparent 100%),
+              rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,149,0,0.25);
+  box-shadow: 0 8px 32px rgba(255,149,0,0.1), 0 0 80px rgba(255,149,0,0.06);
+}
+
+.cta-card .cta-headline {
+  margin-bottom: 12px;
+}
+
+.cta-card .cta-subtitle {
+  margin-bottom: 28px;
+}
+
+.cta-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
-.waitlist-fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.waitlist-input {
+.cta-input {
   width: 100%;
-  padding: 14px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 360px;
+  padding: 16px 20px;
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
-  font-size: 15px;
+  font-size: 16px;
   font-family: inherit;
   font-weight: 500;
   outline: none;
   transition: all var(--duration-fast) var(--ease-default);
 }
 
-.waitlist-input::placeholder {
-  color: var(--text-tertiary);
+.cta-input-blue {
+  background: rgba(255,255,255,0.92);
+  border: 2px solid rgba(0,122,255,0.3);
+  color: var(--text-primary);
 }
 
-.waitlist-input:focus {
-  border-color: rgba(255, 149, 0, 0.5);
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.1);
+.cta-input-blue::placeholder { color: rgba(0,0,0,0.35); }
+
+.cta-input-blue:focus {
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 4px rgba(0,122,255,0.15);
 }
 
-.waitlist-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
+.cta-input-orange {
+  background: rgba(255,255,255,0.92);
+  border: 2px solid rgba(255,149,0,0.3);
+  color: var(--text-primary);
 }
 
-.waitlist-btn {
-  flex: 1;
-  max-width: 220px;
+.cta-input-orange::placeholder { color: rgba(0,0,0,0.35); }
+
+.cta-input-orange:focus {
+  border-color: var(--orange-500);
+  box-shadow: 0 0 0 4px rgba(255,149,0,0.15);
 }
 
-.waitlist-success {
+.cta-form .btn {
+  width: 100%;
+  max-width: 360px;
+  margin-top: 4px;
+}
+
+.cta-success {
   text-align: center;
-  padding: 32px;
-  background: rgba(52, 199, 89, 0.1);
-  border: 1px solid rgba(52, 199, 89, 0.2);
-  border-radius: var(--radius-xl);
+  padding: 24px;
 }
 
-.waitlist-success-icon {
+.cta-success-icon {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -1835,10 +1862,20 @@ img {
   margin: 0 auto 12px;
 }
 
-.waitlist-success-text {
+.cta-success-text {
   font-size: 17px;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+.cta-card .cta-footnote {
+  margin-top: 16px;
+}
+
+@media (max-width: 480px) {
+  .cta-card {
+    padding: 32px 20px;
+  }
 }
 
 @media (max-width: 768px) {

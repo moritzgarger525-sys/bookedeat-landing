@@ -452,47 +452,37 @@
       <div class="container">
         <!-- Guest CTA — Beta signup -->
         <div class="cta-content persona-section active" data-for="guest" id="beta-signup">
-          <h2 class="cta-headline">Be the first to try BookedEat</h2>
-          <p class="cta-subtitle">We're launching soon in Zurich. Leave your email and we'll let you know when the beta is ready.</p>
-          <div class="waitlist-form-wrap">
-            <form class="waitlist-form" id="beta-form">
-              <div class="waitlist-fields" style="grid-template-columns:1fr;">
-                <input type="email" class="waitlist-input" id="beta-email" placeholder="Your email address" required>
-              </div>
-              <div class="waitlist-actions">
-                <button type="submit" class="btn btn-primary btn-lg waitlist-btn">Join the Beta</button>
-              </div>
+          <div class="cta-card cta-card-blue">
+            <h2 class="cta-headline">Be the first to try BookedEat</h2>
+            <p class="cta-subtitle">We're launching soon in Zurich. Leave your email and we'll let you know when the beta is ready.</p>
+            <form class="cta-form" id="beta-form">
+              <input type="email" class="cta-input cta-input-blue" id="beta-email" placeholder="Your email address" required>
+              <button type="submit" class="btn btn-primary btn-lg">Become a Beta Tester</button>
             </form>
-            <div class="waitlist-success" id="beta-success" style="display:none;">
-              <div class="waitlist-success-icon">&#10003;</div>
-              <div class="waitlist-success-text">You're on the list! We'll be in touch.</div>
+            <div class="cta-success" id="beta-success" style="display:none;">
+              <div class="cta-success-icon">&#10003;</div>
+              <div class="cta-success-text">You're on the list! We'll be in touch.</div>
             </div>
+            <p class="cta-footnote">Available in the App Store soon. Free, no ads, ever.</p>
           </div>
-          <p class="cta-footnote">Available in the App Store soon. Free, no ads, ever.</p>
         </div>
 
-        <!-- Restaurant CTA — Waitlist / Book a Call -->
+        <!-- Restaurant CTA — Book a Call -->
         <div class="cta-content persona-section" data-for="restaurant">
-          <h2 class="cta-headline">Curious how it works?</h2>
-          <p class="cta-subtitle">Book an intro call &mdash; we'll walk you through everything. No strings attached.</p>
-
-          <div class="waitlist-form-wrap">
-            <form class="waitlist-form" id="waitlist-form">
-              <div class="waitlist-fields">
-                <input type="text" class="waitlist-input" id="wl-restaurant" placeholder="Restaurant name" required>
-                <input type="email" class="waitlist-input" id="wl-email" placeholder="Email address" required>
-              </div>
-              <div class="waitlist-actions">
-                <button type="submit" class="btn btn-primary-orange btn-lg waitlist-btn">Book an Intro Call</button>
-              </div>
+          <div class="cta-card cta-card-orange">
+            <h2 class="cta-headline">Curious how it works?</h2>
+            <p class="cta-subtitle">Book an intro call &mdash; we'll walk you through everything. No strings attached.</p>
+            <form class="cta-form" id="waitlist-form">
+              <input type="text" class="cta-input cta-input-orange" id="wl-restaurant" placeholder="Restaurant name" required>
+              <input type="email" class="cta-input cta-input-orange" id="wl-email" placeholder="Email address" required>
+              <button type="submit" class="btn btn-primary-orange btn-lg">Book an Intro Call</button>
             </form>
-            <div class="waitlist-success" id="waitlist-success" style="display:none;">
-              <div class="waitlist-success-icon">&#10003;</div>
-              <div class="waitlist-success-text">Thanks! We'll be in touch soon.</div>
+            <div class="cta-success" id="waitlist-success" style="display:none;">
+              <div class="cta-success-icon" style="background:#FF9500;">&#10003;</div>
+              <div class="cta-success-text">Thanks! We'll be in touch soon.</div>
             </div>
+            <p class="cta-footnote">No setup fees. No commitment. We'll reach out within 24 hours.</p>
           </div>
-
-          <p class="cta-footnote">No setup fees. No commitment. We'll reach out within 24 hours.</p>
         </div>
       </div>
     </section>
