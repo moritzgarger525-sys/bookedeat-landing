@@ -461,4 +461,43 @@
     });
   }
 
+  /* ----------------------------------------------------------
+     9. Waitlist / Book a Call form
+     ---------------------------------------------------------- */
+  var waitlistForm = document.getElementById('waitlist-form');
+  var waitlistSuccess = document.getElementById('waitlist-success');
+  var submitAction = 'call';
+
+  if (waitlistForm) {
+    // Track which button was clicked
+    waitlistForm.querySelectorAll('.waitlist-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        submitAction = this.dataset.action || 'call';
+      });
+    });
+
+    waitlistForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var data = {
+        restaurant: document.getElementById('wl-restaurant').value,
+        name: document.getElementById('wl-name').value,
+        email: document.getElementById('wl-email').value,
+        phone: document.getElementById('wl-phone').value,
+        action: submitAction
+      };
+
+      // Send to API (fallback: show success anyway)
+      var API_BASE = 'https://9j1rcg9aeb.execute-api.eu-north-1.amazonaws.com';
+      fetch(API_BASE + '/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).catch(function () {});
+
+      // Show success state
+      waitlistForm.style.display = 'none';
+      if (waitlistSuccess) waitlistSuccess.style.display = 'block';
+    });
+  }
+
 })();

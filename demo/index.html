@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BookedEat — Dashboard Demo</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../portal/portal.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <style>
+    /* Demo-specific overrides */
+    body.portal-body {
+      background: var(--surface-secondary);
+      overflow-x: hidden;
+    }
+    .demo-banner {
+      background: linear-gradient(135deg, #007AFF, #5856D6);
+      color: #fff;
+      text-align: center;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .demo-banner a {
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .demo-nav-links {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .demo-nav-link {
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      transition: all 200ms;
+    }
+    .demo-nav-link:hover {
+      background: var(--surface-secondary);
+      color: var(--text-primary);
+    }
+    .demo-nav-link.active {
+      background: var(--blue-500);
+      color: #fff;
+    }
+    /* Ensure charts render in iframe */
+    .chart-container {
+      position: relative;
+      height: 200px;
+    }
+    .chart-container canvas {
+      max-height: 200px;
+    }
+    /* Deal card hover */
+    .deal-card {
+      transition: transform 200ms, box-shadow 200ms;
+    }
+    .deal-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body class="portal-body">
+
+  <!-- Demo Banner -->
+  <div class="demo-banner">
+    Interactive Demo — Explore the partner dashboard with sample data
+  </div>
+
+  <!-- Portal Navigation -->
+  <header class="portal-nav" id="portal-nav">
+    <a href="#dashboard" class="portal-nav-brand">Booked<span>Eat</span></a>
+    <div class="demo-nav-links">
+      <button class="demo-nav-link active" data-screen="dashboard">Dashboard</button>
+      <button class="demo-nav-link" data-screen="deals">Deals</button>
+      <button class="demo-nav-link" data-screen="posts">Posts</button>
+    </div>
+    <div class="portal-nav-right">
+      <div class="portal-profile-avatar" style="font-size:13px;">BV</div>
+    </div>
+  </header>
+
+  <main id="portal-app">
+
+    <!-- ==================== DASHBOARD ==================== -->
+    <section id="screen-dashboard" class="portal-screen active">
+      <div class="portal-container portal-container-wide">
+        <!-- Header -->
+        <div class="dashboard-header">
+          <div class="dashboard-avatar" style="font-size:20px;">BV</div>
+          <div>
+            <div class="dashboard-name">Bella Vista Zurich</div>
+            <div class="dashboard-subtitle">Partner Dashboard</div>
+          </div>
+        </div>
+
+        <!-- Top row: value banner + stats -->
+        <div class="dashboard-top-row">
+          <div class="value-banner">
+            <div class="value-banner-icon">&#128101;</div>
+            <div class="value-banner-text"><strong>189</strong> unique customers brought to your restaurant</div>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-item">
+              <div class="stat-value blue">5</div>
+              <div class="stat-label">Active Deals</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value purple">247</div>
+              <div class="stat-label">Redemptions</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value green">189</div>
+              <div class="stat-label">Guests</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value orange">312</div>
+              <div class="stat-label">Subscribers</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts grid -->
+        <div class="dashboard-charts-grid">
+          <!-- Pie Chart -->
+          <div class="portal-card chart-section">
+            <div class="chart-header">
+              <div class="chart-title">Redemptions by Deal</div>
+            </div>
+            <div id="pie-chart-area">
+              <div class="chart-container"><canvas id="pie-chart"></canvas></div>
+              <div class="chart-legend" id="pie-legend"></div>
+            </div>
+          </div>
+
+          <!-- Line Chart -->
+          <div class="portal-card chart-section">
+            <div class="chart-title">Daily Guests</div>
+            <div class="dashboard-time-filter" style="margin-bottom:12px;">
+              <button class="time-filter-btn active" data-range="all">All Time</button>
+              <button class="time-filter-btn" data-range="7d">7 Days</button>
+              <button class="time-filter-btn" data-range="30d">30 Days</button>
+            </div>
+            <div id="line-chart-area">
+              <div class="chart-container"><canvas id="line-chart"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Cards Grid -->
+        <div class="dashboard-actions-grid">
+          <a class="dashboard-action-card" href="javascript:void(0)" onclick="showScreen('deals')">
+            <div class="dashboard-action-icon" style="background:rgba(0,122,255,0.1);">&#127991;</div>
+            <div class="dashboard-action-info">
+              <div class="dashboard-action-title">Manage Deals</div>
+              <div class="dashboard-action-desc">6 total deals</div>
+            </div>
+            <div class="dashboard-action-arrow">&#8250;</div>
+          </a>
+          <a class="dashboard-action-card" href="javascript:void(0)" onclick="showScreen('posts')">
+            <div class="dashboard-action-icon" style="background:rgba(255,149,0,0.1);">&#128240;</div>
+            <div class="dashboard-action-info">
+              <div class="dashboard-action-title">News Posts</div>
+              <div class="dashboard-action-desc">Share updates with followers</div>
+            </div>
+            <div class="dashboard-action-arrow">&#8250;</div>
+          </a>
+          <a class="dashboard-action-card" href="javascript:void(0)">
+            <div class="dashboard-action-icon" style="background:rgba(52,199,89,0.1);">&#128274;</div>
+            <div class="dashboard-action-info">
+              <div class="dashboard-action-title">Verify Code</div>
+              <div class="dashboard-action-desc">Check customer codes</div>
+            </div>
+            <div class="dashboard-action-arrow">&#8250;</div>
+          </a>
+          <a class="dashboard-action-card" href="javascript:void(0)">
+            <div class="dashboard-action-icon" style="background:rgba(175,82,222,0.1);">&#128196;</div>
+            <div class="dashboard-action-info">
+              <div class="dashboard-action-title">Billing & Receipts</div>
+              <div class="dashboard-action-desc">CHF 123.50 outstanding</div>
+            </div>
+            <div class="dashboard-action-arrow">&#8250;</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DEALS LIST ==================== -->
+    <section id="screen-deals" class="portal-screen">
+      <div class="portal-container portal-container-wide">
+        <div class="deals-header">
+          <button class="form-back-btn" onclick="showScreen('dashboard')" style="margin-right:8px;">&#8592;</button>
+          <h1 class="deals-title">Manage Deals</h1>
+          <div style="flex:1;"></div>
+          <button class="deals-add-btn" title="Create deal">+</button>
+        </div>
+
+        <div class="filter-chips" id="deals-filter-chips">
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="active">Active</button>
+          <button class="filter-chip" data-filter="inactive">Inactive</button>
+        </div>
+
+        <div id="deals-list" class="deals-grid">
+
+          <!-- Deal 1: Percent Off -->
+          <div class="deal-card" data-active="true">
+            <div class="deal-card-top">
+              <div class="deal-badges">
+                <span class="deal-badge">20% off</span>
+              </div>
+              <label class="deal-toggle">
+                <input type="checkbox" checked>
+                <span class="deal-toggle-slider"></span>
+              </label>
+            </div>
+            <div class="deal-card-body">
+              <div class="deal-card-title">20% Off Lunch Menu</div>
+              <div class="deal-card-validity">Mon, Tue, Wed, Thu, Fri &middot; 11:00 &ndash; 14:00</div>
+              <div class="deal-card-redemptions">87 redemptions</div>
+            </div>
+            <div class="deal-card-actions">
+              <button class="btn-icon">&#9998;</button>
+              <button class="btn-icon danger">&#128465;</button>
+            </div>
+          </div>
+
+          <!-- Deal 2: BOGO -->
+          <div class="deal-card" data-active="true">
+            <div class="deal-card-top">
+              <div class="deal-badges">
+                <span class="deal-badge">BOGO</span>
+              </div>
+              <label class="deal-toggle">
+                <input type="checkbox" checked>
+                <span class="deal-toggle-slider"></span>
+              </label>
+            </div>
+            <div class="deal-card-body">
+              <div class="deal-card-title">Buy One Get One Free Pizza</div>
+              <div class="deal-card-validity">Available anytime</div>
+              <div class="deal-card-redemptions">64 redemptions</div>
+            </div>
+            <div class="deal-card-actions">
+              <button class="btn-icon">&#9998;</button>
+              <button class="btn-icon danger">&#128465;</button>
+            </div>
+          </div>
+
+          <!-- Deal 3: Free Item -->
+          <div class="deal-card" data-active="true">
+            <div class="deal-card-top">
+              <div class="deal-badges">
+                <span class="deal-badge">Free tiramisu</span>
+              </div>
+              <label class="deal-toggle">
+                <input type="checkbox" checked>
+                <span class="deal-toggle-slider"></span>
+              </label>
+            </div>
+            <div class="deal-card-body">
+              <div class="deal-card-title">Free Tiramisu with Main Course</div>
+              <div class="deal-card-validity">Available anytime</div>
+              <div class="deal-card-redemptions">43 redemptions</div>
+            </div>
+            <div class="deal-card-actions">
+              <button class="btn-icon">&#9998;</button>
+              <button class="btn-icon danger">&#128465;</button>
+            </div>
+          </div>
+
+          <!-- Deal 4: Set Menu -->
+          <div class="deal-card" data-active="true">
+            <div class="deal-card-top">
+              <div class="deal-badges">
+                <span class="deal-badge">CHF 29</span>
+              </div>
+              <label class="deal-toggle">
+                <input type="checkbox" checked>
+                <span class="deal-toggle-slider"></span>
+              </label>
+            </div>
+            <div class="deal-card-body">
+              <div class="deal-card-title">Business Lunch Set Menu</div>
+              <div class="deal-card-validity">Mon, Tue, Wed, Thu, Fri &middot; 11:30 &ndash; 14:30</div>
+              <div class="deal-card-redemptions">31 redemptions</div>
+            </div>
+            <div class="deal-card-actions">
+              <button class="btn-icon">&#9998;</button>
+              <button class="btn-icon danger">&#128465;</button>
+            </div>
+          </div>
+
+          <!-- Deal 5: Special Event -->
+          <div class="deal-card" data-active="true">
+            <div class="deal-card-top">
+              <div class="deal-badges">
+                <span class="deal-badge">Event</span>
+              </div>
+              <label class="deal-toggle">
+                <input type="checkbox" checked>
+                <span class="deal-toggle-slider"></span>
+              </label>
+            </div>
+            <div class="deal-card-body">
+              <div class="deal-card-title">Wine Tasting Evening</div>
+              <div class="deal-card-validity">May 15, 2026 &middot; 18:00 &ndash; 22:00</div>
+              <div class="deal-card-redemptions">22 redemptions</div>
+            </div>
+            <div class="deal-card-actions">
+              <button class="btn-icon">&#9998;</button>
+              <button class="btn-icon danger">&#128465;</button>
+            </div>
+          </div>
+
+          <!-- Deal 6: Fixed CHF Off (Insider) -->
+          <div class="deal-card" data-active="true">
+            <div class="deal-card-top">
+              <div class="deal-badges">
+                <span class="deal-badge">CHF 10 off</span>
+                <span class="deal-badge insider">Insider (2)</span>
+              </div>
+              <label class="deal-toggle">
+                <input type="checkbox" checked>
+                <span class="deal-toggle-slider"></span>
+              </label>
+            </div>
+            <div class="deal-card-body">
+              <div class="deal-card-title">CHF 10 Off First Visit</div>
+              <div class="deal-card-validity">Max 1 per customer</div>
+              <div class="deal-card-redemptions">18 redemptions</div>
+            </div>
+            <div class="deal-card-actions">
+              <button class="btn-icon">&#9998;</button>
+              <button class="btn-icon danger">&#128465;</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== POSTS LIST ==================== -->
+    <section id="screen-posts" class="portal-screen">
+      <div class="portal-container portal-container-wide">
+        <div class="deals-header">
+          <button class="form-back-btn" onclick="showScreen('dashboard')" style="margin-right:8px;">&#8592;</button>
+          <h1 class="deals-title">News Posts</h1>
+          <div style="flex:1;"></div>
+          <button class="deals-add-btn" title="Create post">+</button>
+        </div>
+
+        <div id="posts-list" class="deals-grid">
+
+          <!-- Post 1: Menu -->
+          <div class="deal-card">
+            <div class="deal-card-top">
+              <div class="deal-badges">
+                <span class="deal-badge" style="background:rgba(52,199,89,0.12);color:#34C759;">Published</span>
+                <span class="deal-badge">&#127861; Menu</span>
+              </div>
+              <label class="deal-toggle">
+                <input type="checkbox" checked>
+                <span class="deal-toggle-slider"></span>
+              </label>
+            </div>
+            <div class="deal-card-body">
+              <div class="deal-card-title">New Summer Menu Now Available!</div>
+              <div class="deal-card-validity">Fresh seasonal dishes featuring local ingredients. Try our new burrata salad, grilled sea bass, and mango panna cotta...</div>
+              <div class="deal-card-redemptions" style="margin-top:6px;">Yesterday</div>
+            </div>
+            <div class="deal-card-actions">
+              <button class="btn-icon">&#9998;</button>
+              <button class="btn-icon danger">&#128465;</button>
+            </div>
+          </div>
+
+          <!-- Post 2: Event -->
+          <div class="deal-card">
+            <div class="deal-card-top">
+              <div class="deal-badges">
+                <span class="deal-badge" style="background:rgba(52,199,89,0.12);color:#34C759;">Published</span>
+                <span class="deal-badge">&#127881; Event</span>
+                <span class="deal-badge" style="background:rgba(255,59,48,0.1);color:#FF3B30;">&#127991; Wine Tasting Evening</span>
+              </div>
+              <label class="deal-toggle">
+                <input type="checkbox" checked>
+                <span class="deal-toggle-slider"></span>
+              </label>
+            </div>
+            <div class="deal-card-body">
+              <div class="deal-card-title">Live Jazz Night Every Friday</div>
+              <div class="deal-card-validity">Join us for live jazz music every Friday from 7 PM. Reserve your table now and enjoy great music with Italian cuisine...</div>
+              <div class="post-card-deal-row">
+                <span class="post-card-deal-icon">&#127991;</span>
+                <span class="post-card-deal-name">Wine Tasting Evening</span>
+                <span class="post-card-deal-label">Event</span>
+              </div>
+              <div class="deal-card-redemptions" style="margin-top:6px;">3 days ago</div>
+            </div>
+            <div class="deal-card-actions">
+              <button class="btn-icon">&#9998;</button>
+              <button class="btn-icon danger">&#128465;</button>
+            </div>
+          </div>
+
+          <!-- Post 3: Announcement -->
+          <div class="deal-card">
+            <div class="deal-card-top">
+              <div class="deal-badges">
+                <span class="deal-badge" style="background:rgba(52,199,89,0.12);color:#34C759;">Published</span>
+                <span class="deal-badge">&#128226; Announcement</span>
+              </div>
+              <label class="deal-toggle">
+                <input type="checkbox" checked>
+                <span class="deal-toggle-slider"></span>
+              </label>
+            </div>
+            <div class="deal-card-body">
+              <div class="deal-card-title">Featured in Zurich Tipps!</div>
+              <div class="deal-card-validity">We're thrilled to be featured as one of the top Italian restaurants in Zurich. Thank you to all our guests for your amazing reviews...</div>
+              <div class="deal-card-redemptions" style="margin-top:6px;">1 week ago</div>
+            </div>
+            <div class="deal-card-actions">
+              <button class="btn-icon">&#9998;</button>
+              <button class="btn-icon danger">&#128465;</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="demo.js"></script>
+</body>
+</html>

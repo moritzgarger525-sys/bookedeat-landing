@@ -1738,6 +1738,243 @@ img {
 }
 
 /* ============================================================
+   Demo Section — Interactive dashboard embed + customer phones
+   ============================================================ */
+.demo-section {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 48px;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.demo-laptop-wrap {
+  width: 100%;
+}
+
+.demo-laptop-frame {
+  width: 100%;
+  max-width: none;
+}
+
+.demo-laptop-frame .laptop-screen {
+  aspect-ratio: 16 / 10;
+  background: #f5f5f7;
+  overflow: hidden;
+  position: relative;
+}
+
+.demo-laptop-frame .laptop-screen iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.demo-hint {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 16px;
+}
+
+/* Customer phone view */
+.demo-customer-view {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.demo-customer-header {
+  text-align: center;
+}
+
+.demo-customer-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 6px;
+}
+
+.demo-customer-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+}
+
+.demo-phone-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.demo-phone-card {
+  text-align: center;
+}
+
+.demo-phone-frame {
+  width: 160px !important;
+  height: 330px !important;
+  border-radius: 24px !important;
+  padding: 8px !important;
+  transform: none !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 0 0 1.5px rgba(255,255,255,0.08) !important;
+}
+
+.demo-phone-frame:hover {
+  transform: none !important;
+}
+
+.demo-phone-frame .phone-screen {
+  border-radius: 18px;
+}
+
+.demo-phone-label {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================================
+   Waitlist / Book a Call Form
+   ============================================================ */
+.waitlist-form-wrap {
+  max-width: 480px;
+  margin: 0 auto 16px;
+}
+
+.waitlist-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.waitlist-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.waitlist-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 500;
+  outline: none;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+
+.waitlist-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.waitlist-input:focus {
+  border-color: rgba(255, 149, 0, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.1);
+}
+
+.waitlist-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.waitlist-btn {
+  flex: 1;
+  max-width: 220px;
+}
+
+.waitlist-success {
+  text-align: center;
+  padding: 32px;
+  background: rgba(52, 199, 89, 0.1);
+  border: 1px solid rgba(52, 199, 89, 0.2);
+  border-radius: var(--radius-xl);
+}
+
+.waitlist-success-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--green-500);
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+}
+
+.waitlist-success-text {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Demo responsive */
+@media (max-width: 1024px) {
+  .demo-section {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .demo-customer-view {
+    order: 2;
+  }
+
+  .demo-phone-stack {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .demo-section {
+    padding: 0 16px;
+    gap: 32px;
+  }
+
+  .demo-phone-stack {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .demo-phone-frame {
+    width: 140px !important;
+    height: 290px !important;
+    border-radius: 20px !important;
+    padding: 6px !important;
+  }
+
+  .waitlist-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .waitlist-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .waitlist-btn {
+    max-width: none;
+    text-align: center;
+  }
+}
+
+/* ============================================================
    Prefers reduced motion
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {

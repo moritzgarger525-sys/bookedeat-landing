@@ -99,8 +99,8 @@
             </div>
 
             <div class="hero-cta">
-              <a href="portal/" class="btn btn-primary-orange btn-lg">Get Started Free</a>
-              <a href="#screenshots" class="btn btn-secondary btn-lg">See it in action</a>
+              <a href="#screenshots" class="btn btn-primary-orange btn-lg">Try the Demo</a>
+              <a href="#waitlist-form" class="btn btn-secondary btn-lg">Book a Call</a>
             </div>
           </div>
 
@@ -385,32 +385,72 @@
           </div>
         </div>
 
-        <!-- Restaurant Screenshots — laptop slideshow -->
+        <!-- Restaurant: Interactive Demo -->
         <div class="persona-section" data-for="restaurant">
           <div class="section-header">
-            <h2 class="section-title">Your partner dashboard</h2>
-            <p class="section-subtitle">Manage deals, track performance, and grow your business from one place.</p>
+            <h2 class="section-title">Try the dashboard yourself</h2>
+            <p class="section-subtitle">Explore how your restaurant dashboard would look &mdash; with real features and sample data.</p>
           </div>
 
-          <div class="device-showcase" id="laptop-showcase">
-            <div class="laptop-mockup">
-              <div class="laptop-lid">
-                <div class="laptop-bezel">
-                  <div class="laptop-camera"></div>
-                  <div class="laptop-screen" id="laptop-screen">
-                    <img src="screenshots/laptop_dashboard.png" alt="Partner dashboard" class="device-slide active" data-caption="Your performance at a glance" loading="lazy">
-                    <img src="screenshots/laptop_deal_overview.png" alt="Manage deals" class="device-slide" data-caption="Manage all your deals" loading="lazy">
-                    <img src="screenshots/laptop_deal_creation.png" alt="Create a deal" class="device-slide" data-caption="Create deals in seconds" loading="lazy">
-                    <img src="screenshots/laptop_code_verification.png" alt="Verify codes" class="device-slide" data-caption="Verify customer codes instantly" loading="lazy">
+          <div class="demo-section">
+            <!-- Laptop with live demo -->
+            <div class="demo-laptop-wrap">
+              <div class="laptop-mockup demo-laptop-frame">
+                <div class="laptop-lid">
+                  <div class="laptop-bezel">
+                    <div class="laptop-camera"></div>
+                    <div class="laptop-screen">
+                      <iframe src="demo/" id="demo-iframe" title="Dashboard Demo" loading="lazy"></iframe>
+                    </div>
                   </div>
                 </div>
+                <div class="laptop-base">
+                  <div class="laptop-notch"></div>
+                </div>
               </div>
-              <div class="laptop-base">
-                <div class="laptop-notch"></div>
+              <p class="demo-hint">Click through the dashboard, deals, and posts to explore</p>
+            </div>
+
+            <!-- Customer phone view -->
+            <div class="demo-customer-view">
+              <div class="demo-customer-header">
+                <h3 class="demo-customer-title">What your customers see</h3>
+                <p class="demo-customer-subtitle">Your deals and posts appear instantly in the BookedEat app</p>
+              </div>
+
+              <div class="demo-phone-stack">
+                <div class="demo-phone-card">
+                  <div class="phone-mockup demo-phone">
+                    <div class="phone-frame demo-phone-frame">
+                      <div class="phone-screen">
+                        <img src="screenshots/filter_nearby_deals.jpeg" alt="Deals appear on the map" loading="lazy">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="demo-phone-label">Deals appear on the map</div>
+                </div>
+                <div class="demo-phone-card">
+                  <div class="phone-mockup demo-phone">
+                    <div class="phone-frame demo-phone-frame">
+                      <div class="phone-screen">
+                        <img src="screenshots/redeem.jpeg" alt="Redeem with one tap" loading="lazy">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="demo-phone-label">Customers redeem with one tap</div>
+                </div>
+                <div class="demo-phone-card">
+                  <div class="phone-mockup demo-phone">
+                    <div class="phone-frame demo-phone-frame">
+                      <div class="phone-screen">
+                        <img src="screenshots/Navigate_like_notify_save_deals.jpeg" alt="Followers get notified" loading="lazy">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="demo-phone-label">Followers get notified</div>
+                </div>
               </div>
             </div>
-            <div class="device-caption" id="laptop-caption">Your performance at a glance</div>
-            <div class="device-dots" id="laptop-dots"></div>
           </div>
 
           <!-- Pricing — success-based -->
@@ -553,14 +593,31 @@
           <p class="cta-footnote">Available on iOS and Android. No credit card required.</p>
         </div>
 
-        <!-- Restaurant CTA -->
+        <!-- Restaurant CTA — Waitlist / Book a Call -->
         <div class="cta-content persona-section" data-for="restaurant">
           <h2 class="cta-headline">Ready to fill more tables?</h2>
-          <p class="cta-subtitle">Join 850+ restaurants reaching new customers with customizable deals. No setup fees, full control, cancel anytime.</p>
-          <div class="cta-actions">
-            <a href="portal/" class="btn btn-primary-orange btn-lg">Get Started Free</a>
+          <p class="cta-subtitle">Get started in minutes. Book a quick intro call or join our waitlist &mdash; we'll set everything up for you.</p>
+
+          <div class="waitlist-form-wrap">
+            <form class="waitlist-form" id="waitlist-form">
+              <div class="waitlist-fields">
+                <input type="text" class="waitlist-input" id="wl-restaurant" placeholder="Restaurant name" required>
+                <input type="text" class="waitlist-input" id="wl-name" placeholder="Your name" required>
+                <input type="email" class="waitlist-input" id="wl-email" placeholder="Email address" required>
+                <input type="tel" class="waitlist-input" id="wl-phone" placeholder="Phone (optional)">
+              </div>
+              <div class="waitlist-actions">
+                <button type="submit" class="btn btn-primary-orange btn-lg waitlist-btn" data-action="call">Book a Demo Call</button>
+                <button type="submit" class="btn btn-secondary btn-lg waitlist-btn" data-action="waitlist">Join Waitlist</button>
+              </div>
+            </form>
+            <div class="waitlist-success" id="waitlist-success" style="display:none;">
+              <div class="waitlist-success-icon">&#10003;</div>
+              <div class="waitlist-success-text">Thanks! We'll be in touch soon.</div>
+            </div>
           </div>
-          <p class="cta-footnote">No setup fees. Customize everything. Full transparency.</p>
+
+          <p class="cta-footnote">No setup fees. No commitment. We'll reach out within 24 hours.</p>
         </div>
       </div>
     </section>
