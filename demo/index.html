@@ -91,18 +91,23 @@
 
     .demo-main { min-width: 0; }
 
-    /* Phone side panel */
+    /* Phone + CTA pill — dark gradient wrapping both */
+    .demo-right-pill {
+      display: flex;
+      flex-direction: column;
+    }
+
     .demo-phone-panel {
-      border-left: none;
+      flex: 1;
       background: linear-gradient(180deg,
         rgba(22, 28, 50, 0.0) 0%,
-        rgba(22, 28, 50, 0.6) 8%,
-        rgba(22, 33, 62, 0.92) 25%,
-        rgba(22, 33, 62, 0.95) 70%,
-        rgba(22, 28, 50, 0.85) 90%,
-        rgba(22, 28, 50, 0.0) 100%
+        rgba(22, 33, 62, 0.5) 6%,
+        rgba(22, 33, 62, 0.88) 18%,
+        rgba(22, 33, 62, 0.95) 50%,
+        rgba(22, 33, 62, 0.95) 100%
       );
-      padding: 48px 24px;
+      padding: 48px 24px 32px;
+      border-radius: 32px 0 0 0;
     }
 
     .demo-phone-panel-inner {
@@ -112,6 +117,79 @@
       flex-direction: column;
       align-items: center;
       gap: 20px;
+    }
+
+    /* CTA inside the pill — continues the dark gradient */
+    .demo-pill-cta {
+      background: linear-gradient(180deg,
+        rgba(22, 33, 62, 0.95) 0%,
+        rgba(22, 33, 62, 0.9) 40%,
+        rgba(22, 28, 50, 0.6) 80%,
+        rgba(22, 28, 50, 0.0) 100%
+      );
+      padding: 40px 28px 64px;
+      border-radius: 0 0 0 32px;
+      text-align: center;
+    }
+
+    .demo-pill-cta h3 {
+      font-size: 22px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.95);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .demo-pill-cta > p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .demo-pill-cta .demo-wl-fields {
+      grid-template-columns: 1fr;
+      max-width: 260px;
+      margin: 0 auto 12px;
+    }
+
+    .demo-pill-cta .demo-wl-input {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 14px;
+      padding: 12px 16px;
+    }
+
+    .demo-pill-cta .demo-wl-input::placeholder {
+      color: rgba(255,255,255,0.4);
+    }
+
+    .demo-pill-cta .demo-wl-input:focus {
+      border-color: var(--orange-500);
+      box-shadow: 0 0 0 3px rgba(255,149,0,0.15);
+      background: rgba(255,255,255,0.15);
+    }
+
+    .demo-pill-cta .demo-wl-btn {
+      font-size: 14px;
+      height: 44px;
+      padding: 0 24px;
+      max-width: 260px;
+    }
+
+    .demo-pill-cta .demo-wl-footnote {
+      color: rgba(255,255,255,0.35);
+      font-size: 12px;
+    }
+
+    .demo-pill-cta .demo-wl-success {
+      background: rgba(52,199,89,0.15);
+      border-color: rgba(52,199,89,0.25);
+    }
+
+    .demo-pill-cta .demo-wl-success-text {
+      color: rgba(255,255,255,0.9);
     }
 
     .demo-phone-panel-title {
@@ -184,31 +262,7 @@
     }
     .receipt-download-btn:hover { background: rgba(0,122,255,0.15); }
 
-    /* Divider between demo and CTA */
-    .demo-divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent 0%, var(--border-default) 20%, var(--border-default) 80%, transparent 100%);
-      margin: 0;
-    }
-
-    /* CTA section at bottom */
-    .demo-cta-section {
-      background: linear-gradient(180deg, var(--surface-secondary) 0%, #eeeef0 40%, #e8e8ec 100%);
-      padding: 80px 24px;
-      text-align: center;
-    }
-
-    .demo-cta-inner { max-width: 520px; margin: 0 auto; }
-
-    .demo-cta-inner h2 {
-      font-size: 32px; font-weight: 800; letter-spacing: -0.5px;
-      margin-bottom: 12px; color: var(--text-primary);
-    }
-
-    .demo-cta-inner > p {
-      font-size: 17px; color: var(--text-secondary);
-      line-height: 1.6; margin-bottom: 32px;
-    }
+    /* (divider and standalone CTA removed — CTA is inside the pill) */
 
     .demo-wl-fields {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -266,17 +320,18 @@
     /* Mobile */
     @media (max-width: 900px) {
       .demo-layout { grid-template-columns: 1fr; }
-      .demo-phone-panel {
-        background: linear-gradient(180deg,
-          rgba(22, 28, 50, 0.0) 0%,
-          rgba(22, 33, 62, 0.85) 15%,
-          rgba(22, 33, 62, 0.9) 50%,
-          rgba(22, 33, 62, 0.85) 85%,
-          rgba(22, 28, 50, 0.0) 100%
-        );
-        padding: 40px 24px;
-        border-radius: 24px;
+      .demo-right-pill {
         margin: 16px;
+        border-radius: 24px;
+        overflow: hidden;
+      }
+      .demo-phone-panel {
+        border-radius: 24px 24px 0 0;
+        padding: 32px 24px 24px;
+      }
+      .demo-pill-cta {
+        border-radius: 0 0 24px 24px;
+        padding: 24px 20px 40px;
       }
       .demo-phone-panel-inner { position: static; }
       .demo-wl-fields { grid-template-columns: 1fr; }
@@ -598,54 +653,48 @@
 
     </div>
 
-    <!-- RIGHT: Phone panel -->
-    <aside class="demo-phone-panel">
-      <div class="demo-phone-panel-inner">
-        <div>
-          <div class="demo-phone-panel-title" data-i18n="demo.phone_title">What your customers see</div>
-          <div class="demo-phone-panel-subtitle" data-i18n="demo.phone_subtitle">Updates appear instantly in the app</div>
-        </div>
-
-        <div class="demo-phone-mockup-wrap">
-          <div class="demo-phone-frame">
-            <div class="phone-screen">
-              <img id="demo-phone-img" src="../screenshots/filter_nearby_deals.jpeg" alt="Customer view">
+    <!-- RIGHT: Phone panel + CTA pill -->
+    <div class="demo-right-pill">
+      <aside class="demo-phone-panel">
+        <div class="demo-phone-panel-inner">
+          <div>
+            <div class="demo-phone-panel-title" data-i18n="demo.phone_title">What your customers see</div>
+            <div class="demo-phone-panel-subtitle" data-i18n="demo.phone_subtitle">Updates appear instantly in the app</div>
+          </div>
+          <div class="demo-phone-mockup-wrap">
+            <div class="demo-phone-frame">
+              <div class="phone-screen">
+                <img id="demo-phone-img" src="../screenshots/filter_nearby_deals.jpeg" alt="Customer view">
+              </div>
             </div>
           </div>
+          <div class="demo-phone-caption">
+            <span class="demo-phone-typewriter" id="demo-typewriter"></span><span class="demo-phone-cursor">|</span>
+          </div>
         </div>
+      </aside>
 
-        <div class="demo-phone-caption">
-          <span class="demo-phone-typewriter" id="demo-typewriter"></span><span class="demo-phone-cursor">|</span>
+      <div class="demo-pill-cta" id="demo-cta">
+        <h3 data-i18n="cta.headline">Curious how it works?</h3>
+        <p data-i18n="cta.subtitle">Book an intro call &mdash; we'll walk you through everything. No strings attached.</p>
+        <form id="demo-waitlist-form">
+          <div class="demo-wl-fields">
+            <input type="text" class="demo-wl-input" id="dwl-restaurant" data-i18n-ph="cta.restaurant" placeholder="Restaurant name" required>
+            <input type="email" class="demo-wl-input" id="dwl-email" data-i18n-ph="cta.email" placeholder="Email address" required>
+          </div>
+          <div class="demo-wl-actions">
+            <button type="submit" class="demo-wl-btn demo-wl-btn-primary" data-i18n="cta.book_call">Book an Intro Call</button>
+          </div>
+        </form>
+        <div id="demo-wl-success" class="demo-wl-success" style="display:none;">
+          <div class="demo-wl-success-icon">&#10003;</div>
+          <div class="demo-wl-success-text" data-i18n="cta.success">Thanks! We'll be in touch soon.</div>
         </div>
+        <p class="demo-wl-footnote" data-i18n="cta.footnote">No setup fees. No commitment. We'll reach out within 24 hours.</p>
       </div>
-    </aside>
+    </div>
 
   </div>
-
-  <div class="demo-divider"></div>
-
-  <!-- CTA Section -->
-  <section class="demo-cta-section" id="demo-cta">
-    <div class="demo-cta-inner">
-      <h2 data-i18n="cta.headline">Curious how it works?</h2>
-      <p data-i18n="cta.subtitle">Book an intro call &mdash; we'll walk you through everything. No strings attached.</p>
-
-      <form id="demo-waitlist-form">
-        <div class="demo-wl-fields">
-          <input type="text" class="demo-wl-input" id="dwl-restaurant" data-i18n-ph="cta.restaurant" placeholder="Restaurant name" required>
-          <input type="email" class="demo-wl-input" id="dwl-email" data-i18n-ph="cta.email" placeholder="Email address" required>
-        </div>
-        <div class="demo-wl-actions">
-          <button type="submit" class="demo-wl-btn demo-wl-btn-primary" data-i18n="cta.book_call">Book an Intro Call</button>
-        </div>
-      </form>
-      <div id="demo-wl-success" class="demo-wl-success" style="display:none;">
-        <div class="demo-wl-success-icon">&#10003;</div>
-        <div class="demo-wl-success-text" data-i18n="cta.success">Thanks! We'll be in touch soon.</div>
-      </div>
-      <p class="demo-wl-footnote" data-i18n="cta.footnote">No setup fees. No commitment. We'll reach out within 24 hours.</p>
-    </div>
-  </section>
 
   <script src="demo.js"></script>
 </body>
