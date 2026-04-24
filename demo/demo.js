@@ -4,7 +4,8 @@
   // ============================================================
   //  i18n
   // ============================================================
-  var lang = 'en';
+  var LANG_KEY = 'bookedeat_lang';
+  var lang = localStorage.getItem(LANG_KEY) || 'en';
 
   var TR = {
     en: {
@@ -152,8 +153,11 @@
   // Language toggle
   var langBtn = document.getElementById('demo-lang-btn');
   if (langBtn) {
+    langBtn.textContent = lang.toUpperCase();
+    if (lang !== 'en') translatePage();
     langBtn.addEventListener('click', function () {
       lang = lang === 'en' ? 'de' : 'en';
+      localStorage.setItem(LANG_KEY, lang);
       langBtn.textContent = lang.toUpperCase();
       translatePage();
       // Restart typewriter with new language phrases
