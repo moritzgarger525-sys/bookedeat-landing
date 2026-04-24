@@ -321,7 +321,7 @@
   initSlideshow('phone-showcase', 'phone-caption', 'phone-dots', 3000);
 
   /* ----------------------------------------------------------
-     7b. Screenshot Carousel — typewriter caption
+     7b. Screenshot Carousel — cursor-driven speed + typewriter caption
      ---------------------------------------------------------- */
   (function () {
     var carousel = document.getElementById('screenshot-carousel');
@@ -336,6 +336,53 @@
     var isDeleting = false;
     var timer = null;
 
+    // Cursor-driven scrolling: speed + direction based on cursor position
+    var scrollSpeed = 0; // pixels per frame, negative = left, positive = right
+    var scrollPos = 0;
+    var trackWidth = 0;
+    var isHovering = false;
+
+    function measureTrack() {
+      if (!track) return;
+      trackWidth = track.scrollWidth / 2; // half because items are duplicated
+    }
+    measureTrack();
+    window.addEventListener('resize', measureTrack);
+
+    // Default auto-scroll speed (slow)
+    var baseSpeed = 0.5;
+
+    carousel.addEventListener('mouseenter', function () { isHovering = true; });
+    carousel.addEventListener('mouseleave', function () { isHovering = false; scrollSpeed = 0; });
+
+    carousel.addEventListener('mousemove', function (e) {
+      var rect = carousel.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var w = rect.width;
+      // Normalize to -1 (left edge) to +1 (right edge)
+      var ratio = (x / w - 0.5) * 2;
+      // Dead zone in center 20%
+      if (Math.abs(ratio) < 0.1) { scrollSpeed = 0; return; }
+      // Speed scales with distance from center, max ~4px/frame
+      scrollSpeed = ratio * 4;
+    });
+
+    function animate() {
+      var speed = isHovering ? scrollSpeed : baseSpeed;
+      scrollPos += speed;
+      if (trackWidth > 0) {
+        if (scrollPos >= trackWidth) scrollPos -= trackWidth;
+        if (scrollPos < 0) scrollPos += trackWidth;
+      }
+      track.style.transform = 'translateX(' + (-scrollPos) + 'px)';
+      requestAnimationFrame(animate);
+    }
+
+    // Stop CSS animation, use JS instead
+    track.style.animation = 'none';
+    requestAnimationFrame(animate);
+
+    // Typewriter + center highlight
     function getCenterItem() {
       var center = carousel.getBoundingClientRect().left + carousel.offsetWidth / 2;
       var closest = null;
@@ -344,10 +391,7 @@
         var rect = item.getBoundingClientRect();
         var itemCenter = rect.left + rect.width / 2;
         var dist = Math.abs(itemCenter - center);
-        if (dist < closestDist) {
-          closestDist = dist;
-          closest = item;
-        }
+        if (dist < closestDist) { closestDist = dist; closest = item; }
       });
       return closest;
     }
@@ -356,54 +400,35 @@
       if (!isDeleting) {
         charIndex++;
         captionEl.textContent = targetCaption.substring(0, charIndex);
-        if (charIndex >= targetCaption.length) {
-          currentCaption = targetCaption;
-          return; // done typing, wait for next change
-        }
+        if (charIndex >= targetCaption.length) { currentCaption = targetCaption; return; }
         timer = setTimeout(typewrite, 55);
       } else {
         charIndex--;
         captionEl.textContent = currentCaption.substring(0, charIndex);
-        if (charIndex <= 0) {
-          isDeleting = false;
-          currentCaption = '';
-          captionEl.textContent = '';
-          timer = setTimeout(typewrite, 150);
-          return;
-        }
+        if (charIndex <= 0) { isDeleting = false; currentCaption = ''; captionEl.textContent = ''; timer = setTimeout(typewrite, 150); return; }
         timer = setTimeout(typewrite, 30);
       }
     }
 
     var currentHighlight = null;
-
     function checkCenter() {
       var item = getCenterItem();
       if (!item) return;
-
-      // Highlight the center item
       if (item !== currentHighlight) {
         if (currentHighlight) currentHighlight.classList.remove('is-center');
         item.classList.add('is-center');
         currentHighlight = item;
       }
-
       var caption = item.getAttribute('data-caption') || '';
       if (caption !== targetCaption) {
         targetCaption = caption;
         if (timer) clearTimeout(timer);
-        if (currentCaption) {
-          isDeleting = true;
-          charIndex = currentCaption.length;
-        } else {
-          isDeleting = false;
-          charIndex = 0;
-        }
+        if (currentCaption) { isDeleting = true; charIndex = currentCaption.length; }
+        else { isDeleting = false; charIndex = 0; }
         typewrite();
       }
     }
 
-    // Poll for center item changes
     setInterval(checkCenter, 200);
     checkCenter();
   })();
@@ -462,41 +487,49 @@
   }
 
   /* ----------------------------------------------------------
-     9. Waitlist / Book a Call form
+     9. Waitlist / Book a Call form (restaurant)
      ---------------------------------------------------------- */
+  var API_BASE = 'https://9j1rcg9aeb.execute-api.eu-north-1.amazonaws.com';
+
   var waitlistForm = document.getElementById('waitlist-form');
   var waitlistSuccess = document.getElementById('waitlist-success');
-  var submitAction = 'call';
 
   if (waitlistForm) {
-    // Track which button was clicked
-    waitlistForm.querySelectorAll('.waitlist-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        submitAction = this.dataset.action || 'call';
-      });
-    });
-
     waitlistForm.addEventListener('submit', function (e) {
       e.preventDefault();
       var data = {
         restaurant: document.getElementById('wl-restaurant').value,
-        name: document.getElementById('wl-name').value,
         email: document.getElementById('wl-email').value,
-        phone: document.getElementById('wl-phone').value,
-        action: submitAction
+        action: 'call'
       };
-
-      // Send to API (fallback: show success anyway)
-      var API_BASE = 'https://9j1rcg9aeb.execute-api.eu-north-1.amazonaws.com';
       fetch(API_BASE + '/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       }).catch(function () {});
-
-      // Show success state
       waitlistForm.style.display = 'none';
       if (waitlistSuccess) waitlistSuccess.style.display = 'block';
+    });
+  }
+
+  /* ----------------------------------------------------------
+     10. Beta signup form (guest)
+     ---------------------------------------------------------- */
+  var betaForm = document.getElementById('beta-form');
+  var betaSuccess = document.getElementById('beta-success');
+
+  if (betaForm) {
+    betaForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var data = {
+        email: document.getElementById('beta-email').value,
+        action: 'beta'
+      };
+      fetch(API_BASE + '/waitlist', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).catch(function () {});
+      betaForm.style.display = 'none';
+      if (betaSuccess) betaSuccess.style.display = 'block';
     });
   }
 

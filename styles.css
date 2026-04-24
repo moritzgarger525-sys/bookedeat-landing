@@ -1036,9 +1036,7 @@ img {
   will-change: transform;
 }
 
-.screenshot-carousel:hover .screenshot-track {
-  animation-play-state: paused;
-}
+/* Carousel speed controlled by JS — no CSS animation pause */
 
 @keyframes carousel-scroll {
   0% { transform: translateX(0); }

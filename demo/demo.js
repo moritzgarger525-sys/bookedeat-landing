@@ -59,11 +59,8 @@
       'cta.headline': 'Curious how it works?',
       'cta.subtitle': "Book an intro call \u2014 we'll walk you through everything. No strings attached.",
       'cta.restaurant': 'Restaurant name',
-      'cta.name': 'Your name',
       'cta.email': 'Email address',
-      'cta.phone': 'Phone (optional)',
-      'cta.book_call': 'Book a Demo Call',
-      'cta.join_waitlist': 'Join Waitlist',
+      'cta.book_call': 'Book an Intro Call',
       'cta.success': "Thanks! We'll be in touch soon.",
       'cta.footnote': "No setup fees. No commitment. We'll reach out within 24 hours."
     },
@@ -119,11 +116,8 @@
       'cta.headline': 'Neugierig, wie es funktioniert?',
       'cta.subtitle': 'Buchen Sie ein Intro-Gespr\u00e4ch \u2014 wir zeigen Ihnen alles. Ganz unverbindlich.',
       'cta.restaurant': 'Restaurantname',
-      'cta.name': 'Ihr Name',
       'cta.email': 'E-Mail-Adresse',
-      'cta.phone': 'Telefon (optional)',
-      'cta.book_call': 'Demo-Gespr\u00e4ch buchen',
-      'cta.join_waitlist': 'Warteliste beitreten',
+      'cta.book_call': 'Intro-Gespr\u00e4ch buchen',
       'cta.success': 'Danke! Wir melden uns bald.',
       'cta.footnote': 'Keine Einrichtungsgeb\u00fchren. Keine Verpflichtung. Wir melden uns innerhalb von 24 Stunden.'
     }
@@ -371,17 +365,12 @@
   var wlAction = 'call';
 
   if (wlForm) {
-    wlForm.querySelectorAll('.demo-wl-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () { wlAction = this.dataset.action || 'call'; });
-    });
     wlForm.addEventListener('submit', function (e) {
       e.preventDefault();
       var data = {
         restaurant: document.getElementById('dwl-restaurant').value,
-        name: document.getElementById('dwl-name').value,
         email: document.getElementById('dwl-email').value,
-        phone: document.getElementById('dwl-phone').value,
-        action: wlAction
+        action: 'call'
       };
       fetch('https://9j1rcg9aeb.execute-api.eu-north-1.amazonaws.com/waitlist', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
