@@ -93,9 +93,16 @@
 
     /* Phone side panel */
     .demo-phone-panel {
-      border-left: 1px solid var(--border-default);
-      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
-      padding: 32px 24px;
+      border-left: none;
+      background: linear-gradient(180deg,
+        rgba(22, 28, 50, 0.0) 0%,
+        rgba(22, 28, 50, 0.6) 8%,
+        rgba(22, 33, 62, 0.92) 25%,
+        rgba(22, 33, 62, 0.95) 70%,
+        rgba(22, 28, 50, 0.85) 90%,
+        rgba(22, 28, 50, 0.0) 100%
+      );
+      padding: 48px 24px;
     }
 
     .demo-phone-panel-inner {
@@ -177,9 +184,16 @@
     }
     .receipt-download-btn:hover { background: rgba(0,122,255,0.15); }
 
+    /* Divider between demo and CTA */
+    .demo-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--border-default) 20%, var(--border-default) 80%, transparent 100%);
+      margin: 0;
+    }
+
     /* CTA section at bottom */
     .demo-cta-section {
-      background: linear-gradient(180deg, var(--surface-secondary) 0%, #f0f0f2 100%);
+      background: linear-gradient(180deg, var(--surface-secondary) 0%, #eeeef0 40%, #e8e8ec 100%);
       padding: 80px 24px;
       text-align: center;
     }
@@ -253,9 +267,16 @@
     @media (max-width: 900px) {
       .demo-layout { grid-template-columns: 1fr; }
       .demo-phone-panel {
-        border-left: none;
-        border-top: 1px solid rgba(255,255,255,0.1);
-        padding: 32px 24px;
+        background: linear-gradient(180deg,
+          rgba(22, 28, 50, 0.0) 0%,
+          rgba(22, 33, 62, 0.85) 15%,
+          rgba(22, 33, 62, 0.9) 50%,
+          rgba(22, 33, 62, 0.85) 85%,
+          rgba(22, 28, 50, 0.0) 100%
+        );
+        padding: 40px 24px;
+        border-radius: 24px;
+        margin: 16px;
       }
       .demo-phone-panel-inner { position: static; }
       .demo-wl-fields { grid-template-columns: 1fr; }
@@ -600,6 +621,8 @@
     </aside>
 
   </div>
+
+  <div class="demo-divider"></div>
 
   <!-- CTA Section -->
   <section class="demo-cta-section" id="demo-cta">
