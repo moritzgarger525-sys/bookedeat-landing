@@ -814,7 +814,7 @@ img {
 }
 
 .pricing-banner {
-  padding: 24px 32px;
+  padding: 28px 32px;
   background: linear-gradient(135deg, rgba(26, 26, 46, 0.7), rgba(26, 26, 46, 0.55));
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -823,6 +823,7 @@ img {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
   max-width: 640px;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 .pricing-title {
@@ -835,7 +836,8 @@ img {
 .pricing-row {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 24px;
+  flex-wrap: wrap;
 }
 
 .pricing-subtitle {
@@ -873,7 +875,8 @@ img {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .pricing-point {
