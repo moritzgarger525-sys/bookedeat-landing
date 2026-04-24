@@ -23,17 +23,48 @@
       font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
     }
-    .demo-banner a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
+    .demo-banner a {
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .demo-banner-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+      opacity: 0.85;
+      transition: opacity 200ms;
+    }
+    .demo-banner-back:hover { opacity: 1; }
 
-    .demo-nav-links { display: flex; gap: 4px; align-items: center; }
+    .demo-nav-links { display: flex; gap: 2px; align-items: center; flex-wrap: wrap; }
     .demo-nav-link {
-      padding: 8px 16px; border-radius: 9999px; font-size: 13px; font-weight: 500;
+      padding: 8px 14px; border-radius: 9999px; font-size: 13px; font-weight: 500;
       color: var(--text-secondary); cursor: pointer; border: none; background: none;
       font-family: inherit; transition: all 200ms;
     }
     .demo-nav-link:hover { background: var(--surface-secondary); color: var(--text-primary); }
     .demo-nav-link.active { background: var(--blue-500); color: #fff; }
+
+    /* Language switcher in demo */
+    .demo-lang-btn {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: 1px solid var(--border-default); border-radius: 10px;
+      padding: 6px 10px; font-size: 12px; font-weight: 600;
+      color: var(--text-secondary); cursor: pointer; font-family: inherit;
+      transition: all 200ms;
+    }
+    .demo-lang-btn:hover { background: var(--surface-secondary); color: var(--text-primary); }
 
     /* Two-column layout */
     .demo-layout {
@@ -43,9 +74,7 @@
       min-height: calc(100vh - 100px);
     }
 
-    .demo-main {
-      min-width: 0;
-    }
+    .demo-main { min-width: 0; }
 
     /* Phone side panel */
     .demo-phone-panel {
@@ -64,58 +93,37 @@
     }
 
     .demo-phone-panel-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.9);
-      text-align: center;
+      font-size: 15px; font-weight: 700;
+      color: rgba(255,255,255,0.9); text-align: center;
     }
 
     .demo-phone-panel-subtitle {
-      font-size: 12px;
-      color: rgba(255,255,255,0.45);
-      text-align: center;
-      margin-top: 4px;
-    }
-
-    .demo-phone-mockup-wrap {
-      position: relative;
+      font-size: 12px; color: rgba(255,255,255,0.45);
+      text-align: center; margin-top: 4px;
     }
 
     .demo-phone-frame {
-      width: 180px;
-      height: 370px;
-      border-radius: 28px;
-      background: #1C1C1E;
-      padding: 8px;
+      width: 180px; height: 370px; border-radius: 28px;
+      background: #1C1C1E; padding: 8px;
       box-shadow: 0 12px 32px rgba(0,0,0,0.4), inset 0 0 0 1.5px rgba(255,255,255,0.08);
     }
 
     .demo-phone-frame .phone-screen {
-      width: 100%;
-      height: 100%;
-      border-radius: 22px;
-      overflow: hidden;
-      position: relative;
-      background: #000;
+      width: 100%; height: 100%; border-radius: 22px;
+      overflow: hidden; position: relative; background: #000;
     }
 
     .demo-phone-frame .phone-screen img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      width: 100%; height: 100%; object-fit: cover;
       transition: opacity 0.4s ease;
     }
 
     .demo-phone-caption {
-      text-align: center;
-      min-height: 36px;
-      font-size: 14px;
-      font-weight: 500;
+      text-align: center; min-height: 36px;
+      font-size: 14px; font-weight: 500;
     }
 
-    .demo-phone-typewriter {
-      color: rgba(255,255,255,0.85);
-    }
+    .demo-phone-typewriter { color: rgba(255,255,255,0.85); }
 
     .demo-phone-cursor {
       color: var(--orange-500);
@@ -133,6 +141,27 @@
     .deal-card { transition: transform 200ms, box-shadow 200ms; }
     .deal-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
 
+    /* Receipt download button */
+    .receipt-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-default);
+    }
+    .receipt-row:last-child { border-bottom: none; }
+    .receipt-info { display: flex; flex-direction: column; gap: 2px; }
+    .receipt-period { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .receipt-detail { font-size: 12px; color: var(--text-secondary); }
+    .receipt-amount { font-size: 15px; font-weight: 700; color: var(--text-primary); text-align: right; }
+    .receipt-status { font-size: 11px; font-weight: 600; color: #34C759; text-align: right; }
+    .receipt-download-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      color: var(--blue-500); background: rgba(0,122,255,0.08);
+      border: none; cursor: pointer; font-family: inherit;
+      transition: all 200ms;
+    }
+    .receipt-download-btn:hover { background: rgba(0,122,255,0.15); }
+
     /* CTA section at bottom */
     .demo-cta-section {
       background: linear-gradient(180deg, var(--surface-secondary) 0%, #f0f0f2 100%);
@@ -140,113 +169,62 @@
       text-align: center;
     }
 
-    .demo-cta-inner {
-      max-width: 520px;
-      margin: 0 auto;
-    }
+    .demo-cta-inner { max-width: 520px; margin: 0 auto; }
 
     .demo-cta-inner h2 {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 12px;
-      color: var(--text-primary);
+      font-size: 32px; font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 12px; color: var(--text-primary);
     }
 
     .demo-cta-inner > p {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 32px;
+      font-size: 17px; color: var(--text-secondary);
+      line-height: 1.6; margin-bottom: 32px;
     }
 
     .demo-wl-fields {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-bottom: 16px;
     }
 
     .demo-wl-input {
-      width: 100%;
-      padding: 14px 18px;
-      border: 1px solid var(--border-strong);
-      border-radius: 14px;
-      background: #fff;
-      color: var(--text-primary);
-      font-size: 15px;
-      font-family: inherit;
-      font-weight: 500;
-      outline: none;
-      transition: all 200ms;
+      width: 100%; padding: 14px 18px;
+      border: 1px solid var(--border-strong); border-radius: 14px;
+      background: #fff; color: var(--text-primary);
+      font-size: 15px; font-family: inherit; font-weight: 500;
+      outline: none; transition: all 200ms;
     }
 
     .demo-wl-input::placeholder { color: var(--text-tertiary); }
+    .demo-wl-input:focus { border-color: var(--orange-500); box-shadow: 0 0 0 3px rgba(255,149,0,0.1); }
 
-    .demo-wl-input:focus {
-      border-color: var(--orange-500);
-      box-shadow: 0 0 0 3px rgba(255,149,0,0.1);
-    }
-
-    .demo-wl-actions {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-    }
+    .demo-wl-actions { display: flex; gap: 12px; justify-content: center; }
 
     .demo-wl-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-family: inherit;
-      font-weight: 600;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-      border-radius: 9999px;
-      height: 52px;
-      padding: 0 32px;
-      transition: all 200ms;
-      flex: 1;
-      max-width: 240px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: inherit; font-weight: 600; font-size: 16px;
+      border: none; cursor: pointer; border-radius: 9999px;
+      height: 52px; padding: 0 32px; transition: all 200ms;
+      flex: 1; max-width: 240px;
     }
-
     .demo-wl-btn:active { transform: scale(0.97); }
 
     .demo-wl-btn-primary {
       background: linear-gradient(135deg, rgba(255,149,0,0.9), rgba(255,107,53,0.9));
-      color: #fff;
-      box-shadow: 0 4px 16px rgba(255,149,0,0.25);
+      color: #fff; box-shadow: 0 4px 16px rgba(255,149,0,0.25);
     }
-
-    .demo-wl-btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(255,149,0,0.35);
-    }
+    .demo-wl-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,149,0,0.35); }
 
     .demo-wl-btn-secondary {
-      background: #fff;
-      color: var(--text-primary);
-      border: 1px solid var(--border-strong);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      background: #fff; color: var(--text-primary);
+      border: 1px solid var(--border-strong); box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
+    .demo-wl-btn-secondary:hover { transform: translateY(-2px); background: var(--surface-secondary); }
 
-    .demo-wl-btn-secondary:hover {
-      transform: translateY(-2px);
-      background: var(--surface-secondary);
-    }
-
-    .demo-wl-footnote {
-      margin-top: 16px;
-      font-size: 13px;
-      color: var(--text-tertiary);
-    }
+    .demo-wl-footnote { margin-top: 16px; font-size: 13px; color: var(--text-tertiary); }
 
     .demo-wl-success {
-      padding: 32px;
-      background: rgba(52,199,89,0.08);
-      border: 1px solid rgba(52,199,89,0.2);
-      border-radius: 18px;
+      padding: 32px; background: rgba(52,199,89,0.08);
+      border: 1px solid rgba(52,199,89,0.2); border-radius: 18px;
     }
     .demo-wl-success-icon {
       width: 48px; height: 48px; border-radius: 50%;
@@ -256,22 +234,30 @@
     }
     .demo-wl-success-text { font-size: 17px; font-weight: 600; color: var(--text-primary); }
 
-    /* Responsive */
+    /* Mobile */
     @media (max-width: 900px) {
-      .demo-layout {
-        grid-template-columns: 1fr;
-      }
+      .demo-layout { grid-template-columns: 1fr; }
       .demo-phone-panel {
         border-left: none;
         border-top: 1px solid rgba(255,255,255,0.1);
         padding: 32px 24px;
       }
-      .demo-phone-panel-inner {
-        position: static;
-      }
+      .demo-phone-panel-inner { position: static; }
       .demo-wl-fields { grid-template-columns: 1fr; }
       .demo-wl-actions { flex-direction: column; align-items: stretch; }
       .demo-wl-btn { max-width: none; }
+      .demo-nav-link { padding: 7px 10px; font-size: 12px; }
+      .portal-nav { padding: 0 12px; flex-wrap: wrap; gap: 6px; height: auto; min-height: 56px; padding-top: 8px; padding-bottom: 8px; }
+    }
+
+    @media (max-width: 480px) {
+      .demo-cta-inner h2 { font-size: 24px; }
+      .demo-cta-inner > p { font-size: 15px; }
+      .demo-wl-btn { height: 46px; font-size: 14px; padding: 0 20px; }
+      .demo-banner { font-size: 12px; padding: 8px 12px; gap: 8px; }
+      .stats-row { flex-wrap: wrap; gap: 8px; }
+      .stat-divider { display: none; }
+      .stat-item { min-width: 40%; }
     }
   </style>
 </head>
@@ -279,19 +265,24 @@
 
   <!-- Demo Banner -->
   <div class="demo-banner">
-    Interactive Demo &mdash; Explore with sample data &middot; <a href="../#waitlist-form">Book a call</a> to get started
+    <a href="../" class="demo-banner-back">&#8592; Back to BookedEat</a>
+    <span data-i18n="demo.banner">Interactive Demo &mdash; Explore with sample data</span>
+    <span>&middot;</span>
+    <a href="#demo-cta" data-i18n="demo.book_call">Book a call</a>
   </div>
 
   <!-- Portal Navigation -->
   <header class="portal-nav" id="portal-nav">
     <a href="../" class="portal-nav-brand">Booked<span>Eat</span></a>
     <div class="demo-nav-links">
-      <button class="demo-nav-link active" data-screen="dashboard">Dashboard</button>
-      <button class="demo-nav-link" data-screen="deals">Deals</button>
-      <button class="demo-nav-link" data-screen="posts">Posts</button>
+      <button class="demo-nav-link active" data-screen="dashboard" data-i18n="demo.nav_dashboard">Dashboard</button>
+      <button class="demo-nav-link" data-screen="deals" data-i18n="demo.nav_deals">Deals</button>
+      <button class="demo-nav-link" data-screen="posts" data-i18n="demo.nav_posts">Posts</button>
+      <button class="demo-nav-link" data-screen="billing" data-i18n="demo.nav_billing">Billing</button>
     </div>
-    <div class="portal-nav-right">
-      <div class="portal-profile-avatar" style="font-size:13px;">BV</div>
+    <div class="portal-nav-right" style="display:flex;align-items:center;gap:8px;">
+      <button class="demo-lang-btn" id="demo-lang-btn">EN</button>
+      <div class="portal-profile-avatar" style="font-size:13px;">DA</div>
     </div>
   </header>
 
@@ -305,54 +296,54 @@
       <section id="screen-dashboard" class="portal-screen active">
         <div class="portal-container portal-container-wide">
           <div class="dashboard-header">
-            <div class="dashboard-avatar" style="font-size:20px;">BV</div>
+            <div class="dashboard-avatar" style="font-size:20px;">DA</div>
             <div>
-              <div class="dashboard-name">Bella Vista Zurich</div>
-              <div class="dashboard-subtitle">Partner Dashboard</div>
+              <div class="dashboard-name">Demo Account</div>
+              <div class="dashboard-subtitle" data-i18n="dashboard.subtitle">Partner Dashboard</div>
             </div>
           </div>
 
           <div class="dashboard-top-row">
             <div class="value-banner">
               <div class="value-banner-icon">&#128101;</div>
-              <div class="value-banner-text"><strong>189</strong> unique customers brought to your restaurant</div>
+              <div class="value-banner-text"><strong>189</strong> <span data-i18n="dashboard.value_suffix">unique customers brought to your restaurant</span></div>
             </div>
             <div class="stats-row">
               <div class="stat-item">
                 <div class="stat-value blue">5</div>
-                <div class="stat-label">Active Deals</div>
+                <div class="stat-label" data-i18n="dashboard.active_deals">Active Deals</div>
               </div>
               <div class="stat-divider"></div>
               <div class="stat-item">
                 <div class="stat-value purple">247</div>
-                <div class="stat-label">Redemptions</div>
+                <div class="stat-label" data-i18n="dashboard.redemptions">Redemptions</div>
               </div>
               <div class="stat-divider"></div>
               <div class="stat-item">
                 <div class="stat-value green">189</div>
-                <div class="stat-label">Guests</div>
+                <div class="stat-label" data-i18n="dashboard.guests">Guests</div>
               </div>
               <div class="stat-divider"></div>
               <div class="stat-item">
                 <div class="stat-value orange">312</div>
-                <div class="stat-label">Subscribers</div>
+                <div class="stat-label" data-i18n="dashboard.subscribers">Subscribers</div>
               </div>
             </div>
           </div>
 
           <div class="dashboard-charts-grid">
             <div class="portal-card chart-section">
-              <div class="chart-header"><div class="chart-title">Redemptions by Deal</div></div>
+              <div class="chart-header"><div class="chart-title" data-i18n="dashboard.chart_pie">Redemptions by Deal</div></div>
               <div id="pie-chart-area">
                 <div class="chart-container"><canvas id="pie-chart"></canvas></div>
               </div>
             </div>
             <div class="portal-card chart-section">
-              <div class="chart-title">Daily Guests</div>
+              <div class="chart-title" data-i18n="dashboard.chart_line">Daily Guests</div>
               <div class="dashboard-time-filter" style="margin-bottom:12px;">
-                <button class="time-filter-btn active" data-range="all">All Time</button>
-                <button class="time-filter-btn" data-range="7d">7 Days</button>
-                <button class="time-filter-btn" data-range="30d">30 Days</button>
+                <button class="time-filter-btn active" data-range="all" data-i18n="dashboard.filter_all">All Time</button>
+                <button class="time-filter-btn" data-range="7d" data-i18n="dashboard.filter_7d">7 Days</button>
+                <button class="time-filter-btn" data-range="30d" data-i18n="dashboard.filter_30d">30 Days</button>
               </div>
               <div id="line-chart-area">
                 <div class="chart-container"><canvas id="line-chart"></canvas></div>
@@ -364,32 +355,24 @@
             <a class="dashboard-action-card" href="javascript:void(0)" onclick="showScreen('deals')">
               <div class="dashboard-action-icon" style="background:rgba(0,122,255,0.1);">&#127991;</div>
               <div class="dashboard-action-info">
-                <div class="dashboard-action-title">Manage Deals</div>
-                <div class="dashboard-action-desc">6 total deals</div>
+                <div class="dashboard-action-title" data-i18n="dashboard.manage_deals">Manage Deals</div>
+                <div class="dashboard-action-desc" data-i18n="dashboard.deal_count">6 total deals</div>
               </div>
               <div class="dashboard-action-arrow">&#8250;</div>
             </a>
             <a class="dashboard-action-card" href="javascript:void(0)" onclick="showScreen('posts')">
               <div class="dashboard-action-icon" style="background:rgba(255,149,0,0.1);">&#128240;</div>
               <div class="dashboard-action-info">
-                <div class="dashboard-action-title">News Posts</div>
-                <div class="dashboard-action-desc">Share updates with followers</div>
+                <div class="dashboard-action-title" data-i18n="dashboard.news_posts">News Posts</div>
+                <div class="dashboard-action-desc" data-i18n="dashboard.share_updates">Share updates with followers</div>
               </div>
               <div class="dashboard-action-arrow">&#8250;</div>
             </a>
-            <a class="dashboard-action-card" href="javascript:void(0)">
-              <div class="dashboard-action-icon" style="background:rgba(52,199,89,0.1);">&#128274;</div>
-              <div class="dashboard-action-info">
-                <div class="dashboard-action-title">Verify Code</div>
-                <div class="dashboard-action-desc">Check customer codes</div>
-              </div>
-              <div class="dashboard-action-arrow">&#8250;</div>
-            </a>
-            <a class="dashboard-action-card" href="javascript:void(0)">
+            <a class="dashboard-action-card" href="javascript:void(0)" onclick="showScreen('billing')">
               <div class="dashboard-action-icon" style="background:rgba(175,82,222,0.1);">&#128196;</div>
               <div class="dashboard-action-info">
-                <div class="dashboard-action-title">Billing & Receipts</div>
-                <div class="dashboard-action-desc">CHF 123.50 outstanding</div>
+                <div class="dashboard-action-title" data-i18n="dashboard.billing">Billing & Receipts</div>
+                <div class="dashboard-action-desc">CHF 123.50</div>
               </div>
               <div class="dashboard-action-arrow">&#8250;</div>
             </a>
@@ -402,14 +385,14 @@
         <div class="portal-container portal-container-wide">
           <div class="deals-header">
             <button class="form-back-btn" onclick="showScreen('dashboard')" style="margin-right:8px;">&#8592;</button>
-            <h1 class="deals-title">Manage Deals</h1>
+            <h1 class="deals-title" data-i18n="deals.title">Manage Deals</h1>
             <div style="flex:1;"></div>
             <button class="deals-add-btn" title="Create deal">+</button>
           </div>
           <div class="filter-chips" id="deals-filter-chips">
-            <button class="filter-chip active" data-filter="all">All</button>
-            <button class="filter-chip" data-filter="active">Active</button>
-            <button class="filter-chip" data-filter="inactive">Inactive</button>
+            <button class="filter-chip active" data-filter="all" data-i18n="deals.all">All</button>
+            <button class="filter-chip" data-filter="active" data-i18n="deals.active">Active</button>
+            <button class="filter-chip" data-filter="inactive" data-i18n="deals.inactive">Inactive</button>
           </div>
           <div id="deals-list" class="deals-grid">
             <div class="deal-card" data-active="true">
@@ -419,12 +402,12 @@
             </div>
             <div class="deal-card" data-active="true">
               <div class="deal-card-top"><div class="deal-badges"><span class="deal-badge">BOGO</span></div><label class="deal-toggle"><input type="checkbox" checked><span class="deal-toggle-slider"></span></label></div>
-              <div class="deal-card-body"><div class="deal-card-title">Buy One Get One Free Pizza</div><div class="deal-card-validity">Available anytime</div><div class="deal-card-redemptions">64 redemptions</div></div>
+              <div class="deal-card-body"><div class="deal-card-title">Buy One Get One Free Pizza</div><div class="deal-card-validity" data-i18n="deals.anytime">Available anytime</div><div class="deal-card-redemptions">64 redemptions</div></div>
               <div class="deal-card-actions"><button class="btn-icon">&#9998;</button><button class="btn-icon danger">&#128465;</button></div>
             </div>
             <div class="deal-card" data-active="true">
               <div class="deal-card-top"><div class="deal-badges"><span class="deal-badge">Free tiramisu</span></div><label class="deal-toggle"><input type="checkbox" checked><span class="deal-toggle-slider"></span></label></div>
-              <div class="deal-card-body"><div class="deal-card-title">Free Tiramisu with Main Course</div><div class="deal-card-validity">Available anytime</div><div class="deal-card-redemptions">43 redemptions</div></div>
+              <div class="deal-card-body"><div class="deal-card-title">Free Tiramisu with Main Course</div><div class="deal-card-validity" data-i18n="deals.anytime">Available anytime</div><div class="deal-card-redemptions">43 redemptions</div></div>
               <div class="deal-card-actions"><button class="btn-icon">&#9998;</button><button class="btn-icon danger">&#128465;</button></div>
             </div>
             <div class="deal-card" data-active="true">
@@ -439,7 +422,7 @@
             </div>
             <div class="deal-card" data-active="true">
               <div class="deal-card-top"><div class="deal-badges"><span class="deal-badge">CHF 10 off</span><span class="deal-badge insider">Insider (2)</span></div><label class="deal-toggle"><input type="checkbox" checked><span class="deal-toggle-slider"></span></label></div>
-              <div class="deal-card-body"><div class="deal-card-title">CHF 10 Off First Visit</div><div class="deal-card-validity">Max 1 per customer</div><div class="deal-card-redemptions">18 redemptions</div></div>
+              <div class="deal-card-body"><div class="deal-card-title">CHF 10 Off First Visit</div><div class="deal-card-validity" data-i18n="deals.max1">Max 1 per customer</div><div class="deal-card-redemptions">18 redemptions</div></div>
               <div class="deal-card-actions"><button class="btn-icon">&#9998;</button><button class="btn-icon danger">&#128465;</button></div>
             </div>
           </div>
@@ -451,25 +434,121 @@
         <div class="portal-container portal-container-wide">
           <div class="deals-header">
             <button class="form-back-btn" onclick="showScreen('dashboard')" style="margin-right:8px;">&#8592;</button>
-            <h1 class="deals-title">News Posts</h1>
+            <h1 class="deals-title" data-i18n="posts.title">News Posts</h1>
             <div style="flex:1;"></div>
             <button class="deals-add-btn" title="Create post">+</button>
           </div>
           <div id="posts-list" class="deals-grid">
             <div class="deal-card">
-              <div class="deal-card-top"><div class="deal-badges"><span class="deal-badge" style="background:rgba(52,199,89,0.12);color:#34C759;">Published</span><span class="deal-badge">&#127861; Menu</span></div><label class="deal-toggle"><input type="checkbox" checked><span class="deal-toggle-slider"></span></label></div>
-              <div class="deal-card-body"><div class="deal-card-title">New Summer Menu Now Available!</div><div class="deal-card-validity">Fresh seasonal dishes featuring local ingredients. Try our new burrata salad, grilled sea bass, and mango panna cotta...</div><div class="deal-card-redemptions" style="margin-top:6px;">Yesterday</div></div>
+              <div class="deal-card-top"><div class="deal-badges"><span class="deal-badge" style="background:rgba(52,199,89,0.12);color:#34C759;" data-i18n="posts.published">Published</span><span class="deal-badge">&#127861; Menu</span></div><label class="deal-toggle"><input type="checkbox" checked><span class="deal-toggle-slider"></span></label></div>
+              <div class="deal-card-body"><div class="deal-card-title">New Summer Menu Now Available!</div><div class="deal-card-validity">Fresh seasonal dishes featuring local ingredients. Try our new burrata salad, grilled sea bass, and mango panna cotta...</div><div class="deal-card-redemptions" style="margin-top:6px;" data-i18n="posts.yesterday">Yesterday</div></div>
               <div class="deal-card-actions"><button class="btn-icon">&#9998;</button><button class="btn-icon danger">&#128465;</button></div>
             </div>
             <div class="deal-card">
-              <div class="deal-card-top"><div class="deal-badges"><span class="deal-badge" style="background:rgba(52,199,89,0.12);color:#34C759;">Published</span><span class="deal-badge">&#127881; Event</span><span class="deal-badge" style="background:rgba(255,59,48,0.1);color:#FF3B30;">&#127991; Wine Tasting Evening</span></div><label class="deal-toggle"><input type="checkbox" checked><span class="deal-toggle-slider"></span></label></div>
-              <div class="deal-card-body"><div class="deal-card-title">Live Jazz Night Every Friday</div><div class="deal-card-validity">Join us for live jazz music every Friday from 7 PM. Reserve your table now and enjoy great music with Italian cuisine...</div><div class="post-card-deal-row"><span class="post-card-deal-icon">&#127991;</span><span class="post-card-deal-name">Wine Tasting Evening</span><span class="post-card-deal-label">Event</span></div><div class="deal-card-redemptions" style="margin-top:6px;">3 days ago</div></div>
+              <div class="deal-card-top"><div class="deal-badges"><span class="deal-badge" style="background:rgba(52,199,89,0.12);color:#34C759;" data-i18n="posts.published">Published</span><span class="deal-badge">&#127881; Event</span><span class="deal-badge" style="background:rgba(255,59,48,0.1);color:#FF3B30;">&#127991; Wine Tasting Evening</span></div><label class="deal-toggle"><input type="checkbox" checked><span class="deal-toggle-slider"></span></label></div>
+              <div class="deal-card-body"><div class="deal-card-title">Live Jazz Night Every Friday</div><div class="deal-card-validity">Join us for live jazz music every Friday from 7 PM. Reserve your table now and enjoy great music with Italian cuisine...</div><div class="post-card-deal-row"><span class="post-card-deal-icon">&#127991;</span><span class="post-card-deal-name">Wine Tasting Evening</span><span class="post-card-deal-label">Event</span></div><div class="deal-card-redemptions" style="margin-top:6px;" data-i18n="posts.3days">3 days ago</div></div>
               <div class="deal-card-actions"><button class="btn-icon">&#9998;</button><button class="btn-icon danger">&#128465;</button></div>
             </div>
             <div class="deal-card">
-              <div class="deal-card-top"><div class="deal-badges"><span class="deal-badge" style="background:rgba(52,199,89,0.12);color:#34C759;">Published</span><span class="deal-badge">&#128226; Announcement</span></div><label class="deal-toggle"><input type="checkbox" checked><span class="deal-toggle-slider"></span></label></div>
-              <div class="deal-card-body"><div class="deal-card-title">Featured in Zurich Tipps!</div><div class="deal-card-validity">We're thrilled to be featured as one of the top Italian restaurants in Zurich. Thank you to all our guests for your amazing reviews...</div><div class="deal-card-redemptions" style="margin-top:6px;">1 week ago</div></div>
+              <div class="deal-card-top"><div class="deal-badges"><span class="deal-badge" style="background:rgba(52,199,89,0.12);color:#34C759;" data-i18n="posts.published">Published</span><span class="deal-badge">&#128226; Announcement</span></div><label class="deal-toggle"><input type="checkbox" checked><span class="deal-toggle-slider"></span></label></div>
+              <div class="deal-card-body"><div class="deal-card-title">Featured in Zurich Tipps!</div><div class="deal-card-validity">We're thrilled to be featured as one of the top Italian restaurants in Zurich. Thank you to all our guests for your amazing reviews...</div><div class="deal-card-redemptions" style="margin-top:6px;" data-i18n="posts.1week">1 week ago</div></div>
               <div class="deal-card-actions"><button class="btn-icon">&#9998;</button><button class="btn-icon danger">&#128465;</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== BILLING & RECEIPTS ==================== -->
+      <section id="screen-billing" class="portal-screen">
+        <div class="portal-container">
+          <div class="form-screen-header">
+            <button class="form-back-btn" onclick="showScreen('dashboard')">&#8592;</button>
+            <h1 class="form-screen-title" data-i18n="billing.title">Billing & Receipts</h1>
+          </div>
+
+          <div class="settings-header">
+            <div class="settings-avatar" style="font-size:20px;width:48px;height:48px;border-radius:50%;background:var(--blue-500);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;">DA</div>
+            <div>
+              <div class="dashboard-name">Demo Account</div>
+              <div class="dashboard-subtitle">Zurich, Switzerland</div>
+            </div>
+          </div>
+
+          <!-- Billing summary -->
+          <div class="portal-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+              <span style="font-size:20px;">&#128196;</span>
+              <span style="font-size:16px;font-weight:600;" data-i18n="billing.billing">Billing</span>
+            </div>
+            <div class="billing-row">
+              <span class="billing-label" data-i18n="billing.total_redemptions">Total Redemptions</span>
+              <span class="billing-value">247</span>
+            </div>
+            <div style="border-top:1px solid rgba(0,0,0,0.08);margin:10px 0;"></div>
+            <div class="billing-row">
+              <span class="billing-label" data-i18n="billing.fee">BookedEat Fee</span>
+              <span class="billing-value">CHF 123.50</span>
+            </div>
+            <div class="billing-note" style="margin-bottom:8px;" data-i18n="billing.fee_note">CHF 0.50 per redemption</div>
+            <div style="border-top:1px solid rgba(0,0,0,0.08);margin:10px 0;"></div>
+            <div class="billing-row">
+              <span class="billing-label" style="font-weight:600;" data-i18n="billing.total_owed">Total Owed</span>
+              <span class="billing-value bold">CHF 123.50</span>
+            </div>
+          </div>
+
+          <!-- Spending Limit -->
+          <div class="portal-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+              <span style="font-size:20px;">&#128176;</span>
+              <span style="font-size:16px;font-weight:600;" data-i18n="billing.spending_limit">Spending Limit</span>
+            </div>
+            <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;" data-i18n="billing.spending_limit_desc">Set a maximum monthly spend. Deals auto-deactivate when reached.</p>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-weight:500;">CHF</span>
+              <input type="number" class="form-input" style="width:120px;" placeholder="No limit" min="0" step="5" value="200">
+              <button class="btn-portal btn-portal-primary" style="width:auto;padding:8px 16px;font-size:13px;" data-i18n="billing.save_limit">Save</button>
+            </div>
+            <div style="font-size:12px;color:var(--text-tertiary);margin-top:8px;" data-i18n="billing.current_spend_text">This month: CHF 43.50</div>
+          </div>
+
+          <!-- Payment History with downloadable receipts -->
+          <div class="portal-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+              <span style="font-size:20px;">&#128451;</span>
+              <span style="font-size:16px;font-weight:600;" data-i18n="billing.payment_history">Payment History</span>
+            </div>
+            <div id="receipts-list">
+              <div class="receipt-row">
+                <div class="receipt-info">
+                  <div class="receipt-period">March 2026</div>
+                  <div class="receipt-detail">87 redemptions &middot; <span class="receipt-status" data-i18n="billing.paid">Paid</span></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div class="receipt-amount">CHF 43.50</div>
+                  <button class="receipt-download-btn" onclick="downloadReceipt('march')">&#8595; <span data-i18n="billing.download">Download</span></button>
+                </div>
+              </div>
+              <div class="receipt-row">
+                <div class="receipt-info">
+                  <div class="receipt-period">February 2026</div>
+                  <div class="receipt-detail">92 redemptions &middot; <span class="receipt-status" data-i18n="billing.paid">Paid</span></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div class="receipt-amount">CHF 46.00</div>
+                  <button class="receipt-download-btn" onclick="downloadReceipt('february')">&#8595; <span data-i18n="billing.download">Download</span></button>
+                </div>
+              </div>
+              <div class="receipt-row">
+                <div class="receipt-info">
+                  <div class="receipt-period">January 2026</div>
+                  <div class="receipt-detail">68 redemptions &middot; <span class="receipt-status" data-i18n="billing.paid">Paid</span></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div class="receipt-amount">CHF 34.00</div>
+                  <button class="receipt-download-btn" onclick="downloadReceipt('january')">&#8595; <span data-i18n="billing.download">Download</span></button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -481,8 +560,8 @@
     <aside class="demo-phone-panel">
       <div class="demo-phone-panel-inner">
         <div>
-          <div class="demo-phone-panel-title">What your customers see</div>
-          <div class="demo-phone-panel-subtitle">Updates appear instantly in the app</div>
+          <div class="demo-phone-panel-title" data-i18n="demo.phone_title">What your customers see</div>
+          <div class="demo-phone-panel-subtitle" data-i18n="demo.phone_subtitle">Updates appear instantly in the app</div>
         </div>
 
         <div class="demo-phone-mockup-wrap">
@@ -502,28 +581,28 @@
   </div>
 
   <!-- CTA Section -->
-  <section class="demo-cta-section">
+  <section class="demo-cta-section" id="demo-cta">
     <div class="demo-cta-inner">
-      <h2>Ready to fill more tables?</h2>
-      <p>Book a quick intro call or join our waitlist &mdash; we'll set everything up for you.</p>
+      <h2 data-i18n="cta.headline">Curious how it works?</h2>
+      <p data-i18n="cta.subtitle">Book an intro call &mdash; we'll walk you through everything. No payment necessary.</p>
 
       <form id="demo-waitlist-form">
         <div class="demo-wl-fields">
-          <input type="text" class="demo-wl-input" id="dwl-restaurant" placeholder="Restaurant name" required>
-          <input type="text" class="demo-wl-input" id="dwl-name" placeholder="Your name" required>
-          <input type="email" class="demo-wl-input" id="dwl-email" placeholder="Email address" required>
-          <input type="tel" class="demo-wl-input" id="dwl-phone" placeholder="Phone (optional)">
+          <input type="text" class="demo-wl-input" id="dwl-restaurant" data-i18n-ph="cta.restaurant" placeholder="Restaurant name" required>
+          <input type="text" class="demo-wl-input" id="dwl-name" data-i18n-ph="cta.name" placeholder="Your name" required>
+          <input type="email" class="demo-wl-input" id="dwl-email" data-i18n-ph="cta.email" placeholder="Email address" required>
+          <input type="tel" class="demo-wl-input" id="dwl-phone" data-i18n-ph="cta.phone" placeholder="Phone (optional)">
         </div>
         <div class="demo-wl-actions">
-          <button type="submit" class="demo-wl-btn demo-wl-btn-primary" data-action="call">Book a Demo Call</button>
-          <button type="submit" class="demo-wl-btn demo-wl-btn-secondary" data-action="waitlist">Join Waitlist</button>
+          <button type="submit" class="demo-wl-btn demo-wl-btn-primary" data-action="call" data-i18n="cta.book_call">Book a Demo Call</button>
+          <button type="submit" class="demo-wl-btn demo-wl-btn-secondary" data-action="waitlist" data-i18n="cta.join_waitlist">Join Waitlist</button>
         </div>
       </form>
       <div id="demo-wl-success" class="demo-wl-success" style="display:none;">
         <div class="demo-wl-success-icon">&#10003;</div>
-        <div class="demo-wl-success-text">Thanks! We'll be in touch soon.</div>
+        <div class="demo-wl-success-text" data-i18n="cta.success">Thanks! We'll be in touch soon.</div>
       </div>
-      <p class="demo-wl-footnote">No setup fees. No commitment. We'll reach out within 24 hours.</p>
+      <p class="demo-wl-footnote" data-i18n="cta.footnote">No setup fees. No commitment. We'll reach out within 24 hours.</p>
     </div>
   </section>
 
