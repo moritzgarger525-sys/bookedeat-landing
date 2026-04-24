@@ -63,6 +63,7 @@
       'cta.email': 'Email address',
       'cta.book_call': 'Book an Intro Call',
       'cta.success': "Thanks! We'll be in touch soon.",
+      'cta.spam_hint': 'Check your spam folder for our confirmation email.',
       'cta.footnote': "No setup fees. No commitment. We'll reach out within 24 hours."
     },
     de: {
@@ -120,6 +121,7 @@
       'cta.email': 'E-Mail-Adresse',
       'cta.book_call': 'Intro-Gespr\u00e4ch buchen',
       'cta.success': 'Danke! Wir melden uns bald.',
+      'cta.spam_hint': 'Pr\u00fcfe deinen Spam-Ordner f\u00fcr unsere Best\u00e4tigungsmail.',
       'cta.footnote': 'Keine Einrichtungsgeb\u00fchren. Keine Verpflichtung. Wir melden uns innerhalb von 24 Stunden.'
     }
   };

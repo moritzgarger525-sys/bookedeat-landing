@@ -1949,6 +1949,12 @@ img {
   color: var(--text-primary);
 }
 
+.cta-success-hint {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-top: 8px;
+}
+
 .cta-card .cta-footnote {
   margin-top: 16px;
 }
