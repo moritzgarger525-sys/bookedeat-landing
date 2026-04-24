@@ -23,7 +23,7 @@
       ]
     },
     posts: {
-      image: '../screenshots/news_feed.jpeg',
+      image: '../screenshots/News_feed.jpeg',
       phrases: [
         'News posts reach every follower instantly.',
         'Share menus, events, and promotions.',
