@@ -17,7 +17,13 @@
     <div class="nav-inner">
       <a href="#" class="nav-brand">BookedEat</a>
       <div class="nav-actions">
-        <button class="lang-toggle" id="lang-toggle">EN</button>
+        <div class="lang-dropdown-wrap">
+          <button class="lang-toggle" id="lang-toggle">EN &#9662;</button>
+          <div class="lang-dropdown hidden" id="lang-dropdown">
+            <button class="lang-option" data-lang="en">English</button>
+            <button class="lang-option" data-lang="de">Deutsch</button>
+          </div>
+        </div>
         <a href="portal/" class="nav-link" data-i18n="nav.login">Log in</a>
         <a href="#features" class="btn btn-primary btn-sm" data-i18n="nav.coming_soon">Coming Soon</a>
       </div>

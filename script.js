@@ -195,19 +195,38 @@
   function setLang(newLang) {
     lang = newLang;
     localStorage.setItem(LANG_KEY, lang);
-    var btn = document.getElementById('lang-toggle');
-    if (btn) btn.textContent = lang.toUpperCase();
+    updateLangUI();
     translatePage();
-    // Restart typewriters with new phrases
     rebuildTypewriters();
   }
 
-  // Language toggle button
+  // Language dropdown
   var langBtn = document.getElementById('lang-toggle');
-  if (langBtn) {
-    langBtn.textContent = lang.toUpperCase();
-    langBtn.addEventListener('click', function () {
-      setLang(lang === 'en' ? 'de' : 'en');
+  var langDropdown = document.getElementById('lang-dropdown');
+
+  function updateLangUI() {
+    if (langBtn) langBtn.innerHTML = lang.toUpperCase() + ' &#9662;';
+    if (langDropdown) {
+      langDropdown.querySelectorAll('.lang-option').forEach(function (opt) {
+        opt.classList.toggle('active', opt.dataset.lang === lang);
+      });
+    }
+  }
+
+  if (langBtn && langDropdown) {
+    updateLangUI();
+    langBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      langDropdown.classList.toggle('hidden');
+    });
+    langDropdown.querySelectorAll('.lang-option').forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        setLang(this.dataset.lang);
+        langDropdown.classList.add('hidden');
+      });
+    });
+    document.addEventListener('click', function () {
+      langDropdown.classList.add('hidden');
     });
   }
 
